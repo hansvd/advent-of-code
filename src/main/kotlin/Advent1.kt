@@ -15,8 +15,7 @@ fun main() {
     var incr = 0
 
     File("input1.txt").useLines {
-        it.forEach { s ->
-            val cur = tryParseInt(s) ?: return@forEach
+        it.mapNotNull{tryParseInt(it)}.forEach { cur ->
             if (slice.size == 3) {
                 val sum = slice.sum()
                 slice.removeAt(0)
