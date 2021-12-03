@@ -11,10 +11,8 @@ fun main() {
 }
 
 object Advent3 {
-
-
-
-    fun parseInstruction(s: String): List<Int>? {
+    
+    private fun parseInputLine(s: String): List<Int>? {
         val reg = """\s*([0,1]+)""".toRegex()
         val match = reg.matchEntire(s) ?: return null
         if (match.groupValues.size != 2) return null
@@ -27,12 +25,12 @@ object Advent3 {
     }
 
     fun advent3(lines: Sequence<String>): Int {
-        val list = lines.mapNotNull { parseInstruction(it) }.toList()
+        val list = lines.mapNotNull { parseInputLine(it) }.toList()
         val bitNb = list.minOf { it.size }
-        val tresholt = list.size / 2
-        val tot = (0 until bitNb).map { i-> list.map { it[i] }.sum() }
-        val gamma = tot.map { t -> if (t > tresholt) 1 else 0 }.fold(0) { x, cur -> (x shl 1) + cur }
-        val epsilon = tot.map { t -> if (t <= tresholt) 1 else 0 }.fold(0) { x, cur -> (x shl 1) + cur}
+        val threshold = list.size / 2
+        val tot = (0 until bitNb).map { i-> list.sumOf { it[i] } }
+        val gamma = tot.map { t -> if (t > threshold) 1 else 0 }.fold(0) { x, cur -> (x shl 1) + cur }
+        val epsilon = tot.map { t -> if (t <= threshold) 1 else 0 }.fold(0) { x, cur -> (x shl 1) + cur}
         return gamma*epsilon
     }
 
@@ -47,24 +45,21 @@ object Advent3 {
     To find CO2 scrubber rating, determine the least common value (0 or 1) in the current bit position, and keep only numbers with that bit in that position. If 0 and 1 are equally common, keep values with a 0 in the position being considered.
     */
     fun advent3b(lines:Sequence<String>):Int {
-        val list = lines.mapNotNull { parseInstruction(it) }.toList()
-
-
-        val oxygen = bitForIndexR(list,false)
-        val scrub = bitForIndexR(list,true)
-
+        val list = lines.mapNotNull { parseInputLine(it) }.toList()
+        val oxygen = getRating(list,false)
+        val scrub = getRating(list,true)
         return oxygen*scrub
     }
 
 
-    fun bitForIndexR(list:List<List<Int>>, invert: Boolean): Int{
+    private fun getRating(list:List<List<Int>>, leastCommon: Boolean): Int{
         val bitNb = list.minOf { it.size }
         var newList = list
         for (i in 0 until bitNb) {
-            val tot = newList.map { it[i] }.sum()
-            val tresholt = (newList.size*2) / 2
+            val tot = newList.sumOf { it[i] }
+            val threshold = (newList.size*2) / 2
 
-            val f = if (invert) {if ((tot*2)  < tresholt) 1 else 0 } else { if ((tot*2) >= tresholt) 1 else 0 }
+            val f = if (leastCommon) {if ((tot*2)  < threshold) 1 else 0 } else { if ((tot*2) >= threshold) 1 else 0 }
             newList =  newList.filter { it[i] == f }
 
             if (newList.size <= 1) break

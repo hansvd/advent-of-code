@@ -2,7 +2,7 @@ import java.io.File
 
 data class Move(val horizontal: Int, val vertical: Int)
 
-fun parseInstruction(s: String): Move? {
+fun parseInputLine(s: String): Move? {
     val reg = """\s*([^\s\d]+)\s(\d+)""".toRegex()
     val match = reg.matchEntire(s) ?: return null
     if (match.groups.size != 3) return null
@@ -32,13 +32,13 @@ It increases your horizontal position by X units.
 It increases your depth by your aim multiplied by X.
  */
 fun advent2b(lines: Sequence<String>): Int = lines
-    .mapNotNull { s -> parseInstruction(s) }
+    .mapNotNull { s -> parseInputLine(s) }
     .fold(Triple(0, 0, 0)) { (x, y, aim), cur ->
         Triple(x + cur.horizontal, y + aim * cur.horizontal, aim + cur.vertical)
     }.let { (x, y, _) -> x * y }
 
 
 fun advent2(lines: Sequence<String>): Int =
-    lines.mapNotNull { parseInstruction(it) }
+    lines.mapNotNull { parseInputLine(it) }
         .fold(Pair(0, 0)) { (x, y), cur -> Pair(x + cur.horizontal, y + cur.vertical) }
         .let { (x, y) -> x * y }
