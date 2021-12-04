@@ -20,7 +20,7 @@ class AdventXTest {
 
     @Test
     fun adventXaTest() {
-        assertEquals(0, File("inputX.txt").useLines { adventXa(it) })
+        assertEquals(0, File("input/inputX.txt").useLines { adventXa(it) })
     }
 
     @Test()
@@ -35,7 +35,7 @@ class AdventXTest {
 
     @Test
     fun adventXbTest() {
-        assertEquals(0, File("inputX.txt").useLines { adventXb(it) })
+        assertEquals(0, File("input/inputX.txt").useLines { adventXb(it) })
     }
 
 

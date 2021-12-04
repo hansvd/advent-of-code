@@ -34,7 +34,7 @@ class Advent4Test {
 
     @Test
     fun advent4aTest() {
-        assertEquals(8136, File("input4.txt").useLines { advent4a(it.toList()) })
+        assertEquals(8136, File("input/input4.txt").useLines { advent4a(it.toList()) })
     }
 
 
@@ -45,7 +45,7 @@ class Advent4Test {
 
     @Test
     fun advent4bTest() {
-        assertEquals(12738, File("input4.txt").useLines { advent4b(it.toList()) })
+        assertEquals(12738, File("input/input4.txt").useLines { advent4b(it.toList()) })
     }
 
 

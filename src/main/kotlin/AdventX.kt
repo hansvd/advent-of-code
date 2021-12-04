@@ -3,7 +3,7 @@ import AdventX.adventXb
 import java.io.File
 
 fun main() {
-    File("inputX.txt").useLines {
+    File("input/inputX.txt").useLines {
         println(adventXa(it))
         println(adventXb(it))
     }

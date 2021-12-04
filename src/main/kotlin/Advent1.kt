@@ -14,7 +14,7 @@ fun main() {
     val slice= mutableListOf<Int>()
     var incr = 0
 
-    File("input1.txt").useLines {
+    File("input/input1.txt").useLines {
         it.mapNotNull{tryParseInt(it)}.forEach { cur ->
             if (slice.size == 3) {
                 val sum = slice.sum()

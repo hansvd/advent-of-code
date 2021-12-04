@@ -19,7 +19,7 @@ fun parseInputLine(s: String): Move? {
 
 fun main() {
 
-    File("input2.txt").useLines {
+    File("input/input2.txt").useLines {
         println(advent2b(it))
     }
 }

@@ -4,7 +4,7 @@ import java.io.File
 
 fun main() {
 
-    File("input3.txt").useLines {
+    File("input/input3.txt").useLines {
         println(advent3(it))
         println(advent3b(it))
     }

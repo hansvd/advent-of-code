@@ -36,12 +36,12 @@ class Advent3Test {
     }
     @Test
     fun advent3Test() {
-        assertEquals(741950, File("input3.txt").useLines { advent3(it) })
+        assertEquals(741950, File("input/input3.txt").useLines { advent3(it) })
     }
 
     @Test
     fun advent3bTest() {
-        assertEquals(903810, File("input3.txt").useLines { advent3b(it) })
+        assertEquals(903810, File("input/input3.txt").useLines { advent3b(it) })
     }
 
 
