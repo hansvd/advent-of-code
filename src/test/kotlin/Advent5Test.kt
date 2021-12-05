@@ -45,17 +45,20 @@ class Advent5Test {
 
     @Test()
     fun advent5bBaseTest() {
-        assertEquals(0, advent5b("00000".lineSequence()))
+        assertEquals(0, advent5b(testInput.lineSequence().take(1)))
+        assertEquals(0, advent5b(testInput.lineSequence().take(2)))
+        assertEquals(1, advent5b(testInput.lineSequence().take(3)))
+        assertEquals(5, advent5b(testInput.lineSequence().take(6)))
     }
 
     @Test()
     fun advent5bInputTest() {
-        assertEquals(0, advent5b(testInput.lineSequence()))
+        assertEquals(12, advent5b(testInput.lineSequence()))
     }
 
     @Test
     fun advent5bTest() {
-        assertEquals(0, File("input/input5.txt").useLines { advent5b(it) })
+        assertEquals(18627, File("input/input5.txt").useLines { advent5b(it) })
     }
 
 
