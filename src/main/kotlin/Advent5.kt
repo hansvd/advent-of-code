@@ -1,5 +1,5 @@
-import advent5.advent5a
-import advent5.advent5b
+import Advent5.advent5a
+import Advent5.advent5b
 import java.io.File
 
 fun main() {
@@ -9,7 +9,7 @@ fun main() {
     }
 }
 
-object advent5 {
+object Advent5 {
     data class Line(val x0:Int, val y0:Int, val x1:Int, val y1:Int) {
         val xMin = if (x0 < x1) x0 else x1
         val xMax = if (x0 > x1) x0 else x1
@@ -21,14 +21,14 @@ object advent5 {
         val isDiagonal45 = xMax - xMin == yMax - yMin
     }
     class Matrix(lines:List<Line>, val useDiagonal:Boolean) {
-        val w = lines.maxOf { maxOf(it.x0,it.x1) } + 1
-        val h = lines.maxOf {  maxOf(it.y0, it.y1) } + 1
-        val content = Array(h) { Array(w) { 0 } }
+        private val w = lines.maxOf { maxOf(it.x0,it.x1) } + 1
+        private val h = lines.maxOf {  maxOf(it.y0, it.y1) } + 1
+        private val content = Array(h) { Array(w) { 0 } }
         init {
             lines.forEach { addLine(it) }
         }
-        
-        fun addLine(l:Line) {
+
+        private fun addLine(l:Line) {
             require(l.x1 < w && l.y1 < h)
             if (l.isHorizontal) for (i in l.xMin .. l.xMax) { content[l.y0][i] ++ }
             else if (l.isVertical) for (i in l.yMin .. l.yMax) { content[i][l.x0] ++ }
@@ -48,7 +48,7 @@ object advent5 {
         }
 
         fun countAtLeast(i:Int):Int {
-            return content.sumOf { r->r.map { if (it >= i) 1 else 0 }.sum() }
+            return content.sumOf { r-> r.sumOf { (if (it >= i) 1 else 0) as Int } }
         }
     }
     fun advent5a(input: Sequence<String>): Int = Matrix(input.mapNotNull { parseLine(it) }.toList(), false).countAtLeast(2)

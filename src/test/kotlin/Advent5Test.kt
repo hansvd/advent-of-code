@@ -1,6 +1,6 @@
-import advent5.advent5a
-import advent5.advent5b
-import advent5.parseLine
+import Advent5.advent5a
+import Advent5.advent5b
+import Advent5.parseLine
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -20,7 +20,7 @@ class Advent5Test {
 
     @Test()
     fun advent5aBaseTest() {
-        assertEquals(advent5.Line(0, 9, 5, 9), parseLine("0,9 -> 5,9"))
+        assertEquals(Advent5.Line(0, 9, 5, 9), parseLine("0,9 -> 5,9"))
         assertEquals(0, advent5a(testInput.lineSequence().take(1)))
         assertEquals(0, advent5a(testInput.lineSequence().take(2)))
         assertEquals(6, advent5a("0,9->5,9\n0,9->5,9".lineSequence()))
