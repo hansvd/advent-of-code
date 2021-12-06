@@ -48,7 +48,10 @@ object Advent5 {
         }
 
         fun countAtLeast(i:Int):Int {
-            return content.sumOf { r-> r.sumOf { (if (it >= i) 1 else 0) as Int } }
+            return content.sumOf { r-> r.sumOf {
+                @Suppress("USELESS_CAST")
+                (if (it >= i) 1 else 0) as Int
+            } }
         }
     }
     fun advent5a(input: Sequence<String>): Int = Matrix(input.mapNotNull { parseLine(it) }.toList(), false).countAtLeast(2)

@@ -6,16 +6,16 @@ import kotlin.test.assertEquals
 
 class AdventXTest {
 
-    val testInput = """"""
+    val testInput = """3,4,3,1,2"""
 
     @Test()
     fun adventXaBaseTest() {
-        assertEquals(0, adventXa("00000".lineSequence()))
+        assertEquals(0, adventXa("".lineSequence()))
     }
 
     @Test()
     fun adventXaInputTest() {
-        assertEquals(0, adventXa(testInput.lineSequence()))
+        assertEquals(5934, adventXa(testInput.lineSequence()))
     }
 
     @Test
