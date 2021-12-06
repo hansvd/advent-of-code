@@ -1,30 +1,26 @@
-import Advent6.advent6a
-import Advent6.advent6b
+import Advent6.advent6
 import java.io.File
 
 fun main() {
-    File("input/input6.txt").useLines {
-        println(advent6a(it.first()))
-        println(advent6b(it))
-    }
+    val input = File("input/input6.txt").readText()
+
+    println(advent6(input))
+    println(advent6(input, 256))
+
 }
 
 object Advent6 {
-    fun advent6a(line: String, days:Int=80): Int {
-        var cur = line.split(',').mapNotNull { tryParseInt(it) }.map {it}
+    data class Fish(val d: Int, val Nb: Long)
 
-        for (day in 1..days) {
-            cur = nextDay(cur)
-        }
-        return cur.size
+    fun advent6(line: String, days: Int = 80): Long {
+        val start = line.split(',').mapNotNull { tryParseInt(it) }.map { Fish(it, 1) }
+        return (1..days).fold(start) { cur,d -> nextDay(cur) }.sumOf { it.Nb }
     }
 
-    fun advent6b(lines: Sequence<String>): Int {
-        return 0
-    }
 
-    private fun nextDay(list: List<Int>):List<Int> {
-
-        return list.flatMap { i -> if (i > 0) listOf(i-1) else listOf(6,8) }
-    }
+    private fun nextDay(list: List<Fish>): List<Fish> =
+        list.flatMap { f -> if (f.d > 0) listOf(Fish(f.d - 1, f.Nb)) else listOf(Fish(6, f.Nb), Fish(8, f.Nb)) }
+            .groupBy { it.d }.map { (d, fishes) ->
+                Fish(d, fishes.sumOf { it.Nb })
+            }
 }
