@@ -14,7 +14,7 @@ object Advent6 {
 
     fun advent6(line: String, days: Int = 80): Long {
         val start = line.split(',').mapNotNull { tryParseInt(it) }.map { Fish(it, 1) }
-        return (1..days).fold(start) { cur,d -> nextDay(cur) }.sumOf { it.Nb }
+        return (1..days).fold(start) { cur,_ -> nextDay(cur) }.sumOf { it.Nb }
     }
 
 

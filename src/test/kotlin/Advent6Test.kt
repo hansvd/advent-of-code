@@ -5,15 +5,15 @@ import kotlin.test.assertEquals
 
 class Advent6Test {
 
-    val testInput = """3,4,3,1,2"""
+    private val testInput = """3,4,3,1,2"""
 
-    @Test()
+    @Test
     fun advent6BaseTest() {
         assertEquals(0, advent6(""))
         assertEquals(2, advent6("0",1))
     }
 
-    @Test()
+    @Test
     fun advent6InputTest() {
         assertEquals(5, advent6(testInput,0))
         assertEquals(5, advent6(testInput,1))
