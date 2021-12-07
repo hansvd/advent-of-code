@@ -1,5 +1,6 @@
 import Advent7.advent7a
 import Advent7.advent7b
+import Advent7.cost
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -25,12 +26,14 @@ class Advent7Test {
 
     @Test()
     fun advent7bBaseTest() {
-        assertEquals(0, advent7b("00000"))
+        assertEquals(0, advent7b(""))
+        assertEquals(66, cost(11))
+        assertEquals(0, cost(0))
     }
 
     @Test()
     fun advent7bInputTest() {
-        assertEquals(0, advent7b(testInput))
+        assertEquals(168, advent7b(testInput))
     }
 
     @Test
