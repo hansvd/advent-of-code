@@ -1,6 +1,6 @@
 import Advent7.advent7a
 import Advent7.advent7b
-import Advent7.cost
+import Advent7.gaussSum
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -27,8 +27,8 @@ class Advent7Test {
     @Test()
     fun advent7bBaseTest() {
         assertEquals(0, advent7b(""))
-        assertEquals(66, cost(11))
-        assertEquals(0, cost(0))
+        assertEquals(66, gaussSum(11))
+        assertEquals(0, gaussSum(0))
     }
 
     @Test()
@@ -38,7 +38,7 @@ class Advent7Test {
 
     @Test
     fun advent7bTest() {
-        assertEquals(0,advent7b(File("input/input7.txt").readText()))
+        assertEquals(85015836,advent7b(File("input/input7.txt").readText()))
     }
 
 

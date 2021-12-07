@@ -20,9 +20,9 @@ object Advent7 {
         val list = input.split(',').mapNotNull { tryParseInt(it) }
         if (list.isEmpty()) return 0
 
-        return (0..list.maxOf { it }).fold(Int.MAX_VALUE) { min, i -> minOf(min, list.sumOf { cost(abs(it - i)) }) }
+        return (0..list.maxOf { it }).fold(Int.MAX_VALUE) { min, i -> minOf(min, list.sumOf { gaussSum(abs(it - i)) }) }
     }
 
-    fun cost(d:Int):Int = (0..d).fold(0) { c, i -> c + i }
+    fun gaussSum(d:Int):Int = d*(d+1)/2
 
 }
