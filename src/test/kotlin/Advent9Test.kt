@@ -35,12 +35,12 @@ class Advent9Test {
 
     @Test()
     fun advent9bInputTest() {
-        assertEquals(0, advent9b(testInput.lineSequence()))
+        assertEquals(1134, advent9b(testInput.lineSequence()))
     }
 
     @Test
     fun advent9bTest() {
-        assertEquals(0, File("input/input9.txt").useLines { advent9b(it) })
+        assertEquals(1391940, File("input/input9.txt").useLines { advent9b(it) })
     }
 
 
