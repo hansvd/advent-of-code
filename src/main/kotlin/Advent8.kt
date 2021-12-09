@@ -6,24 +6,19 @@ import java.io.File
 fun main() {
     File("input/input8.txt").useLines {
         println(advent8a(it))
+    }
+    File("input/input8.txt").useLines {
         println(advent8b(it))
     }
 }
 
 object Advent8 {
-    fun advent8a(lines: Sequence<String>): Int {
-
-
-        return lines.fold(0) { n, line ->
-            n + (parseLine(line)?.output?.count { uniqueSegmentLength.contains(it.length) } ?: 0)
-        }
-
+    fun advent8a(lines: Sequence<String>): Int = lines.fold(0) { n, line ->
+        n + (parseLine(line)?.output?.count { uniqueSegmentLength.contains(it.length) } ?: 0)
     }
 
-    fun advent8b(lines: Sequence<String>): Int {
-        return lines.fold(0) { n, line ->
-            n + (parseLine(line)?.output?.count { uniqueSegmentLength.contains(it.length) } ?: 0)
-        }
+    fun advent8b(lines: Sequence<String>): Int = lines.fold(0) { n, line ->
+        n + (parseLine(line)?.getNumber() ?: 0)
     }
 
 
@@ -43,14 +38,25 @@ object Advent8 {
             decode()
         }
 
-        private fun decode(): Int {
+        fun getNumber():Int {
+            return output.fold(0) { r, o -> r * 10 + mapOutputToNumber(o)}
+        }
+        private fun decode() {
 
             @Suppress("ControlFlowWithEmptyBody")
             while (reducesPossibleMappings());
-            return 0
+            require(signalToNumberMappings.all { it.size == 1})
+
         }
 
-        private fun reducesPossibleMappings():Boolean {
+        private fun mapOutputToNumber(output:String): Int {
+            val i = uniqueSignals.indexOfFirst { it.toCharArray().sorted() == output.toCharArray().sorted() }
+            require (i >= 0)
+            return signalToNumberMappings[i].first()
+        }
+        private fun reducesPossibleMappings(): Boolean {
+            if (signalToNumberMappings.all {it.size == 1}) return false
+
             for (i in 0..9) {
 
                 val possibleNumbers = signalToNumberMappings[i]
@@ -67,10 +73,24 @@ object Advent8 {
                 }
 
             }
-            return reduceMappings2()
+            val done = reduceMappings2()
+            return reduceMappings3() || done
         }
 
-        private fun reduceMappings2():Boolean {
+        private fun reduceMappings3():Boolean {
+            var result = false
+            for (i in 0..9) {
+                if (signalToNumberMappings[i].size <= 1) continue
+                signalToNumberMappings.filter {it.size == 1 && signalToNumberMappings[i].contains(it[0])}.forEach { d ->
+                    result = true
+                    signalToNumberMappings[i] = signalToNumberMappings[i].filter { it != d[0] }
+                }
+            }
+
+            return result
+        }
+
+        private fun reduceMappings2(): Boolean {
 
             var done = false
             uniqueSignals.forEachIndexed { indexUniqueNumbers, u ->
@@ -131,7 +151,6 @@ object Advent8 {
 
         }
     }
-
 
 
     private fun parseLine(s: String): Data? {
