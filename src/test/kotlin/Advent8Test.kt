@@ -16,7 +16,7 @@ dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf |cefg dcbef fcge gbca
 bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd |ed bcgafe cdgba cbgef
 egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg |gbdfcae bgc cg cgb
 gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc |fgae cfgab fg bagce"""
-    
+
 
     @Test()
     fun advent8aInputTest() {
@@ -30,12 +30,13 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc |fgae cfgab fg bagce"
 
     @Test()
     fun advent8bBaseTest() {
-        assertEquals(0, advent8b("00000".lineSequence()))
+        //assertEquals(0, advent8b("abcefg cf acdeg acdfg bcdf abdfg abdefg acf abcdefg abcdfg|abcefg cf acdeg acdfg".lineSequence()))
+        assertEquals(0, advent8b("acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf".lineSequence()))
     }
 
     @Test()
     fun advent8bInputTest() {
-        assertEquals(0, advent8b(testInput.lineSequence()))
+        assertEquals(61229, advent8b(testInput.lineSequence()))
     }
 
     @Test
