@@ -125,20 +125,15 @@ object Advent8 {
             }
         }
 
-        private fun getPossibleMappingsFor(u: String): List<Set<Char>> {
-            var r = listOf<Set<Char>>()
-            u.forEachIndexed { i, c ->
-                val m1 = charMapping[c]!!
-                r = if (r.isEmpty())
-                    m1.map { setOf(it) }
-                else {
-                    r.map { rr -> m1.map { mm1 -> setOf(mm1).union(rr).toSet() } }.flatten()
+        private fun getPossibleMappingsFor(u: String): List<Set<Char>> = u.foldIndexed(listOf()) { i, r, c ->
 
-                }.filter { it.size == i + 1 }.distinct()
+            if (r.isEmpty())
+                charMapping[c]!!.map { setOf(it) }
+            else {
+                r.map { rr -> charMapping[c]!!.map { mm1 -> setOf(mm1).union(rr).toSet() } }.flatten()
 
-            }
+            }.filter { it.size == i + 1 }.distinct()
 
-            return r
         }
     }
 
