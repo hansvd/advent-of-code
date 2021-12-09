@@ -43,6 +43,4 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc |fgae cfgab fg bagce"
     fun advent8bTest() {
         assertEquals(986034, File("input/input8.txt").useLines { advent8b(it) })
     }
-
-
 }
