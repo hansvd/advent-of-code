@@ -126,21 +126,19 @@ object Advent8 {
         }
 
         private fun getPossibleMappingsFor(u: String): List<Set<Char>> {
-            var r = mutableListOf<MutableSet<Char>>()
+            var r = listOf<Set<Char>>()
             u.forEachIndexed { i, c ->
                 val m1 = charMapping[c]!!
-                if (r.isEmpty())
-                    m1.forEach { r.add(mutableSetOf(it)) }
+                r = if (r.isEmpty())
+                    m1.map { setOf(it) }
                 else {
-                    val rnew = mutableListOf<MutableSet<Char>>()
-                    r.forEach { rr -> m1.forEach { mm1 -> rnew.add(mutableSetOf(mm1).union(rr).toMutableSet()) } }
-                    r = rnew
-                }
+                    r.map { rr -> m1.map { mm1 -> setOf(mm1).union(rr).toSet() } }.flatten()
 
-                r = r.filter { it.size == i + 1 }.distinct().toMutableList()
+                }.filter { it.size == i + 1 }.distinct()
+
             }
 
-            return r.filter { it.size == u.length }
+            return r
         }
     }
 
