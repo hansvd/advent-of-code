@@ -20,7 +20,7 @@ fun main() {
 object Day10 {
 
     class ChunkDelimiter(val open:Char, val close:Char, val score:Long, val completionScore:Long)
-    val delimiters = listOf(
+    private val delimiters = listOf(
         ChunkDelimiter('(',')',3,1),
         ChunkDelimiter('[',']',57,2),
         ChunkDelimiter('{','}',1197,3),
@@ -31,39 +31,40 @@ object Day10 {
           return lines.fold(0) { score, line -> score + errorScore(line)}
     }
 
-
-
     fun part2(lines: Sequence<String>): Long {
 
         val scores = lines.map { line -> completionScore(line) }.filter { it != 0L }.sorted().toList()
-        if (scores.size == 0) return 0
+        if (scores.isEmpty()) return 0
         return scores[scores.size/2]
     }
 
     private fun errorScore(line: String): Long {
         val chunks:Stack<ChunkDelimiter> = mutableListOf()
         for (c in line) {
-            val chunk = delimiters.firstOrNull { it.open == c }
-            if (chunk != null) { chunks.push(chunk); continue }
-            val chunkClose = delimiters.firstOrNull {it.close == c} ?: continue
-            val ch = chunks.peek() ?: return chunkClose.score
-            if (ch.close != chunkClose.close) return chunkClose.score
-            chunks.pop()
+            val errorChunk = handleLine(chunks,c) ?: continue
+            return errorChunk.score
         }
         return 0
     }
+
     private fun completionScore(line: String): Long {
-        val chunks:Stack<ChunkDelimiter> = mutableListOf()
+        val chunks: Stack<ChunkDelimiter> = mutableListOf()
         for (c in line) {
-            val chunk = delimiters.firstOrNull { it.open == c }
-            if (chunk != null) { chunks.push(chunk); continue }
-            val chunkClose = delimiters.firstOrNull {it.close == c} ?: continue
-            val ch = chunks.peek() ?: return 0
-            if (ch.close != chunkClose.close) return 0
-            chunks.pop()
+            val errorChunk = handleLine(chunks, c)
+            if (errorChunk != null) return 0
         }
 
-        val score = chunks.reversed().fold(0L) { score, c -> score * 5L + c.completionScore}
-        return score
+        return chunks.reversed().fold(0L) { score, c -> score * 5L + c.completionScore }
     }
+
+    private fun handleLine(chunks:Stack<ChunkDelimiter>, c:Char):ChunkDelimiter? {
+        val chunk = delimiters.firstOrNull { it.open == c }
+        if (chunk != null) { chunks.push(chunk); return null }
+        val chunkClose = delimiters.firstOrNull {it.close == c} ?: return null
+        val ch = chunks.peek() ?: return chunkClose
+        if (ch.close != chunkClose.close) return chunkClose
+        chunks.pop()
+        return null
+    }
+
 }
