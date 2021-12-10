@@ -6,7 +6,17 @@ import kotlin.test.assertEquals
 
 class Day10Test {
 
-    val testInput = """3,4,3,1,2"""
+    val testInput = """[({(<(())[]>[[{[]{<()<>>
+[(()[<>])]({[<{<<[]>>(
+{([(<{}[<>[]}>{[]{[(<()>
+(((({<>}<{<{<>}{[]{[]{}
+[[<[([]))<([[{}[[()]]]
+[{[{({}]{}}([{[{{{}}([]
+{<[[]]>}<{[{[{[]{()[[[]
+[<(<(<(<{}))><([]([]()
+<{([([[(<>()){}]>(<<{{
+<{([{{}}[<[[[<>{}]]]>[]]
+"""
 
     @Test()
     fun day10aBaseTest() {
@@ -15,12 +25,12 @@ class Day10Test {
 
     @Test()
     fun day10aInputTest() {
-        assertEquals(0, part1(testInput.lineSequence()))
+        assertEquals(26397, part1(testInput.lineSequence()))
     }
 
     @Test
     fun day10aTest() {
-        assertEquals(0, File("input/inputX.txt").useLines { part1(it) })
+        assertEquals(343863, File("input/input10.txt").useLines { part1(it) })
     }
 
     @Test()
