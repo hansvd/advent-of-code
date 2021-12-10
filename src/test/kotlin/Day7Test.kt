@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
 
-class Advent7Test {
+class Day7Test {
 
     val testInput = """16,1,2,0,4,2,7,1,2,14"""
 

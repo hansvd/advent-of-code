@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
 
-class Advent5Test {
+class Day5Test {
 
     val testInput = """0,9 -> 5,9
 8,0 -> 0,8

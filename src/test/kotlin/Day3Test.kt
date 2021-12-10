@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
 
-class Advent3Test {
+class Day3Test {
 
     val testInput="""00100
 11110
