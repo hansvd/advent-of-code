@@ -40,12 +40,12 @@ class Day10Test {
 
     @Test()
     fun day10bInputTest() {
-        assertEquals(0, part2(testInput.lineSequence()))
+        assertEquals(288957, part2(testInput.lineSequence()))
     }
 
     @Test
     fun day10bTest() {
-        assertEquals(0, File("input/inputX.txt").useLines { part2(it) })
+        assertEquals(2924734236, File("input/input10.txt").useLines { part2(it) })
     }
 
 
