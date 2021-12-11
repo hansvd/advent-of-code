@@ -1,5 +1,5 @@
-import AdventX.part1
-import AdventX.part2
+import DayX.part1
+import DayX.part2
 import java.io.File
 
 fun main() {
@@ -9,7 +9,7 @@ fun main() {
     }
 }
 
-object AdventX {
+object DayX {
     fun part1(lines: Sequence<String>): Int {
         return 0
     }

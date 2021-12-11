@@ -12,13 +12,13 @@ class Day9Test {
 8767896789
 9899965678"""
 
-    @Test()
+    @Test
     fun advent9aBaseTest() {
         assertEquals(0, advent9a("".lineSequence()))
         assertEquals(1, advent9a("0".lineSequence()))
     }
 
-    @Test()
+    @Test
     fun advent9aInputTest() {
         assertEquals(15, advent9a(testInput.lineSequence()))
     }
@@ -28,7 +28,7 @@ class Day9Test {
         assertEquals(458, File("input/input9.txt").useLines { advent9a(it) })
     }
 
-    @Test()
+    @Test
     fun advent9bInputTest() {
         assertEquals(1134, advent9b(testInput.lineSequence()))
     }

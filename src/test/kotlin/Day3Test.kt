@@ -19,7 +19,7 @@ class Day3Test {
 00010
 01010"""
 
-    @Test()
+    @Test
     fun advent3BaseTest() {
         assertEquals(0, advent3("00000".lineSequence()))
         assertEquals(16 * 15, advent3("10000".lineSequence()))
@@ -27,7 +27,7 @@ class Day3Test {
         assertEquals(198, advent3(testInput.lineSequence()))
     }
 
-    @Test()
+    @Test
     fun advent3bBaseTest() {
         assertEquals(0, advent3("00000".lineSequence()))
         assertEquals(16 * 15, advent3("10000".lineSequence()))

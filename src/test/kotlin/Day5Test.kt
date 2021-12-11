@@ -18,7 +18,7 @@ class Day5Test {
 0,0 -> 8,8
 5,5 -> 8,2"""
 
-    @Test()
+    @Test
     fun advent5aBaseTest() {
         assertEquals(Advent5.Line(0, 9, 5, 9), parseLine("0,9 -> 5,9"))
         assertEquals(0, advent5a(testInput.lineSequence().take(1)))
@@ -33,7 +33,7 @@ class Day5Test {
         assertEquals(1, advent5a("5,9->5,0\n9,5->0,5".lineSequence()))
     }
 
-    @Test()
+    @Test
     fun advent5aInputTest() {
         assertEquals(5, advent5a(testInput.lineSequence()))
     }
@@ -43,7 +43,7 @@ class Day5Test {
         assertEquals(7644, File("input/input5.txt").useLines { advent5a(it) })
     }
 
-    @Test()
+    @Test
     fun advent5bBaseTest() {
         assertEquals(0, advent5b(testInput.lineSequence().take(1)))
         assertEquals(0, advent5b(testInput.lineSequence().take(2)))
@@ -51,7 +51,7 @@ class Day5Test {
         assertEquals(5, advent5b(testInput.lineSequence().take(6)))
     }
 
-    @Test()
+    @Test
     fun advent5bInputTest() {
         assertEquals(12, advent5b(testInput.lineSequence()))
     }

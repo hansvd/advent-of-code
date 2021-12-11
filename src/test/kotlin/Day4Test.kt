@@ -27,7 +27,7 @@ class Day4Test {
  2  0 12  3  7"""
 
 
-    @Test()
+    @Test
     fun advent4aInputTest() {
         assertEquals(4512, advent4a(testInput.lines()))
     }
@@ -38,7 +38,7 @@ class Day4Test {
     }
 
 
-    @Test()
+    @Test
     fun advent4bInputTest() {
         assertEquals(1924, advent4b(testInput.lines()))
     }

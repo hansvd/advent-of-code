@@ -18,7 +18,7 @@ egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg |gbdfcae bgc cg cgb
 gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc |fgae cfgab fg bagce"""
 
 
-    @Test()
+    @Test
     fun advent8aInputTest() {
         assertEquals(26, advent8a(testInput.lineSequence()))
     }
@@ -28,13 +28,13 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc |fgae cfgab fg bagce"
         assertEquals(387, File("input/input8.txt").useLines { advent8a(it) })
     }
 
-    @Test()
+    @Test
     fun advent8bBaseTest() {
         //assertEquals(0, advent8b("abcefg cf acdeg acdfg bcdf abdfg abdefg acf abcdefg abcdfg|abcefg cf acdeg acdfg".lineSequence()))
         assertEquals(5353, advent8b("acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf".lineSequence()))
     }
 
-    @Test()
+    @Test
     fun advent8bInputTest() {
         assertEquals(61229, advent8b(testInput.lineSequence()))
     }

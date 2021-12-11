@@ -18,12 +18,12 @@ class Day10Test {
 <{([{{}}[<[[[<>{}]]]>[]]
 """
 
-    @Test()
+    @Test
     fun day10aBaseTest() {
         assertEquals(0, part1("".lineSequence()))
     }
 
-    @Test()
+    @Test
     fun day10aInputTest() {
         assertEquals(26397, part1(testInput.lineSequence()))
     }
@@ -33,12 +33,12 @@ class Day10Test {
         assertEquals(343863, File("input/input10.txt").useLines { part1(it) })
     }
 
-    @Test()
+    @Test
     fun day10bBaseTest() {
         assertEquals(0, part2("00000".lineSequence()))
     }
 
-    @Test()
+    @Test
     fun day10bInputTest() {
         assertEquals(288957, part2(testInput.lineSequence()))
     }
