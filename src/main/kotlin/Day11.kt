@@ -14,7 +14,7 @@ object Day11 {
         var flashed = 0
         fun step() {
             rows.forEach { r -> for (i in 0 until r.size) r[i] = r[i] + 1 }
-            val flashing = mutableListOf<Pair<Int,Int>>()
+            val flashing = mutableListOf<Pair<Int, Int>>()
             do {
                 val f = rows.mapIndexed { iRow, r ->
                     r.mapIndexedNotNull { iCol, value ->
@@ -29,38 +29,25 @@ object Day11 {
                 flashing.addAll(f)
             } while (f.isNotEmpty())
 
-
-
-
-
             flashed += rows.sumOf { r -> r.sumOf { if (it > 9) 1.toInt() else 0 } }
             rows.forEach { r -> for (i in 0 until r.size) if (r[i] > 9) r[i] = 0 }
 
         }
 
-        fun addEnergyFrom(iRow: Int, iCol: Int): Boolean {
+        private fun addEnergyFrom(iRow: Int, iCol: Int) {
 
-            var somethingDone = false
             for (r in iRow - 1..iRow + 1) for (c in iCol - 1..iCol + 1) {
-                //if (r == iRow && c == iCol) continue
                 if (c < 0 || r < 0 || r >= rows.size) continue
                 if (c >= rows[r].size) continue
-                //if (done.contains(Pair(iCol,iRow))) continue
                 if (rows[r][c] == 10) continue
                 rows[r][c] += 1
-                somethingDone = true
-                //done.add(Pair(c,r))
-//                if (rows[r][c] == 10)
-//                    addEnergyFrom(r, c,done)
             }
-            return somethingDone
         }
     }
 
     fun part1(lines: Sequence<String>, steps: Int = 100): Int {
         val grid = readInput(lines)
-        for (i in 1..steps)
-            grid.step()
+        for (i in 1..steps) grid.step()
         return grid.flashed
     }
 
