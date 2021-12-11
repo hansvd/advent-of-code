@@ -10,23 +10,19 @@ fun main() {
 }
 
 object Day11 {
-    class Grid(val rows: List<MutableList<Int>>) {
+    class Grid(private val rows: List<MutableList<Int>>) {
         var flashed = 0
         fun step() {
             rows.forEach { r -> for (i in 0 until r.size) r[i] = r[i] + 1 }
-            val flashing = mutableListOf<Pair<Int, Int>>()
+            var flashing = setOf<Pair<Int, Int>>()
             do {
                 val f = rows.mapIndexed { iRow, r ->
                     r.mapIndexedNotNull { iCol, value ->
-                        if (value == 10) Pair(
-                            iRow,
-                            iCol
-                        ) else null
-                    }
-                }.flatten().minus(flashing)
+                        if (value == 10) Pair(iRow, iCol) else null
+                    } }.flatten().minus(flashing)
 
                 f.forEach { addEnergyFrom(it.first, it.second) }
-                flashing.addAll(f)
+                flashing = flashing.plus(f)
             } while (f.isNotEmpty())
 
             flashed += rows.sumOf { r -> r.sumOf {
