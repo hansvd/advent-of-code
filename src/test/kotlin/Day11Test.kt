@@ -44,7 +44,7 @@ class Day11Test {
 
     @Test
     fun day11aTest() {
-        assertEquals(0, File("input/input11.txt").useLines { part1(it) })
+        assertEquals(1594, File("input/input11.txt").useLines { part1(it) })
     }
 
     @Test
