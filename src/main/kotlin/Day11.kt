@@ -29,7 +29,10 @@ object Day11 {
                 flashing.addAll(f)
             } while (f.isNotEmpty())
 
-            flashed += rows.sumOf { r -> r.sumOf { if (it > 9) 1.toInt() else 0 } }
+            flashed += rows.sumOf { r -> r.sumOf {
+                @Suppress("RemoveRedundantCallsOfConversionMethods")
+                if (it > 9) 1.toInt() else 0
+            } }
             rows.forEach { r -> for (i in 0 until r.size) if (r[i] > 9) r[i] = 0 }
 
         }
@@ -43,6 +46,7 @@ object Day11 {
                 rows[r][c] += 1
             }
         }
+        fun allFlashed():Boolean = rows.all{ r-> r.all { it == 0 } }
     }
 
     fun part1(lines: Sequence<String>, steps: Int = 100): Int {
@@ -52,7 +56,13 @@ object Day11 {
     }
 
     fun part2(lines: Sequence<String>): Int {
-        return 0
+        val grid = readInput(lines)
+        var i = 0
+        do {
+            grid.step()
+            i++
+        } while(!grid.allFlashed())
+        return i
     }
 
     private fun readInput(lines: Sequence<String>): Grid = Grid(lines.map { line ->

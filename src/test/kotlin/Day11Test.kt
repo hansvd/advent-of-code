@@ -49,17 +49,17 @@ class Day11Test {
 
     @Test
     fun day11bBaseTest() {
-        assertEquals(0, part2("00000".lineSequence()))
+        assertEquals(10, part2("00000".lineSequence()))
     }
 
     @Test
     fun day11bInputTest() {
-        assertEquals(0, part2(testInput.lineSequence()))
+        assertEquals(195, part2(testInput.lineSequence()))
     }
 
     @Test
     fun day11bTest() {
-        assertEquals(0, File("input/input11.txt").useLines { part2(it) })
+        assertEquals(437, File("input/input11.txt").useLines { part2(it) })
     }
 
 
