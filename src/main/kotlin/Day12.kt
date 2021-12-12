@@ -11,7 +11,10 @@ fun main() {
 }
 
 class Cave(val name:String) {
+    val isStart = name=="start"
+    val isEnd = name =="end"
     val isBig = name == name.uppercase(Locale.getDefault())
+
     val connections = mutableSetOf<String>()
 
     fun addConnection(name:String) {
@@ -23,13 +26,17 @@ class Cave(val name:String) {
 
 typealias Route = List<Cave>
 fun Route.isValid(part2:Boolean):Boolean {
-    for (c in this) {
-        if (!c.isBig && (this.count { it.name == c.name } > 1)) return false
-    }
-    return true
+    if (this.filterIndexed{ i,c -> (c.isStart && i > 0) || (c.isEnd && i != this.size -1)}
+            .any()) return false
+
+    val smallCaves = this.filter { !it.isBig && !it.isStart && !it.isEnd}.groupBy { it.name }
+    return (smallCaves.none {it.value.size > 2} &&
+            (!part2 || ( smallCaves.count { it.value.size == 2} <= 1))
+            && (part2 || smallCaves.none {it.value.size >= 2}))
+
 }
 
-class Day12(val part2:Boolean = false) {
+class Day12(private val part2:Boolean = false) {
 
 
     private val caves = hashMapOf<String,Cave>()
@@ -38,7 +45,7 @@ class Day12(val part2:Boolean = false) {
         getOrCreate("end")
     }
 
-    fun getOrCreate(name:String):Cave = caves[name] ?: let {
+    private fun getOrCreate(name:String):Cave = caves[name] ?: let {
         val n = Cave(name)
         caves[name] = n
         n
@@ -53,14 +60,12 @@ class Day12(val part2:Boolean = false) {
         c2.addConnection(c1.name)
     }
 
-
     fun findRoutes(s: String, e: String): List<Route> {
         val start = caves[s] ?: return listOf()
         val end = caves[e] ?: return listOf()
         return findRoutes(listOf(),start, end)
     }
     private fun findRoutes(routeBase:Route, next:Cave, end: Cave): List<Route> {
-
         if (next.name == end.name) return listOf(routeBase+end)
         val route = routeBase+next
         if (!(route).isValid(part2)) return listOf()

@@ -82,11 +82,11 @@ start-RW"""
     }
     @Test
     fun day12bInputTest3() {
-        assertEquals(103, part2(testInput3.lineSequence()))
+        assertEquals(3509, part2(testInput3.lineSequence()))
     }
     @Test
     fun day12bTest() {
-        assertEquals(0, File("input/inputX.txt").useLines { part2(it) })
+        assertEquals(93686, File("input/input12.txt").useLines { part2(it) })
     }
 
 
