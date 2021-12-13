@@ -28,10 +28,6 @@ class Day13Test {
 fold along y=7
 fold along x=5"""
 
-    @Test
-    fun day13aBaseTest() {
-        assertEquals(0, part1("".lines()))
-    }
 
     @Test
     fun day13aInputTest() {
@@ -45,20 +41,33 @@ fold along x=5"""
     }
 
 
-
-    @Test
-    fun day13bBaseTest() {
-        assertEquals(0, part2("00000".lines()))
-    }
-
     @Test
     fun day13bInputTest() {
-        assertEquals(0, part2(testInput.lines()))
+        val result = """
+            #####
+            #...#
+            #...#
+            #...#
+            #####
+            .....
+            .....
+            
+            """.trimIndent()
+        assertEquals(result, part2(testInput.lines()))
     }
 
     @Test
     fun day13bTest() {
-        assertEquals(0, File("input/input13.txt").useLines { part2(it.toList()) })
+        val result = """
+            .##..#....###..####.#..#.####.#..#.#..#.
+            #..#.#....#..#.#....#.#..#....#.#..#..#.
+            #..#.#....#..#.###..##...###..##...#..#.
+            ####.#....###..#....#.#..#....#.#..#..#.
+            #..#.#....#.#..#....#.#..#....#.#..#..#.
+            #..#.####.#..#.####.#..#.#....#..#..##..         
+            """.trimIndent().trimEnd('\n',' ')
+
+        assertEquals(result, File("input/input13.txt").useLines { part2(it.toList()).trimEnd('\n',' ') })
     }
 
 

@@ -12,11 +12,10 @@ fun main() {
 object Day13 {
     data class Dot(val x: Int, val y: Int)
     data class Fold(val isVertical: Boolean, val value: Int)
-    class Pattern(dots: List<Dot>) {
-        constructor(dots: Sequence<Dot>) : this(dots.toList())
+    class Pattern(dots: List<Dot>, private val w:Int, private val h:Int) {
+        constructor(dots: List<Dot>) : this (dots, dots.maxOf { it.x } + 1,dots.maxOf { it.y } + 1)
+        constructor(dots: Sequence<Dot>, w:Int, h:Int) : this(dots.toList(),w,h)
 
-        private val w = dots.maxOf { it.x } + 1
-        private val h = dots.maxOf { it.y } + 1
         private val pattern = Array(w) { BooleanArray(h) }
 
         init {
@@ -24,6 +23,13 @@ object Day13 {
         }
 
         val dotNb get() = pattern.sumOf { r -> r.count { it } }
+
+        override fun toString(): String {
+            return sequence { for (y in 0 until  h) {
+                (0 until w).forEach { x -> yield(if (pattern[x][y]) '#' else '.') }
+               yield('\n')
+            }}.joinToString("")
+        }
         fun invoke(folds: List<Fold>): Pattern {
             return fold(folds.first())
         }
@@ -34,56 +40,41 @@ object Day13 {
 
         private fun foldVertical(above: Int): Pattern {
             val below = h - above - 1
+            val foldH = maxOf(above, below)
             return Pattern(sequence {
-                (0 until maxOf(above, below)).forEach { y ->
-                    val yy = above + below - y
-                    if (yy in (above + 1) until h)
-                        (0 until w).filter { x -> pattern[x][yy] }.forEach { x ->
-                            yield(Dot(x, y))
-                        }
-                    if (y < above)
-                        (0 until w).filter { x -> pattern[x][y] }.forEach { x ->
-                            if (pattern[x][y]) yield(Dot(x, y))
-                        }
-
+                (0 until above).forEach { y ->
+                    (0 until w).filter { x -> pattern[x][y] }.forEach { x-> yield(Dot(x,y+(foldH-above))) }
+                }
+                (0 until below).forEach { y ->
+                    (0 until w).filter { x -> pattern[x][h - (1+y)] }.forEach { x-> yield(Dot(x,y+(foldH-below))) }
                 }
 
-            })
+            }, w=w, h=foldH)
         }
 
         private fun foldHoriz(left: Int): Pattern {
             val right = w - 1 - left
-
+            val foldWidth = maxOf(left, right)
             return Pattern(sequence {
-                for (x in 0 until maxOf(left, right)) {
-                    val xx = left * 2 - x
-                    if (xx in (left + 1) until w)
-                        (0 until h)
-                            .filter { pattern[xx][it] }
-                            .forEach { yield(Dot(x, it)) }
-
-                    if (x < left)
-                        (0 until h)
-                            .filter { pattern[x][it] }
-                            .forEach { yield(Dot(x, it)) }
-
+                (0 until left).forEach { x ->
+                    (0 until h).filter { y -> pattern[x][y] }.forEach { y-> yield(Dot(x+(foldWidth-left),y)) }
                 }
-            })
+                (0 until right).forEach { x ->
+                    (0 until h).filter { y -> pattern[w - (1 + x)][y] }.forEach { y-> yield(Dot(x+(foldWidth-right),y)) }
+                }
+            }, foldWidth,h)
 
         }
     }
 
-
     fun part1(lines: List<String>, foldNb: Int = 1): Int {
         val (pattern, folds) = parseLines(lines)
-        val p = folds.take(foldNb).fold(pattern) { p, f -> p.fold(f) }
-        return p.dotNb
+        return folds.take(foldNb).fold(pattern) { p, f -> p.fold(f) }.dotNb
     }
 
-    fun part2(lines: List<String>): Int {
+    fun part2(lines: List<String>): String {
         val (pattern, folds) = parseLines(lines)
-        val p = folds.fold(pattern) { p, f -> p.fold(f) }
-        return p.dotNb
+        return folds.fold(pattern) { p, f -> p.fold(f) }.toString()
     }
 
     private fun parseLines(lines: List<String>): Pair<Pattern, List<Fold>> {
@@ -96,9 +87,7 @@ object Day13 {
     private fun parseDots(list: List<String>): List<Dot> {
         return list.mapNotNull { l ->
             val s = l.split(',')
-            if (s.size != 2) null else {
-                Dot(s[0].toInt(), s[1].toInt())
-            }
+            if (s.size == 2) { Dot(s[0].toInt(), s[1].toInt()) } else null
         }
     }
 
@@ -112,6 +101,4 @@ object Day13 {
         }
 
     }
-
-
 }
