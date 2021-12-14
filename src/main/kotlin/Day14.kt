@@ -11,7 +11,7 @@ fun main() {
 data class Combo(val from: Char, val to: Char)
 typealias ComboWithCount = Pair<Combo,Long>
 typealias ComboMap = HashMap<Combo, Long>
-
+fun createChange (from:Char, to:Char, count:Long):ComboWithCount = ComboWithCount(Combo(from,to),count)
 fun ComboMap.add(combo: Combo, count: Long = 1) {
     val c = this[combo]
     if (c == null) this[combo] = count else this[combo] = c + count
@@ -34,9 +34,9 @@ object Day14 {
                 instructions.firstOrNull { it.from == c.from && it.to == c.to }?.let {
                     val count = combinations[c] ?: 0
                     changes + listOf(
-                        Pair(Combo(it.from, it.insert), count),
-                        Pair(Combo(it.insert, it.to), count),
-                        Pair(Combo(it.from, it.to), -count)
+                        createChange(it.from, it.insert, count),
+                        createChange(it.insert, it.to, count),
+                        createChange(it.from, it.to, -count)
                     )
                 } ?: changes
             }
