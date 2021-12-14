@@ -11,21 +11,10 @@ fun main() {
 data class Combo(val from:Char, val to:Char)
 typealias ComboMap = HashMap<Combo,Long>
 fun ComboMap.add(combo:Combo, count:Long = 1) {
-
     val c = this[combo]
-    if (c == null)
-        this[combo] = count
-    else
-        this[combo] = c + count
+    if (c == null) this[combo] = count else this[combo] = c + count
 }
-fun ComboMap.sub(combo:Combo, count:Long = 1) {
-
-    val c = this[combo]
-    if (c == null)
-        this[combo] = -count
-    else
-        this[combo] = c - count
-}
+fun ComboMap.sub(combo:Combo, count:Long = 1) { this.add(combo,-count)}
 
 object Day14 {
 
@@ -52,7 +41,8 @@ object Day14 {
 
 
         fun result():Long  {
-            val g = ((combinations.toList().groupBy ({ it.first.from } , {it.second})) ).map { Pair(it.key,it.value.sumOf { count -> count })}
+            val g = ((combinations.toList().groupBy ({ it.first.from } , {it.second})) ).
+                    map { it.key to it.value.sumOf { count -> count } }
             return g.maxOf { it.second } - g.minOf { it.second }
         }
     }
@@ -60,9 +50,7 @@ object Day14 {
 
     fun day14(lines: Sequence<String>, steps:Int=10): Template {
         val template = parseInput(lines.toList())
-        for (i in 1 .. steps) {
-            template.invoke()
-        }
+        repeat(steps) { template.invoke() }
         return template
     }
 
