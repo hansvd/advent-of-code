@@ -45,8 +45,9 @@ object Day14 {
 
 
         fun result(): Long {
-            val g = ((combinations.toList()
-                .groupBy({ it.first.from }, { it.second }))).map { it.key to it.value.sumOf { count -> count } }
+            //count all combination start chars
+            val g = combinations.toList()
+                .groupBy({ it.first.from }, { it.second }).map { it.key to it.value.sumOf { count -> count } }
             return g.maxOf { it.second } - g.minOf { it.second }
         }
     }
