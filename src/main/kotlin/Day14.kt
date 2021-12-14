@@ -1,50 +1,71 @@
-import Day14.part1
-import Day14.part2
+import Day14.day14
 import java.io.File
 
 fun main() {
     File("input/input14.txt").useLines {
-        println(part1(it))
-        println(part2(it))
+        println(day14(it))
+        println(day14(it))
     }
 }
 
+data class Combo(val from:Char, val to:Char)
+typealias ComboMap = HashMap<Combo,Long>
+fun ComboMap.add(combo:Combo, count:Long = 1) {
+
+    val c = this[combo]
+    if (c == null)
+        this[combo] = count
+    else
+        this[combo] = c + count
+}
+fun ComboMap.sub(combo:Combo, count:Long = 1) {
+
+    val c = this[combo]
+    if (c == null)
+        this[combo] = -count
+    else
+        this[combo] = c - count
+}
+
 object Day14 {
-    class Template(line:String, val instructions: List<Instruction>) {
-        private var elements:List<Char> = line.filter { it in 'A'..'Z' }.toList()
+
+    class Template(line:String, private val instructions: List<Instruction>) {
+        private var combinations:ComboMap = hashMapOf()
+
+        init {
+            for (i in 0 until line.length-1) {
+                combinations.add(Combo(line[i],line[i+1]))
+            }
+            combinations.add(Combo(line.last(),'$')) // end of line, so last char is also counted
+        }
 
         fun invoke() {
-
-            elements = elements.drop(1).fold(elements.take(1)) { els, e -> els + invoke(els.last(),e)}
+            val newCombos =  HashMap(combinations)
+            for (c in combinations.keys) instructions.firstOrNull { it.from == c.from && it.to == c.to}?.let {
+                val count = combinations[c] ?: 0
+                newCombos.add(Combo(it.from,it.insert), count)
+                newCombos.add(Combo(it.insert,it.to), count)
+                newCombos.sub(Combo(it.from, it.to), count)
+            }
+            combinations = newCombos
         }
-        fun invoke(from:Char,to:Char): List<Char> =
-            instructions.firstOrNull { it.from == from && it.to == to}?.let { listOf(it.insert, it.to)} ?: listOf(to)
 
-        fun result():Int  {
-            val g = elements.groupingBy { it }.eachCount()
-            return g.maxOf { it.value } - g.minOf { it.value }
-        }
 
-        override fun toString():String {
-            return String(elements.toCharArray())
+        fun result():Long  {
+            val g = ((combinations.toList().groupBy ({ it.first.from } , {it.second})) ).map { Pair(it.key,it.value.sumOf { count -> count })}
+            return g.maxOf { it.second } - g.minOf { it.second }
         }
     }
-    data class Instruction(val from:Char, val to:Char, val insert:Char) {
+    data class Instruction(val from:Char, val to:Char, val insert:Char)
 
-    }
-    fun part1(lines: Sequence<String>, steps:Int=10): Template {
+    fun day14(lines: Sequence<String>, steps:Int=10): Template {
         val template = parseInput(lines.toList())
         for (i in 1 .. steps) {
             template.invoke()
-            println(template.toString())
         }
-
         return template
     }
 
-    fun part2(lines: Sequence<String>): Int {
-        return 0
-    }
 
     private fun parseInput(lines:List<String>):Template =
          Template(lines[0],parseInstruction(lines.drop(2)))
