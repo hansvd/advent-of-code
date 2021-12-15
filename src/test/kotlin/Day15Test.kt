@@ -6,7 +6,16 @@ import kotlin.test.assertEquals
 
 class Day15Test {
 
-    val testInput = """"""
+    val testInput = """1163751742
+1381373672
+2136511328
+3694931569
+7463417111
+1319128137
+1359912421
+3125421639
+1293138521
+2311944581"""
 
     @Test
     fun day15aBaseTest() {
@@ -15,12 +24,12 @@ class Day15Test {
 
     @Test
     fun day15aInputTest() {
-        assertEquals(0, part1(testInput.lineSequence()))
+        assertEquals(40, part1(testInput.lineSequence()))
     }
 
     @Test
     fun day15aTest() {
-        assertEquals(0, File("input/input15.txt").useLines { part1(it) })
+        assertEquals(720, File("input/input15.txt").useLines { part1(it) })
     }
 
     @Test
