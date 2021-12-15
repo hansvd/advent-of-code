@@ -90,7 +90,7 @@ class Day15Test {
     }
     @Test
     fun day15bTest() {
-        assertEquals(720, File("input/input15.txt").useLines { day15(it,5) })
+        assertEquals(3025, File("input/input15.txt").useLines { day15(it,5) })
     }
 
 }

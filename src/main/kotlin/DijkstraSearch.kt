@@ -1,4 +1,4 @@
-package nl.avwie.aoc.common.search
+// Algorithm based on https://github.com/avwie/advent-of-code
 
 import java.util.*
 

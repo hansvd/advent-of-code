@@ -1,7 +1,7 @@
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
-class DijkstraTest {
+class DijkstraOldTest {
 
     class MyGraph<T>( override val vertices: Set<T>,
                       val edges: Map<T, Set<T>>,

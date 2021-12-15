@@ -1,12 +1,5 @@
-import Day14.day14
-import java.io.File
 
-fun main() {
-    File("input/input14.txt").useLines {
-        println(day14(it))
-        println(day14(it))
-    }
-}
+
 
 data class Combo(val from: Char, val to: Char)
 typealias ComboWithCount = Pair<Combo,Long>
