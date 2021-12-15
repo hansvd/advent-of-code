@@ -34,11 +34,12 @@ fun <T> dijkstra(graph: Graph<T>, start: T): Map<T, T?> {
     val previous: MutableMap<T, T?> = graph.vertices.associateWith { null }.toMutableMap()
 
     while (s != graph.vertices) {
+        println(s.size)
         // let v be the closest vertex that has not yet been visited
         val v: T = delta
             .filter { !s.contains(it.key) }
-            .minByOrNull { it.value }!!
-            .key
+            .minByOrNull { it.value }
+            ?.key ?: continue
 
         graph.edges(v)?.minus(s)?.forEach { neighbor ->
             val newPath = delta.getValue(v) + graph.weights(Pair(v, neighbor))
