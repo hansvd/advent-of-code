@@ -1,7 +1,6 @@
-import Day12.Companion.part2
 import Day16.Companion.hexToBinString
 import Day16.Companion.part1
-
+import Day16.Companion.part2
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -23,23 +22,25 @@ class Day16Test {
     }
 
     @Test
-    fun dayXaTest() {
+    fun day16aTest() {
         assertEquals(923, part1(File("input/input16.txt").readText()))
     }
 
     @Test
-    fun dayXbBaseTest() {
-        assertEquals(0, part2("".lineSequence()))
+    fun day16bBaseTest() {
+        assertEquals(3, part2("C200B40A82"))
+        assertEquals(54,part2("04005AC33890"))
+        assertEquals(7,part2("880086C3E88112"))
+        assertEquals(9,part2("CE00C43D881120"))
+        assertEquals(1,part2("D8005AC2A8F0"))
+        assertEquals(0,part2("F600BC2D8F"))
+        assertEquals(0,part2("9C005AC2F8F0"))
+        assertEquals(1,part2("9C0141080250320F1802104A08"))
     }
 
     @Test
-    fun dayXbInputTest() {
-        assertEquals(0, part2(testInput.lineSequence()))
-    }
-
-    @Test
-    fun dayXbTest() {
-        assertEquals(0, File("input/input16.txt").useLines { part2(it) })
+    fun day16bTest() {
+        assertEquals(258888628940, part2(File("input/input16.txt").readText()))
     }
 
 
