@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 
 class DayXTest {
 
-    val testInput = """3,4,3,1,2"""
+    val testInput = """"""
 
     @Test
     fun dayXaBaseTest() {
