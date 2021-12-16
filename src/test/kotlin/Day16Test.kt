@@ -1,6 +1,6 @@
-import Day16.Companion.hexToBinString
-import Day16.Companion.part1
-import Day16.Companion.part2
+import Day16.hexToBinString
+import Day16.part1
+import Day16.part2
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
