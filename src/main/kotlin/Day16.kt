@@ -1,3 +1,5 @@
+import Day16.State.Companion.parsePackets
+
 fun String.parseBinToLong(): Long = this.toLong(2)
 fun String.parseBinToInt(startIndex: Int, length: Int): Int =
     this.substring(startIndex, startIndex + length).parseBinToInt()
@@ -7,9 +9,9 @@ fun String.parseBinToInt(): Int = this.toInt(2)
 object Day16 {
 
 
-    fun part1(input: String): Int = State(s = hexToBinString(input)).parsePackets().versionSum
+    fun part1(input: String): Int = parsePackets(hexToBinString(input)).versionSum
 
-    fun part2(input: String): Long = State(s = hexToBinString(input)).parsePackets().values.firstOrNull() ?: 0
+    fun part2(input: String): Long = parsePackets(hexToBinString(input)).values.firstOrNull() ?: 0
 
     fun hexToBinString(l: String): String = l.fold("") { r, c ->
         var b = Integer.toBinaryString(c.digitToInt(16))
@@ -29,12 +31,14 @@ object Day16 {
         val startIndex: Int = 0,
         val values: List<Long> = listOf()
     ) {
-        fun parsePackets(): State {
-            var state = this
-            do {
-                state = state.parsePacket()
-            } while (state.startIndex < state.s.length && !onlyZerosFrom(state.s, state.startIndex))
-            return state
+        companion object {
+            fun parsePackets(s:String): State {
+                var state = State(s=s)
+                do {
+                    state = state.parsePacket()
+                } while (state.startIndex < state.s.length && !onlyZerosFrom(state.s, state.startIndex))
+                return state
+            }
         }
 
         private fun parsePacket(): State {
@@ -51,8 +55,7 @@ object Day16 {
         private fun parseOperator(id: Int): State {
             return if (s[startIndex + 6] == '0') {
                 val l = s.parseBinToInt(startIndex + 7, 15)
-                val subString = s.substring(startIndex + 7 + 15, startIndex + 7 + 15 + l)
-                val subState = State(s = subString).parsePackets()
+                val subState = parsePackets( s.substring(startIndex + 7 + 15, startIndex + 7 + 15 + l))
                 copy(
                     startIndex = startIndex + 7 + 15 + l,
                     versionSum = versionSum + subState.versionSum,
