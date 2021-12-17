@@ -19,8 +19,9 @@ object Day17 {
         fun findVelocities():Sequence<Pair<Velocity,Path>> = sequence {
             (1..targetX.last).forEach { x->
                 (targetY.first..-targetY.first).forEach { y->
-                    val s = go(Point(0, 0), Velocity(x, y))
-                    if (s.isNotEmpty()) yield(Pair(Velocity(x, y),s))
+                    go(Point(0, 0), Velocity(x, y)).let { path ->
+                        if (path.isNotEmpty()) yield(Pair(Velocity(x, y), path))
+                    }
                 }
             }
         }
@@ -28,12 +29,12 @@ object Day17 {
             = go (listOf(start),velocity)
         private fun go(cur:Path, velocity:Velocity):Path {
             val last = cur.last()
-            if (hit(last)) return cur
-            if (toFar(last)) return listOf()
+            if (isHit(last)) return cur
+            if (isToFar(last)) return listOf()
             return go(cur + last.move(velocity), velocity.next())
         }
-        private fun hit(p:Point) = (p.x in targetX && p.y in targetY)
-        private fun toFar(p:Point) = (p.x > targetX.last || p.y < targetY.first)
+        private fun isHit(p:Point) = (p.x in targetX && p.y in targetY)
+        private fun isToFar(p:Point) = (p.x > targetX.last || p.y < targetY.first)
     }
 
 }
