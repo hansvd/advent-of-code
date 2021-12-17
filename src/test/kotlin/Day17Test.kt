@@ -2,6 +2,7 @@ import Day17.Point
 import Day17.Velocity
 import Day17.go
 import Day17.part1
+import Day17.part2
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -20,27 +21,19 @@ class Day17Test {
     fun day17aInputTest() {
         assertEquals(45, part1(20..30, -10..-5))
     }
-    //155..182, y=-117..-67
 
     @Test
     fun day17aTest() {
         assertEquals(6786, part1(155..182, -117..-67))
     }
-//
-//    @Test
-//    fun day17bBaseTest() {
-//        assertEquals(0, part2("00000".lineSequence()))
-//    }
-//
-//    @Test
-//    fun day17bInputTest() {
-//        assertEquals(0, part2(testInput.lineSequence()))
-//    }
-//
-//    @Test
-//    fun day17bTest() {
-//        assertEquals(0, File("input/inputX.txt").useLines { part2(it) })
-//    }
 
+    @Test
+    fun day17bInputTest() {
+        assertEquals(112, part2(20..30, -10..-5))
+    }
 
+    @Test
+    fun day17bTest() {
+        assertEquals(2313, part2(155..182, -117..-67))
+    }
 }
