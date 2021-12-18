@@ -2,8 +2,8 @@ import Day18.SnailFishValue
 import Day18.parseInput
 import Day18.parseInputLines
 import Day18.parseValue
+import Day18.part2
 import Day18.toValue
-import DayX.part2
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -99,7 +99,7 @@ class Day18Test {
 
     @Test
     fun exampleInputTestPart2() {
-        assertEquals(0, part2(testInput.lineSequence()))
+        assertEquals(3992, part2(testInput2.lineSequence()))
     }
 
     @Test

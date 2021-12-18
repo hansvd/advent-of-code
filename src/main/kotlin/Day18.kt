@@ -1,13 +1,14 @@
 object Day18 {
     data class StepResult(val v: Value, val addLeft: Int = 0, val addRight: Int = 0, val done: Boolean = false)
 
+    fun part2(lines:Sequence<String>):Int {
+        return 0
+    }
     interface Value {
-        //val depth:In
         fun explode(depth: Int): StepResult
         fun split(): StepResult
         fun addFirst(value: Int): StepResult
         fun addLast(value: Int): StepResult
-        fun toString(depth:Int):String
         fun magnitude():Int
 
         fun explode(): Value = explode(0).v
@@ -15,21 +16,17 @@ object Day18 {
 
         fun reduce(): Value {
             var result = this
-            //println(result.toString())
             do {
                 var stepResult = result.explode(0)
                 if (stepResult.done) {
-                    //println("explode." + stepResult.v.toString(0))
                     result = stepResult.v
                     continue
                 }
 
                 stepResult = result.split()
-                //if (stepResult.done) println("split..." + stepResult.v.toString(0))
                 result = stepResult.v
 
             } while (stepResult.done)
-            //println("==")
             return result
         }
 
@@ -37,26 +34,15 @@ object Day18 {
     }
 
     data class NumValue(val num: Int) : Value {
-        override fun explode(depth: Int): StepResult {
-            //if (num >= 10) return this
-            return StepResult(this)
-        }
+        override fun explode(depth: Int): StepResult = StepResult(this)
 
         override fun split(): StepResult {
             if (num < 10) return StepResult(this)
             return StepResult(SnailFishValue((num / 2).toValue(), ((num + 1) / 2).toValue()), done = true)
         }
 
-        override fun addFirst(value: Int): StepResult {
-            return StepResult(NumValue(num + value), done = true)
-        }
-
-        override fun addLast(value: Int): StepResult {
-            return StepResult(NumValue(num + value), done = true)
-        }
-
-        override fun toString(depth: Int) = num.toString()
-
+        override fun addFirst(value: Int): StepResult = StepResult(NumValue(num + value), done = true)
+        override fun addLast(value: Int): StepResult = StepResult(NumValue(num + value), done = true)
         override fun toString(): String = num.toString()
         override fun magnitude(): Int = num
     }
@@ -133,23 +119,11 @@ object Day18 {
 
         }
 
-        override fun toString(depth: Int): String {
-             val s = if (depth == 4) '|' else '['
-            return "$s${left.toString(depth+1)},${right.toString(depth+1)}]"
-        }
-
         override fun toString(): String = "[$left,$right]"
         override fun magnitude(): Int = left.magnitude()*3 + right.magnitude()*2
     }
 
     fun Int.toValue() = NumValue(this)
-//    fun part1(lines: Sequence<String>): Int {
-//        return 0
-//    }
-//
-//    fun part2(lines: Sequence<String>): Int {
-//        return 0
-//    }
 
     fun parseInputLines(input: Sequence<String>): Value =
         input.map { parseInput(it) }.reduce { r, l -> SnailFishValue(r, l).reduce() }
