@@ -28,11 +28,13 @@ class Day18Test {
     }
     @Test
     fun exampleInputTestPart1() {
-        assertEquals("[[[[0,9],2],3],4]", parseInput("[[[[[9,8],1],2],3],4]").reduce().toString())
-        assertEquals("[7,[6,[5,[7,0]]]]", parseInput("[7,[6,[5,[4,[3,2]]]]]").reduce().toString())
-        assertEquals("[[6,[5,[7,0]]],3]", parseInput("[[6,[5,[4,[3,2]]]],1]").reduce().toString())
-        assertEquals("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]", parseInput("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]").reduce().toString())
-        assertEquals("[[3,[2,[8,0]]],[9,[5,[7,0]]]]", parseInput("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]").reduce().toString())
+        assertEquals("[[[[0,9],2],3],4]", parseInput("[[[[[9,8],1],2],3],4]").explode().toString())
+        assertEquals("[7,[6,[5,[7,0]]]]", parseInput("[7,[6,[5,[4,[3,2]]]]]").explode().toString())
+        assertEquals("[[6,[5,[7,0]]],3]", parseInput("[[6,[5,[4,[3,2]]]],1]").explode().toString())
+        assertEquals("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]", parseInput("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]").explode().toString())
+        assertEquals("[[3,[2,[8,0]]],[9,[5,[7,0]]]]", parseInput("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]").explode().toString())
+        assertEquals("[[[[0,7],4],[[7,8],[0,13]]],[1,1]]", parseInput("[[[[0,7],4],[15,[0,13]]],[1,1]]").splitter().toString())
+        assertEquals("[[[[0,7],4],[[7,8],[6,0]]],[8,1]]", parseInput("[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]").reduce().toString())
     }
 
     @Test

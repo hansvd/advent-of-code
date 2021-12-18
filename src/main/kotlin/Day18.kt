@@ -5,16 +5,34 @@ object Day18 {
 
     interface Value {
         //val depth:In
-        fun reduce(depth:Int):ReduceResult
+        fun explode(depth:Int):ReduceResult
+        fun split():ReduceResult
+        fun explode():Value {
+            return explode(0).v
+        }
+        fun splitter():Value {
+            return split().v
+        }
         fun reduce():Value {
-            return reduce(0).v
+            var result = this
+            do {
+                val explodeResult = result.explode(0)
+                val splitResult = explodeResult.v.split()
+                result = splitResult.v
+            } while(explodeResult.done || splitResult.done)
+            return result
         }
         fun addFirst(value:Int):ReduceResult
     }
     data class NumValue(val num:Int):Value {
-        override fun reduce(depth:Int):ReduceResult {
+        override fun explode(depth:Int):ReduceResult {
             //if (num >= 10) return this
             return ReduceResult(this)
+        }
+
+        override fun split(): ReduceResult {
+            if (num < 10) return ReduceResult(this)
+            return ReduceResult(SnailFishValue((num / 2).toValue(),((num + 1) / 2).toValue()),done=true)
         }
 
         override fun addFirst(value: Int): ReduceResult {
@@ -26,12 +44,12 @@ object Day18 {
     data class SnailFishValue(val left:Value, val right:Value):Value {
         //override val depth = 1 + maxOf(left.depth,right.depth)
 
-        override fun reduce(depth:Int):ReduceResult {
+        override fun explode(depth:Int):ReduceResult {
             if (depth == 4 && (left is NumValue && right is NumValue)) {
                 return ReduceResult(0.toValue(),left.num,right.num,true)
             }
             else {
-                val leftResult = left.reduce(depth+1)
+                val leftResult = left.explode(depth+1)
                 var addLeft = leftResult.addLeft
                 var addRight = leftResult.addRight
 
@@ -39,7 +57,7 @@ object Day18 {
                     val r = right.addFirst(addRight)
                     addRight = 0
                     r
-                } else right.reduce(depth+1)
+                } else right.explode(depth+1)
 
 
 
@@ -58,6 +76,15 @@ object Day18 {
                 return ReduceResult(SnailFishValue(newLeft,newRight),addLeft,addRight,leftResult.done || rightResult.done)
             }
 
+        }
+
+        override fun split(): ReduceResult {
+            val leftResult = left.split()
+            if (leftResult.done) {
+                return ReduceResult(SnailFishValue(leftResult.v,right), done = true)
+            }
+            val rightResult = right.split()
+            return ReduceResult(SnailFishValue(left,rightResult.v),done=rightResult.done)
         }
 
         override fun addFirst(value: Int): ReduceResult {
@@ -99,6 +126,8 @@ object Day18 {
         return line.length
     }
     fun parseValue(line:String):Value {
+        var i = 0; while(i < line.length && line[i].isDigit()) i++
+        if (i>0) return NumValue(Integer.parseInt(line.substring(0,i)))
         if (line[0].isDigit()) return NumValue(line[0].code - '0'.code)
         return parseInput(line)
     }
