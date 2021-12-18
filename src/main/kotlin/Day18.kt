@@ -3,16 +3,15 @@ object Day18 {
 
     fun part2(lines:Sequence<String>):Int {
        val values = lines.map { parseInput(it)}.toList()
-        var max = 0
-        for (l in values) {
-            for (l2 in values) {
-                if (l == l2) continue
-                val m = SnailFishValue(l, l2).reduce().magnitude()
-                if (m > max) max = m
+
+        return values.fold(0) { max, l ->
+            values.fold(max) { max2, l2 ->
+                if (l == l2) max2
+                else maxOf(SnailFishValue(l, l2).reduce().magnitude(), max2)
             }
         }
 
-        return max
+
     }
     interface Value {
         fun explode(depth: Int): StepResult
