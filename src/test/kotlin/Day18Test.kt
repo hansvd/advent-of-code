@@ -7,6 +7,7 @@ import DayX.part2
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class Day18Test {
 
@@ -23,10 +24,15 @@ class Day18Test {
         assertEquals(1.toValue(), parseValue("1"))
         assertEquals(SnailFishValue(1.toValue(), 2.toValue()), parseValue("[1,2]"))
         assertEquals(SnailFishValue(SnailFishValue(1.toValue(), 2.toValue()),3.toValue()), parseInput("[[1,2],3]"))
+        assertNotNull(parseInput("[[[1,3],[5,3]],[[1,3],[8,7]]],[[[4,9],[6,9]],[[8,2],[7,3]]]]"))
     }
     @Test
     fun exampleInputTestPart1() {
-        assertEquals(0, part1(testInput.lineSequence()))
+        assertEquals("[[[[0,9],2],3],4]", parseInput("[[[[[9,8],1],2],3],4]").reduce().toString())
+        assertEquals("[7,[6,[5,[7,0]]]]", parseInput("[7,[6,[5,[4,[3,2]]]]]").reduce().toString())
+        assertEquals("[[6,[5,[7,0]]],3]", parseInput("[[6,[5,[4,[3,2]]]],1]").reduce().toString())
+        assertEquals("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]", parseInput("[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]").reduce().toString())
+        assertEquals("[[3,[2,[8,0]]],[9,[5,[7,0]]]]", parseInput("[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]").reduce().toString())
     }
 
     @Test
