@@ -2,7 +2,17 @@ object Day18 {
     data class StepResult(val v: Value, val addLeft: Int = 0, val addRight: Int = 0, val done: Boolean = false)
 
     fun part2(lines:Sequence<String>):Int {
-        return 0
+       val values = lines.map { parseInput(it)}.toList()
+        var max = 0
+        for (l in values) {
+            for (l2 in values) {
+                if (l == l2) continue
+                val m = SnailFishValue(l, l2).reduce().magnitude()
+                if (m > max) max = m
+            }
+        }
+
+        return max
     }
     interface Value {
         fun explode(depth: Int): StepResult

@@ -99,12 +99,12 @@ class Day18Test {
 
     @Test
     fun exampleInputTestPart2() {
-        assertEquals(3992, part2(testInput2.lineSequence()))
+        assertEquals(3993, part2(testInput2.lineSequence()))
     }
 
     @Test
     fun inputTestPart2() {
-        assertEquals(0, File("input/inputX.txt").useLines { part2(it) })
+        assertEquals(4735, File("input/input18.txt").useLines { part2(it) })
     }
 
 
