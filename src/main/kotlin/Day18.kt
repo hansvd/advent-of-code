@@ -5,37 +5,35 @@ object Day18 {
         //val depth:In
         fun explode(depth: Int): StepResult
         fun split(): StepResult
-        fun explode(): Value {
-            return explode(0).v
-        }
+        fun addFirst(value: Int): StepResult
+        fun addLast(value: Int): StepResult
+        fun toString(depth:Int):String
+        fun magnitude():Int
 
-        fun splitter(): Value {
-            return split().v
-        }
+        fun explode(): Value = explode(0).v
+        fun splitter(): Value = split().v
 
         fun reduce(): Value {
             var result = this
-            println(result.toString())
+            //println(result.toString())
             do {
                 var stepResult = result.explode(0)
                 if (stepResult.done) {
-                    println("explode." + stepResult.v.toString(0))
+                    //println("explode." + stepResult.v.toString(0))
                     result = stepResult.v
                     continue
                 }
 
                 stepResult = result.split()
-                if (stepResult.done) println("split..." + stepResult.v.toString(0))
+                //if (stepResult.done) println("split..." + stepResult.v.toString(0))
                 result = stepResult.v
 
             } while (stepResult.done)
-            println("==")
+            //println("==")
             return result
         }
 
-        fun addFirst(value: Int): StepResult
-        fun addLast(value: Int): StepResult
-        fun toString(depth:Int):String
+
     }
 
     data class NumValue(val num: Int) : Value {
@@ -60,10 +58,10 @@ object Day18 {
         override fun toString(depth: Int) = num.toString()
 
         override fun toString(): String = num.toString()
+        override fun magnitude(): Int = num
     }
 
     data class SnailFishValue(val left: Value, val right: Value) : Value {
-        //override val depth = 1 + maxOf(left.depth,right.depth)
 
         override fun explode(depth: Int): StepResult {
             require(depth != 4 || (left is NumValue && right is NumValue))
@@ -141,6 +139,7 @@ object Day18 {
         }
 
         override fun toString(): String = "[$left,$right]"
+        override fun magnitude(): Int = left.magnitude()*3 + right.magnitude()*2
     }
 
     fun Int.toValue() = NumValue(this)
