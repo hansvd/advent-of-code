@@ -1,3 +1,5 @@
+import kotlin.math.abs
+
 data class R(val pos: Int, val m: Int)
 typealias RotatePar = Array<R>
 object Day19 {
@@ -45,7 +47,10 @@ object Day19 {
     )
 
     fun List<RotatePar>.rotations(c: Coordinates) = this.map { r -> c.rotate(r) }
-
+    fun Int.distance(o:Int):Int {
+        if (o > this) return abs(o - this)
+        return abs(this - o)
+    }
     data class Coordinates(val x: Int, val y: Int, val z: Int) {
         val isOrigin = x == 0 && y == 0 && z == 0
         private val pos = arrayOf(x, y, z)
@@ -58,6 +63,9 @@ object Day19 {
             rotateParameters.rotations(o).any { r -> (x == r.x && y == r.y && z == r.z) }
 
         fun delta(o: Coordinates): Coordinates = Coordinates(x - o.x, y - o.y, z - o.z)
+        fun distance(d: Coordinates): Int {
+                return x.distance(d.x) + y.distance(d.y) + z.distance(d.z)
+        }
 
 
     }
@@ -106,6 +114,16 @@ object Day19 {
         }
     }
 
+    fun maxDistance(scanners: List<Scanner>):Int {
+        var max = 0
+        scanners.forEach { s1 ->
+            scanners.forEach { s2 ->
+                val d = s1.coordinates.distance(s2.coordinates)
+                max = maxOf(max,d)
+            }
+        }
+        return max
+    }
 
     fun parseInput(lines: List<String>): List<Scanner> {
         // split per scanner

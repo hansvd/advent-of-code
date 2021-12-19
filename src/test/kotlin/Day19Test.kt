@@ -1,4 +1,5 @@
 import Day19.Coordinates
+import Day19.maxDistance
 import Day19.parseInput
 import Day19.setOffsets
 import org.junit.jupiter.api.Test
@@ -68,6 +69,23 @@ class Day19Test {
     }
 
 
+    @Test
+    fun exampleTestPart2() {
+        assertEquals(3621, Coordinates(1105,-1205,1229).distance(Coordinates(-92,-2380,-20)))
 
+
+        val input = File("input/input19example.txt").useLines { parseInput(it.toList()) }
+        setOffsets(input)
+
+        assertEquals(3621, maxDistance(input))
+    }
+
+    @Test
+    fun inputTestPart2() {
+        val input = File("input/input19.txt").useLines { parseInput(it.toList()) }
+        setOffsets(input)
+
+        assertEquals(13327, maxDistance(input))
+    }
 
 }
