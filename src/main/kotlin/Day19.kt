@@ -1,55 +1,109 @@
+data class R(val pos: Int, val m: Int)
+typealias RotatePar = Array<R>
 object Day19 {
-    val permutations:List<Array<Int>> = listOf(
-        arrayOf(0, 1, 2),
-        arrayOf(0, 2, 1),
-        arrayOf(1, 0, 2),
-        arrayOf(1, 2, 0),
-        arrayOf(2, 0, 1),
-        arrayOf(2, 1, 0)
+
+//    pos = mapping of x,y,z  => 0 = x -> x, 1 = y -> x, 2 = z -> x
+//    m = multiply (-1,1)
+
+    // should be 24 possibilities
+    val rotateParameters: List<RotatePar> = listOf(
+        // positive x
+        arrayOf(R(0, 1), R(1, 1), R(2, 1)),
+        arrayOf(R(0, 1), R(2, -1), R(1, 1)),
+        arrayOf(R(0, 1), R(1, -1), R(2, -1)),
+        arrayOf(R(0, 1), R(2, 1), R(1, -1)),
+
+        // negative x
+        arrayOf(R(0, -1), R(1, -1), R(2, 1)),
+        arrayOf(R(0, -1), R(2, 1), R(1, 1)),
+        arrayOf(R(0, -1), R(1, 1), R(2, -1)),
+        arrayOf(R(0, -1), R(2, -1), R(1, -1)),
+
+        // positive y
+        arrayOf(R(1, 1), R(2, 1), R(0, 1)),
+        arrayOf(R(1, 1), R(0, -1), R(2, 1)),
+        arrayOf(R(1, 1), R(2, -1), R(0, -1)),
+        arrayOf(R(1, 1), R(0, 1), R(2, -1)),
+
+        // negative y
+        arrayOf(R(1, -1), R(2, -1), R(0, 1)),
+        arrayOf(R(1, -1), R(0, 1), R(2, 1)),
+        arrayOf(R(1, -1), R(2, 1), R(0, -1)),
+        arrayOf(R(1, -1), R(0, -1), R(2, -1)),
+
+        // positive z
+        arrayOf(R(2, 1), R(0, 1), R(1, 1)),
+        arrayOf(R(2, 1), R(1, -1), R(0, 1)),
+        arrayOf(R(2, 1), R(0, -1), R(1, -1)),
+        arrayOf(R(2, 1), R(1, 1), R(0, -1)),
+
+        // negative z
+        arrayOf(R(2, -1), R(0, -1), R(1, 1)),
+        arrayOf(R(2, -1), R(1, 1), R(0, 1)),
+        arrayOf(R(2, -1), R(0, 1), R(1, -1)),
+        arrayOf(R(2, -1), R(1, -1), R(0, -1)),
     )
-    val rotations = listOf(
-        arrayOf(1,1,1),
-        arrayOf(1,-1,1),
-        arrayOf(1,1,-1),
-        arrayOf(1,-1,-1),
-        arrayOf(-1,1,1),
-        arrayOf(-1,-1,1),
-        arrayOf(-1,-1,-1),
-        arrayOf(-1,-1,-1)
-    )
+
+    fun List<RotatePar>.rotations(c: Coordinates) = this.map { r -> c.rotate(r) }
+
     data class Coordinates(val x: Int, val y: Int, val z: Int) {
-        val pos = arrayOf(x, y, z)
-//        fun samePosition(o: Coordinates, m: Array<Int>): Boolean {
-//            return rotations.any { r -> (pos[0] == o.pos[m[0]]*r[0] && pos[1] == o.pos[m[1]]*r[1] && pos[2] == o.pos[m[2]]*r[2]) }
-//
-//        }
+        val isOrigin = x == 0 && y == 0 && z == 0
+        private val pos = arrayOf(x, y, z)
 
-        fun samePosition(o: Coordinates): Boolean = //permutations.any { p -> samePosition(o, p) }
-            permutations.any { m -> rotations.any { r -> (x == o.pos[m[0]]*r[0] && y == o.pos[m[1]]*r[1] && z == o.pos[m[2]]*r[2]) } }
+        fun rotate(r: RotatePar) = Coordinates(pos[r[0].pos] * r[0].m, pos[r[1].pos] * r[1].m, pos[r[2].pos] * r[2].m)
+        fun plus(o: Coordinates) = Coordinates(x + o.x, y + o.y, z + o.z)
+        fun minus(o: Coordinates) = Coordinates(x - o.x, y - o.y, z - o.z)
 
-        fun delta(o:Coordinates, m:Array<Int>):Coordinates = Coordinates(x-o.pos[m[0]],y-o.pos[m[1]],x-o.pos[m[2]])
+        fun samePosition(o: Coordinates): Boolean =
+            rotateParameters.rotations(o).any { r -> (x == r.x && y == r.y && z == r.z) }
+
+        fun delta(o: Coordinates): Coordinates = Coordinates(x - o.x, y - o.y, z - o.z)
+
+
     }
 
     data class Bacon(val coordinates: Coordinates) {
         fun match(o: Bacon) = coordinates.samePosition(o.coordinates)
     }
 
-    data class Scanner(val coordinates: Coordinates? = null, val bacons: List<Bacon>) {
-        fun findMatchingBacons(other: Scanner): List<Pair<Bacon, Bacon>> {
-            return bacons.map { b ->
-                other.bacons.mapNotNull { o ->
-                    if (b.match(o)) Pair(b, o) else null
-                }
-            }.flatten()
+    fun setOffsets(scanners: List<Scanner>) {
+        var done = true
+        while (done) {
+            done = false
+            scanners.drop(1).filter{ it.coordinates.isOrigin }.forEach {
+                done = scanners[0].setOffsets(it) || done }
+
+//            scanners.filter { !it.coordinates.isOrigin }.forEach { s ->
+//                scanners.drop(0).filter { it.coordinates.isOrigin }.forEach { done = s.setOffsets(it) || done }
+//            }
         }
     }
 
-    fun part1(lines: Sequence<String>): Int {
-        return 0
-    }
+    class Scanner(var coordinates: Coordinates = Coordinates(0, 0, 0), var bacons: List<Bacon>) {
 
-    fun part2(lines: Sequence<String>): Int {
-        return 0
+
+
+        fun setOffsets(o: Scanner):Boolean {
+            val (delta,r) = findDelta(o) ?: return false
+            o.coordinates = if(coordinates.isOrigin) delta else  coordinates.minus(delta)
+
+            bacons = (bacons + o.bacons.map { Bacon(it.coordinates.rotate(r).plus(delta))}).distinct()
+            return true
+        }
+
+        private fun findDelta(o: Scanner): Pair<Coordinates,RotatePar>? {
+            rotateParameters.forEach { r ->
+                val deltaCount = mutableMapOf<Coordinates, Int>()
+                for (bacon in bacons) for (otherBacon in o.bacons) {
+                    val rotation = otherBacon.coordinates.rotate(r)
+                    val delta = bacon.coordinates.delta(rotation)
+                    deltaCount[delta] = (deltaCount[delta] ?: 0) + 1
+                    if ((deltaCount[delta] ?: 0) >= 12)
+                        return Pair(delta,r)
+                }
+            }
+            return null
+        }
     }
 
 
