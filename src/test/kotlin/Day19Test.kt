@@ -1,8 +1,8 @@
 import Day19.Coordinates
 import Day19.match
 import Day19.maxDistance
+import Day19.merge
 import Day19.parseInput
-import Day19.setOffsets
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -39,10 +39,10 @@ class Day19Test {
         val input = File("input/input19example.txt").useLines { parseInput(it.toList()) }
         assertEquals(5, input.size)
 
-        input[0].setOffsets(input[1])
+        input[0].merge(input[1])
         assertEquals(Coordinates(68, -1246, -43), input[1].coordinates)
 
-        input[1].setOffsets(input[4])
+        input[1].merge(input[4])
         assertEquals(Coordinates(-20, -1359, 1061), input[4].coordinates)
     }
 
@@ -51,7 +51,7 @@ class Day19Test {
         val input = File("input/input19example.txt").useLines { parseInput(it.toList()) }
         assertEquals(5, input.size)
 
-        setOffsets(input)
+        merge(input)
 
         assertEquals(Coordinates(68, -1246, -43), input[1].coordinates)
         assertEquals(Coordinates(1105, -1205, 1229), input[2].coordinates)
@@ -64,7 +64,7 @@ class Day19Test {
     @Test
     fun inputTestPart1() {
         val input = File("input/input19.txt").useLines { parseInput(it.toList()) }
-        setOffsets(input)
+        merge(input)
         assertEquals(390, input[0].bacons.size)
     }
 
@@ -75,7 +75,7 @@ class Day19Test {
 
 
         val input = File("input/input19example.txt").useLines { parseInput(it.toList()) }
-        setOffsets(input)
+        merge(input)
 
         assertEquals(3621, maxDistance(input))
     }
@@ -83,7 +83,7 @@ class Day19Test {
     @Test
     fun inputTestPart2() {
         val input = File("input/input19.txt").useLines { parseInput(it.toList()) }
-        setOffsets(input)
+        merge(input)
 
         assertEquals(13327, maxDistance(input))
     }

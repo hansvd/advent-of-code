@@ -72,18 +72,18 @@ object Day19 {
         fun distance(d: Coordinates): Int = x.distance(d.x) + y.distance(d.y) + z.distance(d.z)
     }
 
-    fun setOffsets(scanners: List<Scanner>) {
+    fun merge(scanners: List<Scanner>) {
         var done = true
         while (done) {
             done = false
             scanners.drop(1).filter{ it.coordinates.isOrigin }.forEach {
-                done = scanners[0].setOffsets(it) || done }
+                done = scanners[0].merge(it) || done }
         }
     }
 
     class Scanner(var coordinates: Coordinates = Coordinates(0, 0, 0), var bacons: Set<Bacon>) {
 
-        fun setOffsets(o: Scanner):Boolean {
+        fun merge(o: Scanner):Boolean {
             val (delta,r) = findDelta(o) ?: return false
             o.coordinates = if(coordinates.isOrigin) delta else  coordinates.minus(delta)
 
