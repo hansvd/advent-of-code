@@ -30,10 +30,13 @@ class Day19Test {
                     bacon.match(s.bacons[i]) } }.all { it })
     }
 
-//    @Test fun matchSameBaconDifferentScannerTest() {
-//        assertTrue(Coordinates(-618,-824,-621).delta(Coordinates(686,422,578),arrayOf(0,1,2)).samePosition(Coordinates(-537,-823,-458).delta(Coordinates(605,423,415),arrayOf(0,2,1))))
-//
-//    }
+    @Test fun matchSameBaconDifferentScannerTest() {
+
+        assertTrue(Coordinates(-537,-823,-458).possibleDeltas(Coordinates(605,423,415)).any {
+            p -> Coordinates(-618,-824,-621).delta(Coordinates(686,422,578)).samePosition(p)})
+
+
+    }
 
     @Test
     fun exampleInputTestPart1() {

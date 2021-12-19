@@ -1,33 +1,60 @@
 object Day19 {
-    val permutations:List<Array<Int>> = listOf(
-        arrayOf(0, 1, 2),
-        arrayOf(0, 2, 1),
-        arrayOf(1, 0, 2),
-        arrayOf(1, 2, 0),
-        arrayOf(2, 0, 1),
-        arrayOf(2, 1, 0)
+
+    // should be 24 possibilities
+    data class R(val pos:Int, val m:Int)
+    val rotateParameters:List<Array<R>> = listOf(
+        // positive x
+        arrayOf(R(0,1), R(1,1), R(2,1)),
+        arrayOf(R(0,1), R(2,-1), R(1,1)),
+        arrayOf(R(0,1), R(1,-1), R(2,-1)),
+        arrayOf(R(0,1), R(2,1), R(1,-1)),
+
+        // negative x
+        arrayOf(R(0,-1), R(1,-1), R(2,1)),
+        arrayOf(R(0,-1), R(2,1), R(1,1)),
+        arrayOf(R(0,-1), R(1,1), R(2,-1)),
+        arrayOf(R(0,-1), R(2,-1), R(1,-1)),
+
+        // positive y
+        arrayOf(R(1,1), R(2,1), R(0,1)),
+        arrayOf(R(1,1), R(0,-1), R(2,1)),
+        arrayOf(R(1,1), R(2,-1), R(0,-1)),
+        arrayOf(R(1,1), R(0,1), R(2,-1)),
+
+        // negative y
+        arrayOf(R(1,-1), R(2,-1), R(0,1)),
+        arrayOf(R(1,-1), R(0,1), R(2,1)),
+        arrayOf(R(1,-1), R(2,1), R(0,-1)),
+        arrayOf(R(1,-1), R(0,-1), R(2,-1)),
+
+        // positive z
+        arrayOf(R(2,1), R(0,1), R(1,1)),
+        arrayOf(R(2,1), R(1,-1), R(0,1)),
+        arrayOf(R(2,1), R(0,-1), R(1,-1)),
+        arrayOf(R(2,1), R(1,1), R(0,-1)),
+
+        // negative z
+        arrayOf(R(2,-1), R(0,-1), R(1,1)),
+        arrayOf(R(2,-1), R(1,1), R(0,1)),
+        arrayOf(R(2,-1), R(0,1), R(1,-1)),
+        arrayOf(R(2,-1), R(1,-1), R(0,-1)),
     )
-    val rotations = listOf(
-        arrayOf(1,1,1),
-        arrayOf(1,-1,1),
-        arrayOf(1,1,-1),
-        arrayOf(1,-1,-1),
-        arrayOf(-1,1,1),
-        arrayOf(-1,-1,1),
-        arrayOf(-1,-1,-1),
-        arrayOf(-1,-1,-1)
-    )
+
+    fun List<Array<R>>.rotations(c:Coordinates) = this.map { r -> c.rotate(r) }
+
     data class Coordinates(val x: Int, val y: Int, val z: Int) {
-        val pos = arrayOf(x, y, z)
-//        fun samePosition(o: Coordinates, m: Array<Int>): Boolean {
-//            return rotations.any { r -> (pos[0] == o.pos[m[0]]*r[0] && pos[1] == o.pos[m[1]]*r[1] && pos[2] == o.pos[m[2]]*r[2]) }
-//
-//        }
+        private val pos = arrayOf(x, y, z)
 
-        fun samePosition(o: Coordinates): Boolean = //permutations.any { p -> samePosition(o, p) }
-            permutations.any { m -> rotations.any { r -> (x == o.pos[m[0]]*r[0] && y == o.pos[m[1]]*r[1] && z == o.pos[m[2]]*r[2]) } }
+        fun rotate(r: Array<R>) = Coordinates(pos[r[0].pos] * r[0].m ,pos[r[1].pos] * r[1].m,pos[r[2].pos] * r[2].m)
 
-        fun delta(o:Coordinates, m:Array<Int>):Coordinates = Coordinates(x-o.pos[m[0]],y-o.pos[m[1]],x-o.pos[m[2]])
+
+        fun samePosition(o: Coordinates): Boolean =
+            rotateParameters.rotations(o).any { r ->  (x == r.x && y == r.y && z == r.z) }
+
+        fun delta(o:Coordinates):Coordinates = Coordinates(x-o.x,y-o.y,z-o.z)
+
+       fun possibleDeltas(o:Coordinates):List<Coordinates> = rotateParameters.rotations(o).map { o -> delta(o) }
+
     }
 
     data class Bacon(val coordinates: Coordinates) {
