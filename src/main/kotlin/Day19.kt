@@ -1,26 +1,31 @@
 object Day19 {
+    val permutations:List<Array<Int>> = listOf(
+        arrayOf(0, 1, 2),
+        arrayOf(0, 2, 1),
+        arrayOf(1, 0, 2),
+        arrayOf(1, 2, 0),
+        arrayOf(2, 0, 1),
+        arrayOf(2, 1, 0)
+    )
+    val rotations = listOf(
+        arrayOf(1,1,1),
+        arrayOf(1,-1,1),
+        arrayOf(1,1,-1),
+        arrayOf(1,-1,-1),
+        arrayOf(-1,1,1),
+        arrayOf(-1,-1,1),
+        arrayOf(-1,-1,-1),
+        arrayOf(-1,-1,-1)
+    )
     data class Coordinates(val x: Int, val y: Int, val z: Int) {
         val pos = arrayOf(x, y, z)
-        fun samePosition(o: Coordinates, m: Array<Int>): Boolean {
-            val r = (pos[0] == o.pos[m[0]] && pos[1] == o.pos[m[1]] && pos[2] == o.pos[m[2]]) ||
-                    (pos[0] == o.pos[m[0]] && pos[1] == -o.pos[m[1]] && pos[2] == o.pos[m[2]]) ||
-                    (pos[0] == o.pos[m[0]] && pos[1] == o.pos[m[1]] && pos[2] == -o.pos[m[2]]) ||
-                    (pos[0] == o.pos[m[0]] && pos[1] == -o.pos[m[1]] && pos[2] == -o.pos[m[2]]) ||
-                    (pos[0] == -o.pos[m[0]] && pos[1] == o.pos[m[1]] && pos[2] == o.pos[m[2]]) ||
-                    (pos[0] == -o.pos[m[0]] && pos[1] == -o.pos[m[1]] && pos[2] == o.pos[m[2]]) ||
-                    (pos[0] == -o.pos[m[0]] && pos[1] == o.pos[m[1]] && pos[2] == -o.pos[m[2]]) ||
-                    (pos[0] == -o.pos[m[0]] && pos[1] == -o.pos[m[1]] && pos[2] == -o.pos[m[2]])
-            return r
-        }
+//        fun samePosition(o: Coordinates, m: Array<Int>): Boolean {
+//            return rotations.any { r -> (pos[0] == o.pos[m[0]]*r[0] && pos[1] == o.pos[m[1]]*r[1] && pos[2] == o.pos[m[2]]*r[2]) }
+//
+//        }
 
-        fun samePosition(o: Coordinates): Boolean {
-            return samePosition(o, arrayOf(0, 1, 2)) ||
-                    samePosition(o, arrayOf(0, 2, 1)) ||
-                    samePosition(o, arrayOf(1, 0, 2)) ||
-                    samePosition(o, arrayOf(1, 2, 0)) ||
-                    samePosition(o, arrayOf(2, 0, 1)) ||
-                    samePosition(o, arrayOf(2, 1, 0))
-        }
+        fun samePosition(o: Coordinates): Boolean = //permutations.any { p -> samePosition(o, p) }
+            permutations.any { m -> rotations.any { r -> (x == o.pos[m[0]]*r[0] && y == o.pos[m[1]]*r[1] && z == o.pos[m[2]]*r[2]) } }
 
         fun delta(o:Coordinates, m:Array<Int>):Coordinates = Coordinates(x-o.pos[m[0]],y-o.pos[m[1]],x-o.pos[m[2]])
     }
