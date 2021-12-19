@@ -81,13 +81,13 @@ object Day19 {
         }
     }
 
-    class Scanner(var coordinates: Coordinates = Coordinates(0, 0, 0), var bacons: List<Bacon>) {
+    class Scanner(var coordinates: Coordinates = Coordinates(0, 0, 0), var bacons: Set<Bacon>) {
 
         fun setOffsets(o: Scanner):Boolean {
             val (delta,r) = findDelta(o) ?: return false
             o.coordinates = if(coordinates.isOrigin) delta else  coordinates.minus(delta)
 
-            bacons = (bacons + o.bacons.map { it.rotate(r).plus(delta)}).distinct()
+            bacons = bacons + o.bacons.map { it.rotate(r).plus(delta)}
             return true
         }
 
@@ -126,7 +126,7 @@ object Day19 {
             val coord = l.split(',')
             if (coord.size != 3) null
             else Bacon(coord[0].toInt(), coord[1].toInt(), coord[2].toInt())
-        }
+        }.toSet()
         return Scanner(bacons = bacons)
     }
 }

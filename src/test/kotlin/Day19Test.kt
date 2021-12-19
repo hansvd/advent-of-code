@@ -26,10 +26,9 @@ class Day19Test {
         assertEquals(5, input.size)
         assertTrue(input.all { it.bacons.size == 6 })
 
-        assertTrue(input[0].bacons.mapIndexed() { i, bacon ->
+        assertTrue(input[0].bacons.toList().mapIndexed() { i, bacon ->
             input.all { s ->
-                println("match $bacon == ${s.bacons[i]}")
-                bacon.match(s.bacons[i])
+                bacon.match(s.bacons.toList()[i])
             }
         }.all { it })
     }
