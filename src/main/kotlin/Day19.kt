@@ -73,12 +73,10 @@ object Day19 {
     }
 
     fun merge(scanners: List<Scanner>) {
-        var done = true
-        while (done) {
-            done = false
-            scanners.drop(1).filter{ it.coordinates.isOrigin }.forEach {
-                done = scanners[0].merge(it) || done }
-        }
+        do {
+            val done = scanners.drop(1).filter{ it.coordinates.isOrigin }.fold(false) { d, s2 ->
+                scanners[0].merge(s2) || d }
+        } while (done)
     }
 
     class Scanner(var coordinates: Coordinates = Coordinates(0, 0, 0), var bacons: Set<Bacon>) {
