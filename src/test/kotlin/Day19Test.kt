@@ -1,4 +1,5 @@
 import Day19.Coordinates
+import Day19.match
 import Day19.maxDistance
 import Day19.parseInput
 import Day19.setOffsets

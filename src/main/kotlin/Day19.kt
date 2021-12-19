@@ -1,11 +1,14 @@
 import kotlin.math.abs
 
-data class R(val pos: Int, val m: Int)
-typealias RotatePar = Array<R>
+typealias RotatePar = Array<Day19.R>
+typealias Bacon = Day19.Coordinates
+
 object Day19 {
 
-//    pos = mapping of x,y,z  => 0 = x -> x, 1 = y -> x, 2 = z -> x
-//    m = multiply (-1,1)
+
+    //    pos = mapping of x,y,z  => 0 = x -> x, 1 = y -> x, 2 = z -> x
+    //    m = multiply (-1,1)
+    data class R(val pos: Int, val m: Int)
 
     // should be 24 possibilities
     val rotateParameters: List<RotatePar> = listOf(
@@ -51,6 +54,9 @@ object Day19 {
         if (o > this) return abs(o - this)
         return abs(this - o)
     }
+
+    fun Bacon.match(o: Bacon) = samePosition(o)
+
     data class Coordinates(val x: Int, val y: Int, val z: Int) {
         val isOrigin = x == 0 && y == 0 && z == 0
         private val pos = arrayOf(x, y, z)
@@ -63,15 +69,7 @@ object Day19 {
             rotateParameters.rotations(o).any { r -> (x == r.x && y == r.y && z == r.z) }
 
         fun delta(o: Coordinates): Coordinates = Coordinates(x - o.x, y - o.y, z - o.z)
-        fun distance(d: Coordinates): Int {
-                return x.distance(d.x) + y.distance(d.y) + z.distance(d.z)
-        }
-
-
-    }
-
-    data class Bacon(val coordinates: Coordinates) {
-        fun match(o: Bacon) = coordinates.samePosition(o.coordinates)
+        fun distance(d: Coordinates): Int = x.distance(d.x) + y.distance(d.y) + z.distance(d.z)
     }
 
     fun setOffsets(scanners: List<Scanner>) {
@@ -80,49 +78,38 @@ object Day19 {
             done = false
             scanners.drop(1).filter{ it.coordinates.isOrigin }.forEach {
                 done = scanners[0].setOffsets(it) || done }
-
-//            scanners.filter { !it.coordinates.isOrigin }.forEach { s ->
-//                scanners.drop(0).filter { it.coordinates.isOrigin }.forEach { done = s.setOffsets(it) || done }
-//            }
         }
     }
 
     class Scanner(var coordinates: Coordinates = Coordinates(0, 0, 0), var bacons: List<Bacon>) {
 
-
-
         fun setOffsets(o: Scanner):Boolean {
             val (delta,r) = findDelta(o) ?: return false
             o.coordinates = if(coordinates.isOrigin) delta else  coordinates.minus(delta)
 
-            bacons = (bacons + o.bacons.map { Bacon(it.coordinates.rotate(r).plus(delta))}).distinct()
+            bacons = (bacons + o.bacons.map { it.rotate(r).plus(delta)}).distinct()
             return true
         }
 
         private fun findDelta(o: Scanner): Pair<Coordinates,RotatePar>? {
             rotateParameters.forEach { r ->
                 val deltaCount = mutableMapOf<Coordinates, Int>()
-                for (bacon in bacons) for (otherBacon in o.bacons) {
-                    val rotation = otherBacon.coordinates.rotate(r)
-                    val delta = bacon.coordinates.delta(rotation)
-                    deltaCount[delta] = (deltaCount[delta] ?: 0) + 1
-                    if ((deltaCount[delta] ?: 0) >= 12)
-                        return Pair(delta,r)
+                bacons.forEach { bacon ->
+                    o.bacons.forEach { otherBacon ->
+                        val rotation = otherBacon.rotate(r)
+                        val delta = bacon.delta(rotation)
+                        deltaCount[delta] = (deltaCount[delta] ?: 0) + 1
+                        if ((deltaCount[delta] ?: 0) >= 12)
+                            return Pair(delta,r)
+                    }
                 }
             }
             return null
         }
     }
 
-    fun maxDistance(scanners: List<Scanner>):Int {
-        var max = 0
-        scanners.forEach { s1 ->
-            scanners.forEach { s2 ->
-                val d = s1.coordinates.distance(s2.coordinates)
-                max = maxOf(max,d)
-            }
-        }
-        return max
+    fun maxDistance(scanners: List<Scanner>) = scanners.maxOf { s1 ->
+         scanners.maxOf { s1.coordinates.distance(it.coordinates) }
     }
 
     fun parseInput(lines: List<String>): List<Scanner> {
@@ -138,7 +125,7 @@ object Day19 {
         val bacons = subList.mapNotNull { l ->
             val coord = l.split(',')
             if (coord.size != 3) null
-            else Bacon(Coordinates(coord[0].toInt(), coord[1].toInt(), coord[2].toInt()))
+            else Bacon(coord[0].toInt(), coord[1].toInt(), coord[2].toInt())
         }
         return Scanner(bacons = bacons)
     }
