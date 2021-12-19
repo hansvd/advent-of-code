@@ -27,14 +27,10 @@ object Day18 {
             var result = this
             do {
                 var stepResult = result.explode(0)
-                if (stepResult.done) {
-                    result = stepResult.v
-                    continue
-                }
+                if (stepResult.done) { result = stepResult.v; continue }
 
                 stepResult = result.split()
                 result = stepResult.v
-
             } while (stepResult.done)
             return result
         }
@@ -93,7 +89,6 @@ object Day18 {
                     newLeft = addLeftResult.v
                     addLeft = 0
                 }
-
             }
             return StepResult(
                 SnailFishValue(newLeft, newRight),
@@ -101,7 +96,6 @@ object Day18 {
                 addRight,
                 leftResult.done || rightResult.done
             )
-
         }
 
         override fun split(): StepResult {
