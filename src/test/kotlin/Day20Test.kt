@@ -1,5 +1,4 @@
-import Day20.part1
-import Day20.part2
+import Day20.invoke
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -9,20 +8,23 @@ class Day20Test {
 
     @Test
     fun exampleInputTestPart1() {
-        assertEquals(35,  File("input/input20example.txt").useLines { part1(it,2) })
+        assertEquals(35,  File("input/input20example.txt").useLines { invoke(it,2) })
     }
 
     @Test
     fun inputTestPart1() {
-        assertEquals(5179, File("input/input20.txt").useLines { part1(it,2) })
+        assertEquals(5179, File("input/input20.txt").useLines { invoke(it,2) })
     }
 
-
+    @Test
+    fun exampleInputTestPart2() {
+        assertEquals(3351,  File("input/input20example.txt").useLines { invoke(it,50) })
+    }
 
 
     @Test
     fun inputTestPart2() {
-        assertEquals(0,File("input/input20example.txt").useLines { part2(it) })
+        assertEquals(16112,File("input/input20.txt").useLines { invoke(it,50) })
     }
 
 
