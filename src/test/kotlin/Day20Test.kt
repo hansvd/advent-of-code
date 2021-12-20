@@ -9,12 +9,12 @@ class Day20Test {
 
     @Test
     fun exampleInputTestPart1() {
-        assertEquals(0,  File("input/input20example.txt").useLines { part1(it) })
+        assertEquals(35,  File("input/input20example.txt").useLines { part1(it,2) })
     }
 
     @Test
     fun inputTestPart1() {
-        assertEquals(0, File("input/input20.txt").useLines { part1(it) })
+        assertEquals(5179, File("input/input20.txt").useLines { part1(it,2) })
     }
 
 
