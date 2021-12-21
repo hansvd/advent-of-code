@@ -8,20 +8,20 @@ object Day20 {
         init {
             require(w == h)
         }
-        fun process(turn:Int):Image = enlarge(turn).convert()
-        private fun enlarge(turn:Int):Image {
-            val extra = 2
+        fun process(version:Int):Image = enlarge(version).convert()
+        private fun enlarge(version:Int):Image {
+            val borderWidth = 2
             val border = if (enhancement[0] == '.') "." else {
                 when {
-                    turn == 0 -> "."
-                    turn % 2 == 1 -> enhancement[0].toString()
+                    version == 0 -> "."
+                    version % 2 == 1 -> enhancement[0].toString()
                     else -> enhancement[511].toString()
                 }
             }
             return Image(enhancement,
-                (1..extra).map { border.repeat(extra*2+w) }
-                        + rows.map { "${border.repeat(extra)}$it${border.repeat(extra)}" }
-                        + (1..extra).map { border.repeat(extra*2+w) })
+                (1..borderWidth).map { border.repeat(borderWidth*2+w) }
+                        + rows.map { "${border.repeat(borderWidth)}$it${border.repeat(borderWidth)}" }
+                        + (1..borderWidth).map { border.repeat(borderWidth*2+w) })
         }
 
         fun getValue(x:Int,y:Int):Char {
