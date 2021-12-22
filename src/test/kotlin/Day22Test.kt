@@ -21,7 +21,7 @@ class Day22Test {
 
         assertEquals(27,invoke("on x=10..12,y=10..12,z=10..12".lineSequence(),-50..50))
         assertEquals(27+19,invoke("on x=10..12,y=10..12,z=10..12\non x=11..13,y=11..13,z=11..13".lineSequence(),-50..50))
-//        assertEquals(27+19-8,invoke("on x=10..12,y=10..12,z=10..12\non x=11..13,y=11..13,z=11..13\noff x=9..11,y=9..11,z=9..11".lineSequence(),-50..50))
+       assertEquals(27+19-8,invoke("on x=10..12,y=10..12,z=10..12\non x=11..13,y=11..13,z=11..13\noff x=9..11,y=9..11,z=9..11".lineSequence(),-50..50))
 
 
     }
@@ -48,7 +48,7 @@ class Day22Test {
 
     @Test
     fun inputTestPart2() {
-        assertEquals(0, File("input/input22.txt").useLines { invoke(it) })
+        assertEquals(1187742789778677, File("input/input22.txt").useLines { invoke(it) })
     }
 
 

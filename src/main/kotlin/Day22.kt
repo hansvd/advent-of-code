@@ -5,21 +5,10 @@ object Day22 {
     val IntRange.width: Int get() = this.last - this.first + 1
     fun IntRange.isOverlap(other: IntRange) = !overlap(other).isEmpty()
     fun IntRange.contains(other: IntRange) = first <= other.first && last >= other.last
-    fun IntRange.subtract(other: IntRange): IntRange {
-        if (!this.isOverlap(other)) return this
-        if (other.contains(this) || this == other) return IntRange.EMPTY
-        if (this.contains(other)) {
-            require(false) { "Don't support this case, it will return two ranges" }
-            //return listOf(IntRange(first, other.first), IntRange(other.last, last))
-        }
-        if (first < other.first) return IntRange(other.first, last)
-        return IntRange(first, other.first)
-    }
 
 
     data class Instruction(val on: Boolean, val cuboid: Cuboid)
 
-    //data class Cube(val x: Int, val y: Int, val z: Int)
     data class Cuboid(val xr: IntRange, val yr: IntRange, val zr: IntRange) {
         constructor(x0: Int, x1: Int, y0: Int, y1: Int, z0: Int, z1: Int) : this(
             IntRange(x0, x1),
@@ -34,36 +23,35 @@ object Day22 {
 
         val isEmpty get() = xr.isEmpty() || yr.isEmpty() || zr.isEmpty()
 
-        fun intersect(other:Cuboid):Cuboid {
-            return Cuboid(maxOf(xr.first,other.xr.first), minOf(xr.last,other.xr.last),
-                            maxOf(yr.first,other.yr.first), minOf(yr.last, other.yr.last),
-                            maxOf(zr.first,other.zr.first), minOf(zr.last,other.zr.last))
+        private fun intersect(other: Cuboid): Cuboid {
+            return Cuboid(
+                maxOf(xr.first, other.xr.first), minOf(xr.last, other.xr.last),
+                maxOf(yr.first, other.yr.first), minOf(yr.last, other.yr.last),
+                maxOf(zr.first, other.zr.first), minOf(zr.last, other.zr.last)
+            )
         }
+
         fun removeOverlap(other: Cuboid): List<Cuboid> {
             if (!isOverlap(other)) return listOf(this)
             if (other.xr.contains(xr) && other.yr.contains(yr) && other.zr.contains(zr)) return listOf()
 
-            val result = mutableListOf<Cuboid>()
             val inters = intersect(other)
-            if (inters.xr.first > xr.first)
-                result.add(Cuboid(IntRange(xr.first, inters.xr.first - 1), yr, zr))
-            if (xr.last > inters.xr.last)
-                result.add(Cuboid(IntRange(inters.xr.last + 1, xr.last), yr, zr))
-            if (inters.yr.first > yr.first)
-                result.add(Cuboid(inters.xr, IntRange(yr.first, inters.yr.first - 1), zr))
-            if (yr.last > inters.yr.last)
-                result.add(Cuboid(inters.xr, IntRange(inters.yr.last + 1, yr.last), zr))
-            if (inters.zr.first > zr.first)
-                result.add(Cuboid(inters.xr, inters.yr, IntRange(zr.first, inters.zr.first - 1)))
-            if (zr.last > inters.zr.last)
-                result.add(Cuboid(inters.xr, inters.yr, IntRange(inters.zr.last + 1, zr.last)))
-
-            return result
+            return sequence {
+                if (inters.xr.first > xr.first)
+                    yield(Cuboid(IntRange(xr.first, inters.xr.first - 1), yr, zr))
+                if (xr.last > inters.xr.last)
+                    yield(Cuboid(IntRange(inters.xr.last + 1, xr.last), yr, zr))
+                if (inters.yr.first > yr.first)
+                    yield(Cuboid(inters.xr, IntRange(yr.first, inters.yr.first - 1), zr))
+                if (yr.last > inters.yr.last)
+                    yield(Cuboid(inters.xr, IntRange(inters.yr.last + 1, yr.last), zr))
+                if (inters.zr.first > zr.first)
+                    yield(Cuboid(inters.xr, inters.yr, IntRange(zr.first, inters.zr.first - 1)))
+                if (zr.last > inters.zr.last)
+                    yield(Cuboid(inters.xr, inters.yr, IntRange(inters.zr.last + 1, zr.last)))
+            }.toList()
         }
 
-        companion object {
-            val EMPTY = Cuboid(IntRange.EMPTY, IntRange.EMPTY, IntRange.EMPTY)
-        }
     }
 
 
@@ -81,7 +69,13 @@ object Day22 {
         fun subtract(subtraction: Cuboid) {
             if (cuboids.none { it.isOverlap(subtraction) }) return
 
-            // TODO
+            for (c in cuboids.toList()) {
+                if (c.isOverlap(subtraction)) {
+                    val s = c.removeOverlap(subtraction)
+                    cuboids.remove(c)
+                    cuboids.addAll(s)
+                }
+            }
             return
         }
 
