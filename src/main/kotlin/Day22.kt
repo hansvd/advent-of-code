@@ -31,7 +31,7 @@ object Day22 {
             )
         }
 
-        fun removeOverlap(other: Cuboid): List<Cuboid> {
+        fun substract(other: Cuboid): List<Cuboid> {
             if (!isOverlap(other)) return listOf(this)
             if (other.xr.contains(xr) && other.yr.contains(yr) && other.zr.contains(zr)) return listOf()
 
@@ -61,7 +61,7 @@ object Day22 {
         fun add(addition: Cuboid) {
             // remove the overlap
             val rest = cuboids.filter { it.isOverlap(addition) }.fold(listOf(addition)) { result, c ->
-                result.map { it.removeOverlap(c) }.flatten()
+                result.map { it.substract(c) }.flatten()
             }
             rest.forEach { if (!it.isEmpty) cuboids.add(it) }
         }
@@ -71,7 +71,7 @@ object Day22 {
 
             for (c in cuboids.toList()) {
                 if (c.isOverlap(subtraction)) {
-                    val s = c.removeOverlap(subtraction)
+                    val s = c.substract(subtraction)
                     cuboids.remove(c)
                     cuboids.addAll(s)
                 }
