@@ -9,7 +9,7 @@ class Day22Test {
 
 
     @Test
-    fun exampleInputTestinvoke() {
+    fun baseTests() {
 
         assertEquals(IntRange(-41,9), IntRange(-41,9).overlap(-50..50))
         assertEquals(IntRange(-41,9), IntRange(-41,9).overlap(-50..50))
@@ -21,18 +21,18 @@ class Day22Test {
 
         assertEquals(27,invoke("on x=10..12,y=10..12,z=10..12".lineSequence(),-50..50))
         assertEquals(27+19,invoke("on x=10..12,y=10..12,z=10..12\non x=11..13,y=11..13,z=11..13".lineSequence(),-50..50))
-        //assertEquals(27+19-8,invoke("on x=10..12,y=10..12,z=10..12\non x=11..13,y=11..13,z=11..13\noff x=9..11,y=9..11,z=9..11".lineSequence(),-50..50))
+        assertEquals(27+19-8,invoke("on x=10..12,y=10..12,z=10..12\non x=11..13,y=11..13,z=11..13\noff x=9..11,y=9..11,z=9..11".lineSequence(),-50..50))
 
 
     }
 
     @Test
-    fun inputTestinvokeExample() {
+    fun inputTestPart1Example() {
         assertEquals(590784, File("input/input22example1.txt").useLines { invoke(it, -50..50) })
     }
 
     @Test
-    fun inputTestinvoke() {
+    fun inputTestPart1() {
         assertEquals(607657, File("input/input22.txt").useLines { invoke(it, -50..50) })
     }
 

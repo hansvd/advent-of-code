@@ -1,24 +1,42 @@
 object Day22 {
-    data class Instruction(val on: Boolean, val cuboid: Cuboid)
-    data class Cube(val x: Int, val y: Int, val z: Int)
-    data class Cuboid(val xr: IntRange, val yr: IntRange, val zr: IntRange) {
-        val volume get() = xr.width.toLong() * yr.width.toLong() * zr.width.toLong()
-    }
-
     fun IntRange.overlap(other: IntRange): IntRange =
         IntRange(maxOf(this.first, other.first), minOf(this.last, other.last))
-
     val IntRange.width: Int get() = this.last - this.first + 1
+    fun IntRange.isOverlap(other:IntRange) = !overlap(other).isEmpty()
+
+    data class Instruction(val on: Boolean, val cuboid: Cuboid)
+    //data class Cube(val x: Int, val y: Int, val z: Int)
+    data class Cuboid(val xr: IntRange, val yr: IntRange, val zr: IntRange) {
+        val volume get() = xr.width.toLong() * yr.width.toLong() * zr.width.toLong()
+
+        fun isOverlap(other:Cuboid) =
+            xr.isOverlap(other.xr) && yr.isOverlap(other.yr) && zr.isOverlap(other.zr)
+        val isEmpty get() = xr.isEmpty() || yr.isEmpty() || zr.isEmpty()
+
+        fun removeOverlap(other: Cuboid):Cuboid {
+            // TODO
+            return this
+        }
+    }
+
+
 
     class Reactor {
-        val cuboids = mutableSetOf<Cuboid>()
+        private val cuboids = mutableSetOf<Cuboid>()
 
-        fun add(cuboid: Cuboid) {
-            cuboids.add(cuboid)
+        fun add(addition: Cuboid) {
+            // remove the overlap
+            val rest = cuboids.filter { it.isOverlap(addition) }.fold(addition) { result, c ->
+                addition.removeOverlap(c)
+            }
+            if (!rest.isEmpty) cuboids.add(rest)
         }
 
-        fun subtract(cuboid: Cuboid) {
+        fun subtract(subtraction: Cuboid) {
+            if (cuboids.none { it.isOverlap(subtraction) }) return
 
+            // TODO
+            return
         }
 
         fun cubeCount(): Long {
@@ -27,29 +45,10 @@ object Day22 {
     }
 
 
-    fun invoke(lines: Sequence<String>, range: IntRange = IntRange(Integer.MIN_VALUE,Integer.MAX_VALUE)): Long {
-        val input = parseInputLines(lines, range)
-        return calculateCubes(input)
-        //val r = mutableSetOf<Cube>()
+    fun invoke(lines: Sequence<String>, range: IntRange = IntRange(Integer.MIN_VALUE,Integer.MAX_VALUE)): Long =
+        calculateCubes( parseInputLines(lines, range))
 
-    //        input.forEach { i ->
-//
-//            i.cuboid.xr.forEach { x ->
-//                i.cuboid.yr.forEach { y ->
-//                    i.cuboid.zr.forEach { z ->
-//                        if (i.on) {
-//                            r.add(Cube(x, y, z))
-//                        } else {
-//                            r.remove(Cube(x, y, z))
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return r.size
-    }
-
-    fun calculateCubes(instructions: Sequence<Instruction>): Long {
+    private fun calculateCubes(instructions: Sequence<Instruction>): Long {
         val reactor = Reactor()
 
         instructions.forEach {
