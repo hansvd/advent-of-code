@@ -18,7 +18,7 @@ object Day23 {
         println("--")
         for (r in this) println(r)
     }
-
+    fun List<Point>.contains(x:Int, y:Int) = this.any { it.x == x && it.y == y}
     class Burrow(val rows: List<String>) {
         val hallway = (1..11).map { Point(it, 1) }
         val sideRooms = listOf(3, 5, 7, 9).map { x -> (2..rows.size - 2).map { y -> Point(x, y) } }.flatten()
@@ -50,7 +50,7 @@ object Day23 {
         override fun hashCode(): Int = rows.joinToString().hashCode() + costs.hashCode()
 
         val totalCosts: Int = costs
-        val freeSpaces = rows.getFreeSpaces()
+        private val freeSpaces = rows.getFreeSpaces()
 
         private fun content(p: Point) = content(p.x, p.y)
         private fun content(x: Int, y: Int): Char {
@@ -93,7 +93,7 @@ object Day23 {
             // only move from the hallway into the dest room
             if (burrow.isSideRoom(p2)) {
                 if (!burrow.isSideRoomFor(p2, amphipod)) return false
-                if ((p2.y + 1..rows.size - 2).any { y -> freeSpaces.contains(Point(p2.x, y)) }) return false
+                if ((p2.y + 1..rows.size - 2).any { y -> freeSpaces.contains(p2.x, y) }) return false
                 if (burrow.isSideRoom(p2.below)) {
                     if ((p2.y + 1..rows.size - 2).any { y -> content(p2.x, y) != amphipod }) return false
                 }
@@ -106,7 +106,7 @@ object Day23 {
 
             // is there a more efficient path
             val x = burrow.sideRoomXFor(amphipod)
-            if (p2.x != x && freeSpaces.contains(Point(x, 2))
+            if (p2.x != x && freeSpaces.contains(x, 2)
                 && (2..rows.size - 2).all { y -> content(x, y) == '.' || content(x, y) == amphipod }
                 && stepsNeeded(p1, Point(x, 2), freeSpaces) >= 0
             ) return false
@@ -162,9 +162,6 @@ object Day23 {
             cost = { state -> state.costs }
         )
 
-        val f1 = search
-        val f = f1.minByOrNull { it.totalCosts }
-        f?.printAll()
-        return f?.totalCosts ?: 0
+        return search.minByOrNull { it.totalCosts }?.totalCosts ?: 0
     }
 }
