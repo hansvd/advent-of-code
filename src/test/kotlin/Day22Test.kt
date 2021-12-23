@@ -1,6 +1,6 @@
 
+import Day22.intersect
 import Day22.invoke
-import Day22.overlap
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -11,12 +11,12 @@ class Day22Test {
     @Test
     fun baseTests() {
 
-        assertEquals(IntRange(-41,9), IntRange(-41,9).overlap(-50..50))
-        assertEquals(IntRange(-41,9), IntRange(-41,9).overlap(-50..50))
-        assertEquals(-50..50, (-54112..39298).overlap(-50..50))
-        assertEquals(-50..-50, (-50..-50).overlap(-50..50))
-        assertEquals(50..50, (50..50).overlap(-50..50))
-        assertEquals(-50..50, (-150..150).overlap(-50..50))
+        assertEquals(IntRange(-41,9), IntRange(-41,9).intersect(-50..50))
+        assertEquals(IntRange(-41,9), IntRange(-41,9).intersect(-50..50))
+        assertEquals(-50..50, (-54112..39298).intersect(-50..50))
+        assertEquals(-50..-50, (-50..-50).intersect(-50..50))
+        assertEquals(50..50, (50..50).intersect(-50..50))
+        assertEquals(-50..50, (-150..150).intersect(-50..50))
 
 
         assertEquals(27,invoke("on x=10..12,y=10..12,z=10..12".lineSequence(),-50..50))

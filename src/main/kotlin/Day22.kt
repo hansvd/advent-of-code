@@ -1,20 +1,13 @@
 object Day22 {
-    fun IntRange.overlap(other: IntRange): IntRange =
+    fun IntRange.intersect(other: IntRange): IntRange =
         IntRange(maxOf(this.first, other.first), minOf(this.last, other.last))
-
     val IntRange.width: Int get() = this.last - this.first + 1
-    fun IntRange.isOverlap(other: IntRange) = !overlap(other).isEmpty()
+    fun IntRange.isOverlap(other: IntRange) = !intersect(other).isEmpty()
     fun IntRange.contains(other: IntRange) = first <= other.first && last >= other.last
-
 
     data class Instruction(val on: Boolean, val cuboid: Cuboid)
 
     data class Cuboid(val xr: IntRange, val yr: IntRange, val zr: IntRange) {
-        constructor(x0: Int, x1: Int, y0: Int, y1: Int, z0: Int, z1: Int) : this(
-            IntRange(x0, x1),
-            IntRange(y0, y1), IntRange
-                (z0, z1)
-        )
 
         val volume get() = xr.width.toLong() * yr.width.toLong() * zr.width.toLong()
 
@@ -23,18 +16,17 @@ object Day22 {
 
         val isEmpty get() = xr.isEmpty() || yr.isEmpty() || zr.isEmpty()
 
-        private fun intersect(other: Cuboid): Cuboid {
-            return Cuboid(
-                maxOf(xr.first, other.xr.first), minOf(xr.last, other.xr.last),
-                maxOf(yr.first, other.yr.first), minOf(yr.last, other.yr.last),
-                maxOf(zr.first, other.zr.first), minOf(zr.last, other.zr.last)
-            )
-        }
+        private fun intersect(other: Cuboid): Cuboid = Cuboid(
+            xr.intersect(other.xr),
+            yr.intersect(other.yr),
+            zr.intersect(other.zr)
+        )
 
-        fun substract(other: Cuboid): List<Cuboid> {
+        fun subtract(other: Cuboid): List<Cuboid> {
             if (!isOverlap(other)) return listOf(this)
             if (other.xr.contains(xr) && other.yr.contains(yr) && other.zr.contains(zr)) return listOf()
 
+            // take all parts outside the intersect of both
             val inters = intersect(other)
             return sequence {
                 if (inters.xr.first > xr.first)
@@ -61,7 +53,7 @@ object Day22 {
         fun add(addition: Cuboid) {
             // remove the overlap
             val rest = cuboids.filter { it.isOverlap(addition) }.fold(listOf(addition)) { result, c ->
-                result.map { it.substract(c) }.flatten()
+                result.map { it.subtract(c) }.flatten()
             }
             rest.forEach { if (!it.isEmpty) cuboids.add(it) }
         }
@@ -71,7 +63,7 @@ object Day22 {
 
             for (c in cuboids.toList()) {
                 if (c.isOverlap(subtraction)) {
-                    val s = c.substract(subtraction)
+                    val s = c.subtract(subtraction)
                     cuboids.remove(c)
                     cuboids.addAll(s)
                 }
@@ -109,9 +101,9 @@ object Day22 {
 
         return Instruction(
             match.groupValues[1] == "on", Cuboid(
-                toRange(match.groupValues[2]).overlap(range),
-                toRange(match.groupValues[3]).overlap(range),
-                toRange(match.groupValues[4]).overlap(range)
+                toRange(match.groupValues[2]).intersect(range),
+                toRange(match.groupValues[3]).intersect(range),
+                toRange(match.groupValues[4]).intersect(range)
             )
         )
     }
