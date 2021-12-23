@@ -1,6 +1,7 @@
 object Day22 {
     fun IntRange.intersect(other: IntRange): IntRange =
         IntRange(maxOf(this.first, other.first), minOf(this.last, other.last))
+
     val IntRange.width: Int get() = this.last - this.first + 1
     fun IntRange.isOverlap(other: IntRange) = !intersect(other).isEmpty()
     fun IntRange.contains(other: IntRange) = first <= other.first && last >= other.last
@@ -51,24 +52,22 @@ object Day22 {
         private val cuboids = mutableSetOf<Cuboid>()
 
         fun add(addition: Cuboid) {
-            // remove the overlap
-            val rest = cuboids.filter { it.isOverlap(addition) }.fold(listOf(addition)) { result, c ->
-                result.map { it.subtract(c) }.flatten()
-            }
-            rest.forEach { if (!it.isEmpty) cuboids.add(it) }
+            // remove the overlap and add that
+            cuboids.addAll(
+                cuboids.filter { it.isOverlap(addition) }.fold(listOf(addition)) { result, cuboidsToAdd ->
+                    result.map { it.subtract(cuboidsToAdd) }.flatten()
+                }.filter { !it.isEmpty })
         }
 
         fun subtract(subtraction: Cuboid) {
             if (cuboids.none { it.isOverlap(subtraction) }) return
 
-            for (c in cuboids.toList()) {
+            cuboids.toList().forEach { c->
                 if (c.isOverlap(subtraction)) {
-                    val s = c.subtract(subtraction)
+                    cuboids.addAll(c.subtract(subtraction))
                     cuboids.remove(c)
-                    cuboids.addAll(s)
                 }
             }
-            return
         }
 
         fun cubeCount(): Long {
