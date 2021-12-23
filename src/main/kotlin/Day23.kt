@@ -35,6 +35,16 @@ object Day23 {
             return true
         }
 
+        fun sideRoomXFor(amphipod: Char): Int {
+            when (amphipod) {
+                'A' -> return 3
+                'B' -> return 5
+                'C' -> return 7
+                'D' -> return 9
+            }
+            return 0
+        }
+
     }
 
     data class BurrowState(val burrow: Burrow, val previous: BurrowState?, val rows: List<String>, val costs: Int = 0) {
@@ -93,8 +103,14 @@ object Day23 {
             if (burrow.isSideRoom(p2.below) && burrow.isHallway(p2)) return false
 
             // anything on the rood
-            if (stepsNeeded(p1, p2, rows.getFreeSpaces()) < 0) return false
+            val freeSpaces = rows.getFreeSpaces()
+            if (stepsNeeded(p1, p2, freeSpaces) < 0) return false
 
+            // is there a more efficient path
+            val x = burrow.sideRoomXFor(amphipod)
+            if (p2.x != x && freeSpaces.contains(Point(x,2))
+                && (2..rows.size-2).all {y -> content(x,y) == '.' || content(x,y) == amphipod }
+                && stepsNeeded(p1,Point(x,2),freeSpaces) >= 0) return false
 
             return true
         }
