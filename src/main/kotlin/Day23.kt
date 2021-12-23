@@ -23,7 +23,7 @@ object Day23 {
 
     class Burrow(val rows: List<String>) {
         val hallway =  (1..11).map { Point(it,1)}
-        val sideRooms = listOf(3,5,7,9).map { x-> listOf(Point(x,2),Point(x,3)) }.flatten()
+        val sideRooms = listOf(3,5,7,9).map { x-> (2..rows.size-2).map { y-> Point(x,y)} }.flatten()
         fun isSideRoom(p: Point):Boolean = sideRooms.contains(p)
         fun isHallway(p: Point) = hallway.contains(p)
         fun isSideRoomFor(p2: Point, amphipod: Char): Boolean {
@@ -48,16 +48,16 @@ object Day23 {
             return previous.contains(state)
         }
 
-        private fun space(p: Point) = space(p.x, p.y)
-        private fun space(x: Int, y: Int): Char {
+        private fun content(p: Point) = content(p.x, p.y)
+        private fun content(x: Int, y: Int): Char {
             if (x < 0 || y < 0 || y >= rows.size) return '#'
             val r = rows[y]
             if (x >= r.length) return '#'
             return r[x]
         }
 
-        fun move(p1: Point, p2: Point): BurrowState {
-            val amphipod = space(p1)
+        private fun move(p1: Point, p2: Point): BurrowState {
+            val amphipod = content(p1)
             val newRows = rows.mapIndexed { y, row ->
                 if (y != p2.y) row else row.substring(
                     0,
@@ -71,23 +71,22 @@ object Day23 {
             return this.copy(rows = newRows, previous = this, costs = c*steps + costs)
         }
 
-        fun isValidMove(p1: Point, p2: Point): Boolean {
-            val amphipod = space(p1)
+        private fun isValidMove(p1: Point, p2: Point): Boolean {
+            val amphipod = content(p1)
 
             // only move from hallway into sideRoom
             if (burrow.isHallway(p1) && burrow.isHallway(p2))
                 return false
 
             if (burrow.isSideRoomFor(p1,amphipod)) {
-                if (space(p1.below) == amphipod || space(p1.below)  =='#') return false // it's already there
+                if ((p1.y + 1 .. rows.size-2).all { y-> content(p1.x, y) == amphipod}) return false // it's already in place
             }
             // only move from the hallway into the dest room
             if (burrow.isSideRoom(p2)) {
                 if (!burrow.isSideRoomFor(p2,amphipod)) return false
-                if (rows.getFreeSpaces().contains(p2.below)) return false //
+                if ((p2.y + 1 .. rows.size-2).any { y -> rows.getFreeSpaces().contains(Point(p2.x,y)) }) return false
                 if (burrow.isSideRoom(p2.below)) {
-                    val other = space(p2.below)
-                    if (other != amphipod) return false
+                    if ((p2.y + 1 .. rows.size-2).any { y -> content(p2.x,y) != amphipod }) return false
                 }
             }
             //Amphipods will never stop on the space immediately outside any room
@@ -120,8 +119,8 @@ object Day23 {
         }
 
         val isFinish: Boolean by lazy {
-            burrow.sideRooms.all { s -> this.space(s) in 'A'..'D' }
-                    && burrow.sideRooms.all { s -> space(s) == space(s.above) || space(s) == space(s.below) }
+            burrow.sideRooms.all { s -> this.content(s) in 'A'..'D' }
+                    && burrow.sideRooms.all { s -> content(s) == content(s.above) || content(s) == content(s.below) }
         }
         fun printAll() {
             previous?.printAll()
@@ -136,7 +135,7 @@ object Day23 {
     }
 
 
-    fun part1(lines: List<String>): Int {
+    fun invoke(lines: List<String>): Int {
         val burrow = Burrow(lines.toList())
         val init = BurrowState(burrow, null, burrow.rows)
         if (init.isFinish) return 0
@@ -148,14 +147,9 @@ object Day23 {
             cost = { state -> state.costs }
         )
 
-        val f1 = search.toList()
+        val f1 = search
         val f = f1.minByOrNull { it.totalCosts }
         f?.printAll()
         return f?.totalCosts ?: 0
-
-    }
-
-    fun part2(lines: Sequence<String>): Int {
-        return 0
     }
 }
