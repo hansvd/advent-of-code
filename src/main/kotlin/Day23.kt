@@ -47,8 +47,9 @@ object Day23 {
 
     data class BurrowState(val burrow: Burrow, val previous: BurrowState?, val rows: List<String>, val costs: Int = 0) {
         override fun equals(other: Any?): Boolean = (other as? BurrowState)?.hashCode() == hashCode()
-        override fun hashCode(): Int = rows.joinToString().hashCode() + costs.hashCode()
+        override fun hashCode(): Int = theHash
 
+        val theHash:Int by lazy { rows.foldIndexed(1) { i, h, s -> (h shl 1) + s.hashCode() } + costs.hashCode() }
         val totalCosts: Int = costs
         private val freeSpaces = rows.getFreeSpaces()
 
