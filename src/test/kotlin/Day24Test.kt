@@ -20,7 +20,7 @@ class Day24Test {
         assertEquals(1, File("input/input24example.txt").useLines { calculate(it,"5").z.value })
     }
 
-    // manual analizing of input. Found the following dependencies
+    // manual analysing of input. Found the following dependencies
     // Inp4 = Inp3
     // Inp6 = Inp5 + 4
     // Inp8 = Inp7 + 3
