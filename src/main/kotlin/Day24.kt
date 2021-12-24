@@ -1,7 +1,7 @@
 
 
 object Day24 {
-    class Var(val name: String, var value:Int = 0) {
+    class Var(private val name: String, var value:Int = 0) {
         fun set(v:Int) {
             value = v
         }
@@ -84,7 +84,7 @@ object Day24 {
         }
     }
 
-    class ALU(val instructions:List<Instruction>) {
+    class ALU(private val instructions:List<Instruction>) {
         fun calculate(input:String):ALUState = instructions.fold(ALUState(input)) { s, i -> i.calculate(s) }
     }
 
@@ -92,22 +92,7 @@ object Day24 {
         val monad = parseInput(lines)
         return monad.calculate(input)
     }
-    fun part1(lines: Sequence<String>): Long {
-        val monad = parseInput(lines)
 
-        for (input in 99999999999999L downTo 0L) {
-            val str = input.toString()
-            if (str.contains("0")) continue
-            val state = monad.calculate(str)
-            if (state.z.value < 20) println("$str -> $state")
-            if (state.z.value == 0) return input
-        }
-        return 0
-
-    }
-    fun part2(lines: Sequence<String>): Int {
-        return 0
-    }
     fun parseInput(lines:Sequence<String>):ALU {
         return ALU(lines.map { parseInstruction(it)}.toList())
     }

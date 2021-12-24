@@ -1,5 +1,4 @@
 import Day24.calculate
-import Day24.part1
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -21,24 +20,21 @@ class Day24Test {
         assertEquals(1, File("input/input24example.txt").useLines { calculate(it,"5").z.value })
     }
 
+    // manual analizing of input. Found the following dependencies
+    // Inp4 = Inp3
+    // Inp6 = Inp5 + 4
+    // Inp8 = Inp7 + 3
+    // Inp11 = Inp10 + 8
+    // Inp12 = Inp9 - 6
+    // Inp13 = Inp2 - 7
+    // Inp14 = Inp1 - 3
     @Test
-    fun inputTestExample() {
-        assertEquals(0, File("input/input24.txt").useLines { calculate(it,"13579246899999").z.value })
+    fun inputTestPart1() {
+        assertEquals(0, File("input/input24.txt").useLines { calculate(it,"99995969919326").z.value })
     }
     @Test
-    fun inputTestPar1() {
-        assertEquals(0, File("input/input24.txt").useLines { part1(it) })
+    fun inputTestPart2() {
+        assertEquals(0, File("input/input24.txt").useLines { calculate(it,"48111514719111").z.value })
     }
-
-//    @Test
-//    fun exampleInputTestPart2() {
-//        assertEquals(0, part2(testInput.lineSequence()))
-//    }
-//
-//    @Test
-//    fun inputTestPart2() {
-//        assertEquals(0, File("input/input24.txt").useLines { part2(it) })
-//    }
-
 
 }

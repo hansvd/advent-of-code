@@ -14,13 +14,13 @@ object Day23 {
     fun List<String>.getAmphipods(): List<Point> =
         this.mapIndexed { r, s -> s.mapIndexedNotNull { c, ch -> if (ch in 'A'..'D') Point(c, r) else null } }.flatten()
 
-    fun List<String>.print() {
-        println("--")
-        for (r in this) println(r)
-    }
+//    fun List<String>.print() {
+//        println("--")
+//        for (r in this) println(r)
+//    }
     fun List<Point>.contains(x:Int, y:Int) = this.any { it.x == x && it.y == y}
     class Burrow(val rows: List<String>) {
-        val hallway = (1..11).map { Point(it, 1) }
+        private val hallway = (1..11).map { Point(it, 1) }
         val sideRooms = listOf(3, 5, 7, 9).map { x -> (2..rows.size - 2).map { y -> Point(x, y) } }.flatten()
         fun isSideRoom(p: Point): Boolean = sideRooms.contains(p)
         fun isHallway(p: Point) = hallway.contains(p)
@@ -49,7 +49,7 @@ object Day23 {
         override fun equals(other: Any?): Boolean = (other as? BurrowState)?.hashCode() == hashCode()
         override fun hashCode(): Int = theHash
 
-        val theHash:Int by lazy { rows.foldIndexed(1) { i, h, s -> (h shl 1) + s.hashCode() } + costs.hashCode() }
+        private val theHash:Int by lazy { rows.fold(1) { h, s -> (h shl 1) + s.hashCode() } + costs.hashCode() }
         val totalCosts: Int = costs
         private val freeSpaces = rows.getFreeSpaces()
 
@@ -129,7 +129,7 @@ object Day23 {
             return steps
         }
 
-        private fun steps(p1Next: Point, p2: Point, freeSpaces: List<Point>, ): Int {
+        private fun steps(p1Next: Point, p2: Point, freeSpaces: List<Point>): Int {
             return if (freeSpaces.contains(p1Next)) stepsNeeded(p1Next, p2, freeSpaces - p1Next, 1) else -1
         }
 
@@ -138,10 +138,10 @@ object Day23 {
                     && burrow.sideRooms.all { s -> content(s) == content(s.above) || content(s) == content(s.below) }
         }
 
-        fun printAll() {
-            previous?.printAll()
-            rows.print()
-        }
+//        fun printAll() {
+//            previous?.printAll()
+//            rows.print()
+//        }
 
         fun next(): List<BurrowState> {
             val amphipods = rows.getAmphipods()
