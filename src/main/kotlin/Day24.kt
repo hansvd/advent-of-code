@@ -5,6 +5,10 @@ object Day24 {
         fun set(v:Int) {
             value = v
         }
+
+        override fun toString(): String {
+            return if (name[0].isDigit()) value.toString() else "$name=$value"
+        }
     }
     data class ALUState(var input:String,val w:Var = Var("w"), val x:Var=Var("x"), val y:Var=Var("y"), val z:Var=Var("z")) {
         fun result():Long = 0
@@ -23,6 +27,9 @@ object Day24 {
             f(v1,v2)
         }
 
+        override fun toString(): String {
+            return "$input -> $w, $x, $y, $z"
+        }
 
 //        fun parse(input:String):Var {
 
@@ -81,11 +88,23 @@ object Day24 {
         fun calculate(input:String):ALUState = instructions.fold(ALUState(input)) { s, i -> i.calculate(s) }
     }
 
-    fun calculateZ(lines: Sequence<String>,input:String): ALUState {
+    fun calculate(lines: Sequence<String>, input:String): ALUState {
         val monad = parseInput(lines)
         return monad.calculate(input)
     }
+    fun part1(lines: Sequence<String>): Long {
+        val monad = parseInput(lines)
 
+        for (input in 99999999999999L downTo 0L) {
+            val str = input.toString()
+            if (str.contains("0")) continue
+            val state = monad.calculate(str)
+            if (state.z.value < 20) println("$str -> $state")
+            if (state.z.value == 0) return input
+        }
+        return 0
+
+    }
     fun part2(lines: Sequence<String>): Int {
         return 0
     }
