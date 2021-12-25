@@ -25,17 +25,5 @@ class Day25Test {
     fun part1Test() {
         assertEquals(378, parseInput(File("input/input25.txt").readLines()).maxSteps())
     }
-//
-//
-//    @Test
-//    fun exampleInputTestPart2() {
-//        assertEquals(0, part2(testInput.lineSequence()))
-//    }
-//
-//    @Test
-//    fun inputTestPart2() {
-//        assertEquals(0, File("input/inputX.txt").useLines { part2(it) })
-//    }
-//
 
 }

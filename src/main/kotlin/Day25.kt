@@ -1,63 +1,57 @@
-import Day25.Cucumber.Companion.createFrom
+val Char.isEast get() = this == '>'
+val Char.isSouth get() = this == 'v'
 
 object Day25 {
-    data class Cucumber(val x: Int, val y: Int, val direction:Char) {
 
-        fun nextX(width:Int) = if (x+1 >= width) 0 else x+1
-        fun nextY(heigth:Int) = if (y+1 >= heigth) 0 else y+1
-        val isEast = direction == '>'
-        val isSouth = direction == 'v'
-        override fun toString(): String = "($x,$y:$direction)"
-        companion object {
-            fun createFrom(x:Int, y:Int, c:Char):Cucumber? {
-                if (c!= '>' && c != 'v') return null
-                return Cucumber(x,y,c)
-            }
-        }
+
+    data class Point(val x: Int, val y: Int) {
+
+        fun goEast(width: Int) = copy(x = if (x + 1 >= width) 0 else x + 1)
+        fun goSouth(height: Int) = copy(y = if (y + 1 >= height) 0 else y + 1)
+
+        override fun toString(): String = "($x,$y)"
     }
-    data class SeeBottom(val cucumbers:Set<Cucumber>, val width:Int, val height:Int) {
+
+    data class SeeBottom(val cucumbers: Map<Point, Char>, val width: Int, val height: Int) {
 
 
-        fun step():SeeBottom {
-            val east = cucumbers.map { if (it.isEast && cucumbers.none { other -> other.x == it.nextX(width) && it.y == other.y})
-                it.copy(x=it.nextX(width)) else it  }.toSet()
-            val south= east.map { if (it.isSouth && east.none { other -> other.y == it.nextY(height) && it.x == other.x})
-                it.copy(y=it.nextY(height)) else it  }.toSet()
-            return copy(cucumbers = south)
+        fun step() = goEast().goSouth()
+
+        private fun goEast(): SeeBottom = copy(cucumbers = cucumbers.map {
+            (if (it.value.isEast && cucumbers[it.key.goEast(width)] == null)
+                it.key.goEast(width) else it.key) to it.value
+        }.toMap())
+
+        private fun goSouth(): SeeBottom = copy(
+            cucumbers =
+            cucumbers.map {
+                (if (it.value.isSouth && cucumbers[it.key.goSouth(height)] == null)
+                    it.key.goSouth(height) else it.key) to it.value
+            }.toMap()
+        )
+
+        fun maxSteps(i:Int = 0): Int {
+            val next = step()
+            if (next == this) return i+1
+            return next.maxSteps(i+1)
         }
 
-        override fun toString(): String {
-            val sb = StringBuilder()
-            for (y in 0 until height) {
-                if (y > 0)  sb.append('\n')
-                for (x in 0 until width) {
-                    val c = cucumbers.firstOrNull { it.x == x && it.y == y }
-                    if (c == null) sb.append('.') else sb.append(c.direction)
+        override fun toString(): String = sequence {
+            (0 until height).forEach { y ->
+                if (y > 0) yield('\n')
+                (0 until width).forEach { x ->
+                    val c = cucumbers[Point(x, y)]
+                    if (c == null) yield('.') else yield(c)
                 }
             }
-            return sb.toString()
+        }.joinToString(separator = "")
+    }
+    fun parseInput(lines: List<String>): SeeBottom {
+
+        val map = mutableMapOf<Point, Char>()
+        lines.forEachIndexed { y, row ->
+            row.forEachIndexed { x, c -> if (c == 'v' || c == '>') map[Point(x, y)] = c }
         }
-
-        fun maxSteps(): Int {
-            var i = 0
-            var cur = this
-            do {
-                var newCur = cur.step()
-                i++
-                if (cur == newCur) return i
-                cur = newCur
-            } while(true)
-        }
+        return SeeBottom(map, lines[0].length, lines.size)
     }
-    fun part1(lines: Sequence<String>): Int {
-        return 0
-    }
-
-    fun part2(lines: Sequence<String>): Int {
-        return 0
-    }
-
-    fun parseInput(lines:List<String>):SeeBottom = SeeBottom(lines.mapIndexed { y, row ->
-        row.mapIndexedNotNull { x, c ->  createFrom(x,y,c) } }.flatten().toSet(), lines[0].length,lines.size)
-
 }
