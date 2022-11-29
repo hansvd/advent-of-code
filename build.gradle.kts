@@ -13,7 +13,9 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
+    implementation(kotlin("test"))
+    implementation("org.junit.jupiter", "junit-jupiter-api", "5.9.1")
+    implementation("org.junit.jupiter", "junit-jupiter-engine", "5.9.1")
 }
 
 tasks.test {
@@ -26,4 +28,9 @@ tasks.withType<KotlinCompile>() {
 
 application {
     mainClass.set("MainKt")
+
+    sourceSets {
+        getByName("main").java.srcDirs("src/main/kotlin")
+        getByName("test").java.srcDirs("src/main/kotlin")
+    }
 }

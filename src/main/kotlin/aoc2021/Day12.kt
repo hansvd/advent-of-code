@@ -6,7 +6,7 @@ import java.io.File
 import java.util.*
 
 fun main() {
-    File("input/aoc2021/input12.txt").useLines {
+    File("src/main/kotlin/aoc2021/input12.txt").useLines {
         println(part1(it))
         println(part2(it))
     }

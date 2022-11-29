@@ -5,7 +5,7 @@ import aoc2021.Advent4.advent4b
 import java.io.File
 
 fun main() {
-    val lines = File("input/aoc2021/input4.txt").readLines()
+    val lines = File("src/main/kotlin/aoc2021/input4.txt").readLines()
 
         println(advent4a(lines))
         println(advent4b(lines))

@@ -5,7 +5,7 @@ import aoc2021.Advent5.advent5b
 import java.io.File
 
 fun main() {
-    File("input/aoc2021/input5.txt").useLines {
+    File("src/main/kotlin/aoc2021/input5.txt").useLines {
         println(advent5a(it))
         println(advent5b(it))
     }

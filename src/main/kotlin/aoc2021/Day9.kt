@@ -5,10 +5,10 @@ import aoc2021.Advent9.advent9b
 import java.io.File
 
 fun main() {
-    File("input/aoc2021/input9.txt").useLines {
+    File("src/main/kotlin/aoc2021/input9.txt").useLines {
         println(advent9a(it))
     }
-    File("input/aoc2021/input9.txt").useLines {
+    File("src/main/kotlin/aoc2021/input9.txt").useLines {
         println(advent9b(it))
     }
 }

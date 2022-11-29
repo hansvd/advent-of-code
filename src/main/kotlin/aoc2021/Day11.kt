@@ -5,7 +5,7 @@ import aoc2021.Day11.part2
 import java.io.File
 
 fun main() {
-    File("input/aoc2021/input11.txt").useLines {
+    File("src/main/kotlin/aoc2021/input11.txt").useLines {
         println(part1(it))
         println(part2(it))
     }

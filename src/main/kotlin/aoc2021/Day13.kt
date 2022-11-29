@@ -5,7 +5,7 @@ import aoc2021.Day13.part2
 import java.io.File
 
 fun main() {
-    val lines = File("input/aoc2021/input13.txt").readLines()
+    val lines = File("src/main/kotlin/aoc2021/input13.txt").readLines()
     println(part1(lines, 1))
     println(part2(lines))
 }

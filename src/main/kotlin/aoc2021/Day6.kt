@@ -4,7 +4,7 @@ import aoc2021.Advent6.advent6
 import java.io.File
 
 fun main() {
-    val input = File("input/aoc2021/input6.txt").readText()
+    val input = File("src/main/kotlin/aoc2021/input6.txt").readText()
 
     println(advent6(input))
     println(advent6(input, 256))

@@ -11,10 +11,10 @@ fun <T> Stack<T>.pop(): T? = if (isNotEmpty()) removeAt(lastIndex) else null
 fun <T> Stack<T>.peek(): T? = if (isNotEmpty()) this[lastIndex] else null
 
 fun main() {
-    File("input/aoc2021/input10.txt").useLines {
+    File("src/main/kotlin/aoc2021/input10.txt").useLines {
         println(part1(it))
     }
-    File("input/aoc2021/input10.txt").useLines {
+    File("src/main/kotlin/aoc2021/input10.txt").useLines {
          println(part2(it))
     }
 }

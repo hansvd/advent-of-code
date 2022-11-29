@@ -6,7 +6,7 @@ import java.io.File
 import kotlin.math.abs
 
 fun main() {
-    val input = File("input/aoc2021/input7.txt").readText()
+    val input = File("src/main/kotlin/aoc2021/input7.txt").readText()
         println(advent7a(input))
         println(advent7b(input))
 }
