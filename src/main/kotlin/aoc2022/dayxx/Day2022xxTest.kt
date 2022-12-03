@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import shared.Input.useLines
 import kotlin.test.assertEquals
 
-class Day202204Test {
+class Day2022xxTest {
 
     @Test
     fun part1Test() {
