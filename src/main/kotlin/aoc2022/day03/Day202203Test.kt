@@ -12,6 +12,7 @@ PmmdzqPrVvPwwTWBwg
 wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw"""
+
     @Test
     fun part1ExTest() {
         assertEquals(16,Day202203.part1("vJrwpWtwJgWrhcsFMMfFFhFp".lineSequence()))
@@ -20,11 +21,17 @@ CrZsJsPPZsGzwwsLwLmpwMDw"""
     }
 
     @Test
+    fun part2ExTest() {
+        assertEquals(70, Day202203.part2(testInput.lineSequence()))
+    }
+
+    @Test
     fun part1Test() {
         assertEquals(8109,useLines(2022,3) { Day202203.part1(it) })
     }
+
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,3) { Day2022xx.part2(it) })
+        assertEquals(2738,useLines(2022,3) { Day202203.part2(it) })
     }
 }
