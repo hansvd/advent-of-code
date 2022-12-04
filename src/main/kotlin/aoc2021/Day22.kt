@@ -1,12 +1,12 @@
 package aoc2021
 
-object Day22 {
-    fun IntRange.intersect(other: IntRange): IntRange =
-        IntRange(maxOf(this.first, other.first), minOf(this.last, other.last))
+import shared.contains
+import shared.intersect
+import shared.isOverlap
+import shared.width
 
-    val IntRange.width: Int get() = this.last - this.first + 1
-    fun IntRange.isOverlap(other: IntRange) = !intersect(other).isEmpty()
-    fun IntRange.contains(other: IntRange) = first <= other.first && last >= other.last
+
+object Day22 {
 
     data class Instruction(val on: Boolean, val cuboid: Cuboid)
 

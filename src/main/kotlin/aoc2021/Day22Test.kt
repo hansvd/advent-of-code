@@ -1,7 +1,7 @@
 package aoc2021
-import aoc2021.Day22.intersect
 import aoc2021.Day22.invoke
 import org.junit.jupiter.api.Test
+import shared.intersect
 import java.io.File
 import kotlin.test.assertEquals
 
