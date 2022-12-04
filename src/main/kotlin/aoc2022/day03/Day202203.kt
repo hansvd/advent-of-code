@@ -1,4 +1,4 @@
-package aoc2022.day02
+package aoc2022.day03
 
 object Day202203 {
 
