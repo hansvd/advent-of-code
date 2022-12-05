@@ -2,13 +2,11 @@ package aoc2021
 
 import aoc2021.Day10.part1
 import aoc2021.Day10.part2
+import shared.Stack
+import shared.peek
+import shared.pop
+import shared.push
 import java.io.File
-
-
-typealias Stack<T> = MutableList<T>
-fun <T> Stack<T>.push(item: T) = add(item)
-fun <T> Stack<T>.pop(): T? = if (isNotEmpty()) removeAt(lastIndex) else null
-fun <T> Stack<T>.peek(): T? = if (isNotEmpty()) this[lastIndex] else null
 
 fun main() {
     File("src/main/kotlin/aoc2021/input10.txt").useLines {

@@ -1,28 +1,27 @@
 package aoc2022.day05
 
 import org.junit.jupiter.api.Test
-import shared.Input.useLines
+import shared.Input.getLines
 import kotlin.test.assertEquals
 
 class Day202205Test {
 
-    val exampleInput =""""""
 
     @Test
     fun part1ExTest() {
-        assertEquals(0, Day202205.part1(exampleInput.lineSequence()))
+        assertEquals("CMZ", getLines(2022,5,"ex") { Day202205.part1(it) })
     }
     @Test
     fun part1Test() {
-        assertEquals(0,useLines(2022,4) { Day202205.part1(it) })
+        assertEquals("DHBJQJCCW",getLines(2022,5) { Day202205.part1(it) })
     }
 
     @Test
     fun part2ExTest() {
-        assertEquals(0, Day202205.part2(exampleInput.lineSequence()))
+        assertEquals("MCD", getLines(2022,5, "ex") { Day202205.part2(it) })
     }
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,4) { Day202205.part2(it) })
+        assertEquals("WJVRLSJJT",getLines(2022,5) { Day202205.part2(it) })
     }
 }
