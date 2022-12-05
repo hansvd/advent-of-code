@@ -1,6 +1,6 @@
-package aoc2022.day02
+package aoc2022.day25
 
-object Day2022xx {
+object Day202225 {
 
     fun part1(lines: Sequence<String>): Int {
         return 0
