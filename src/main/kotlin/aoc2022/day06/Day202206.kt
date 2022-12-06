@@ -2,14 +2,13 @@ package aoc2022.day06
 
 object Day202206 {
 
-    fun part1(line:String): Int {
-        for (i in 4 until line.length)
-            if (line.toCharArray().slice(i-4 until i).distinct().size == 4)
-                return i
-        return 0
-    }
+    fun part1(line: String): Int = findForSize(line.toCharArray())
 
-    fun part2(lines: Sequence<String>): Int {
-        return 0
-    }
+    fun part2(line: String): Int = findForSize(line.toCharArray(), 14)
+
+    private fun findForSize(input: CharArray, n: Int = 4): Int =
+        (n until input.size).firstOrNull {
+            input.slice(it - n until it)
+                .distinct().size == n
+        } ?: 0
 }

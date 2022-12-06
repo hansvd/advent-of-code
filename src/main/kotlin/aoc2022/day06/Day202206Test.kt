@@ -1,12 +1,10 @@
 package aoc2022.day06
 
 import org.junit.jupiter.api.Test
-import shared.Input.useLines
 import shared.Input.useText
 import kotlin.test.assertEquals
 
 class Day202206Test {
-
 
     @Test
     fun part1ExTest() {
@@ -22,14 +20,18 @@ class Day202206Test {
         assertEquals(1198,useText(2022,6) { Day202206.part1(it) })
     }
 
-
     @Test
     fun part2ExTest() {
-        assertEquals(0,Day202206.part2("".lineSequence()))
+        assertEquals(19,Day202206.part2("mjqjpqmgbljsphdztnvjfqwrcgsmlb"))
+        assertEquals(23,Day202206.part2("bvwbjplbgvbhsrlpgdmjqwftvncz"))
+        assertEquals(23,Day202206.part2("nppdvjthqldpwncqszvftbrmjlhg"))
+        assertEquals(29,Day202206.part2("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg"))
+        assertEquals(26,Day202206.part2("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw"))
+
     }
 
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,6) { Day202206.part2(it) })
+        assertEquals(3120,useText(2022,6) { Day202206.part2(it) })
     }
 }
