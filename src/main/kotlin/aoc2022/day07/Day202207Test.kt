@@ -19,11 +19,11 @@ class Day202207Test {
 
     @Test
     fun part2ExTest() {
-        assertEquals(95437,useText(2022,7, "ex") { Day202207.part2(it)})
+        assertEquals(24933642,useText(2022,7, "ex") { Day202207.part2(it)})
     }
 
     @Test
     fun part2Test() {
-        assertEquals(0,useText(2022,7) { Day202207.part2(it) })
+        assertEquals(2568781,useText(2022,7) { Day202207.part2(it) })
     }
 }

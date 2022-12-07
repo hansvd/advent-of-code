@@ -13,6 +13,8 @@ object Day202207 {
 
         fun sum(block: (EDir) -> Boolean):Long =
             (if (block(this)) this.size else 0) + subDirs.sumOf { it.sum(block) }
+
+        fun list():List<EDir> = subDirs + subDirs.map { it.list()}.flatten()
     }
 
     class EFile(val name: String, val size: Long)
@@ -22,8 +24,12 @@ object Day202207 {
         return root.sum { it.size <= 100000L }
     }
 
-    fun part2(text: String): Int {
-        return 0
+    fun part2(text: String): Long {
+        val root = parseInput(text)
+        val free = 70000000 - root.size
+        val needed = 30000000 - free
+
+        return root.list().sortedBy { it.size }.firstOrNull { it.size >= needed }?.size ?: 0
     }
 
     fun parseInput(text: String): EDir {
@@ -36,7 +42,7 @@ object Day202207 {
         return root
     }
 
-    fun parseChunk(lines: List<String>, currentDirIn: EDir): EDir {
+    private fun parseChunk(lines: List<String>, currentDirIn: EDir): EDir {
 
         var currentDir = currentDirIn
         lines.filter { it.isNotBlank() }.forEach { l ->
