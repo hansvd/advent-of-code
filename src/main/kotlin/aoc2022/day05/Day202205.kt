@@ -13,7 +13,7 @@ class Day202205(private val stacks:List<Stack<Char>>,
 
     fun crateMover9000():Day202205 {
         moves.forEach { m ->
-            repeat(m.nb) { i ->
+            repeat(m.nb) {
                 val v = stacks[m.from-1].pop()
                 if (v != null) stacks[m.to-1].push(v)
             }
