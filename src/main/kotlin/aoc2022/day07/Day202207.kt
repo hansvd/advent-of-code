@@ -3,10 +3,10 @@ package aoc2022.day07
 object Day202207 {
 
     class EDir(
-        val name: String,
-        val parent: EDir? = null,
-        val subDirs: MutableList<EDir> = mutableListOf(),
-        val files: MutableList<EFile> = mutableListOf()
+        private val name: String,
+        private val parent: EDir? = null,
+        private val subDirs: MutableList<EDir> = mutableListOf(),
+        private val files: MutableList<EFile> = mutableListOf()
     ) {
         val size:Long
             get() = files.sumOf { it.size } + subDirs.sumOf { it.size }
@@ -15,6 +15,36 @@ object Day202207 {
             (if (block(this)) this.size else 0) + subDirs.sumOf { it.sum(block) }
 
         fun list():List<EDir> = subDirs + subDirs.map { it.list()}.flatten()
+
+        // A chunk start with a dir listing and then some cd commands
+        fun parseChunk(lines: List<String>): EDir {
+
+            var currentDir = this
+            lines.filter { it.isNotBlank() }.forEach { l ->
+                when {
+
+                    l.startsWith("$ cd ..") -> {
+                        currentDir = currentDir.parent ?: currentDir
+                    }
+
+                    l.startsWith("$ cd") -> {
+                        val name = l.substring(5,l.length)
+                        currentDir = currentDir.subDirs.firstOrNull { it.name == name } ?: currentDir
+                    }
+
+                    l.startsWith("dir ") -> {
+                        currentDir.subDirs.add(EDir(l.substring(4, l.length),currentDir))
+                    }
+
+                    !l.startsWith("$") -> {
+                        val s = l.split(' ')
+                        currentDir.files.add(EFile(s[1],s[0].toLong()))
+                    }
+                }
+            }
+
+            return currentDir
+        }
     }
 
     class EFile(val name: String, val size: Long)
@@ -34,40 +64,12 @@ object Day202207 {
 
     fun parseInput(text: String): EDir {
         val root = EDir("root")
-        val chunks = text.split("$ ls")
         var currentDir = root
-        for (c in chunks.drop(1)) {
-            currentDir = parseChunk(c.split("\n"), currentDir)
+        text.split("$ ls").drop(1).forEach { c ->
+            currentDir = currentDir.parseChunk(c.split("\n"))
         }
         return root
     }
 
-    private fun parseChunk(lines: List<String>, currentDirIn: EDir): EDir {
 
-        var currentDir = currentDirIn
-        lines.filter { it.isNotBlank() }.forEach { l ->
-            when {
-
-                l.startsWith("$ cd ..") -> {
-                    currentDir = currentDir.parent ?: currentDir
-                }
-
-                l.startsWith("$ cd") -> {
-                    val name = l.substring(5,l.length)
-                    currentDir = currentDir.subDirs.firstOrNull { it.name == name } ?: currentDir
-                }
-
-                l.startsWith("dir ") -> {
-                    currentDir.subDirs.add(EDir(l.substring(4, l.length),currentDir))
-                }
-
-                !l.startsWith("$") -> {
-                    val s = l.split(' ')
-                    currentDir.files.add(EFile(s[1],s[0].toLong()))
-                }
-            }
-        }
-
-        return currentDir
-    }
 }
