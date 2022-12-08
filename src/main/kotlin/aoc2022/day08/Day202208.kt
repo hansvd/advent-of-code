@@ -6,22 +6,17 @@ object Day202208 {
         val h = rows.size
         val w = rows[0].size
 
-        private fun isVisible(r: Int, c: Int): Boolean {
-            val i = rows[r][c]
-            return (0 until c).all { rows[r][it] < i }
-                    || (c + 1 until w).all { rows[r][it] < i }
-                    || (0 until r).all { rows[it][c] < i }
-                    || (r + 1 until h).all { rows[it][c] < i }
-        }
+        private fun isVisible(r: Int, c: Int): Boolean =
+                (0 until c).all { rows[r][it] < rows[r][c] }
+                || (c + 1 until w).all { rows[r][it] < rows[r][c] }
+                || (0 until r).all { rows[it][c] < rows[r][c] }
+                || (r + 1 until h).all { rows[it][c] < rows[r][c] }
 
-        private fun score(r: Int, c: Int): Int {
-            val i = rows[r][c]
-            val s1 = c - ((c - 1 downTo 0).firstOrNull { rows[r][it] >= i } ?: 0)
-            val s2 = ((c + 1 until w).firstOrNull { rows[r][it] >= i } ?: (w - 1)) - c
-            val s3 = r - ((r - 1 downTo 0).firstOrNull { rows[it][c] >= i } ?: 0)
-            val s4 = ((r + 1 until h).firstOrNull { rows[it][c] >= i } ?: (h - 1)) - r
-            return s1 * s2 * s3 * s4
-        }
+        private fun score(r: Int, c: Int): Int =
+                (c - 1 downTo 0).takeWhile { rows[r][it] >= rows[r][c] }.size *
+                (c + 1 until w).takeWhile { rows[r][it] >= rows[r][c] }.size  *
+                (r - 1 downTo 0).takeWhile { rows[it][c] >= rows[r][c] }.size *
+                (r + 1 until h).takeWhile { rows[it][c] >= rows[r][c] }.size
 
         fun maxScore(): Int = (1 until h - 1).maxOf { r ->
             (1 until w - 1).maxOf { c -> score(r, c) }
