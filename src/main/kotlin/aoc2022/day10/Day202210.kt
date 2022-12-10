@@ -22,11 +22,7 @@ object Day202210 {
                 result += cycle * x
         }
 
-        fun add(a:Int) {
-            nextCycle()
-            nextCycle()
-            x += a
-        }
+        fun add(a:Int) { nextCycle(); nextCycle(); x += a }
 
         fun handleInput(lines: Sequence<String>) {
             lines.forEach { s ->

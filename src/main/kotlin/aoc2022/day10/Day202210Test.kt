@@ -39,6 +39,6 @@ class Day202210Test {
             #.#..#....#....#....#.#..#..#.#....#..#.
             #..#.#....####.####.#..#.###..#....#..#.
         """.trimIndent()
-        assertEquals(exp,useLines(2022,10) { Day202210.part2(it).trim() })
+        assertEquals(exp,useLines(2022,10) { Day202210.part2(it) })
     }
 }
