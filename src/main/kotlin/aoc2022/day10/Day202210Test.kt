@@ -10,12 +10,12 @@ class Day202210Test {
 
     @Test
     fun part1ExTest() {
-        assertEquals(0, Day202210.part1(exInput.lineSequence()))
+        assertEquals(13140, useLines(2022,10, "ex") { Day202210.part1(it) })
     }
 
     @Test
     fun part1Test() {
-        assertEquals(0,useLines(2022,10) { Day202210.part1(it) })
+        assertEquals(15220,useLines(2022,10) { Day202210.part1(it) })
     }
 
 
