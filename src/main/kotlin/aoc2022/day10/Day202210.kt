@@ -3,21 +3,14 @@ package aoc2022.day10
 object Day202210 {
 
     class Cpu {
+        var result = 0
         private var cycle = 0
         private var x:Int = 1
-        var result = 0
-
         private var image = ""
 
         private fun nextCycle() {
             cycle += 1
-            var i = (image.length+1) % 41
-            if (i == 0) {
-                image += "\n"
-                i = 1
-            }
-
-            image += if (i in x..x+2) "#" else "."
+            image += if ((image.length % 40) in x-1..x+1) "#" else "."
             if ((cycle-20) % 40 == 0)
                 result += cycle * x
         }
@@ -32,7 +25,7 @@ object Day202210 {
                 }
             }
         }
-        override fun toString():String =image
+        override fun toString():String =image.chunked(40).fold("") { a, s -> a + s + "\n"}.trim()
     }
 
     fun part1(lines: Sequence<String>): Int = Cpu().also { it.handleInput(lines) }.result
