@@ -25,7 +25,7 @@ object Day202210 {
                 }
             }
         }
-        override fun toString():String =image.chunked(40).fold("") { a, s -> a + s + "\n"}.trim()
+        override fun toString():String =image.chunked(40).joinToString("\n") { it }
     }
 
     fun part1(lines: Sequence<String>): Int = Cpu().also { it.handleInput(lines) }.result
