@@ -6,8 +6,6 @@ import kotlin.test.assertEquals
 
 class Day202210Test {
 
-    val exInput = """"""
-
     @Test
     fun part1ExTest() {
         assertEquals(13140, useLines(2022,10, "ex") { Day202210.part1(it) })
@@ -21,11 +19,26 @@ class Day202210Test {
 
     @Test
     fun part2ExTest() {
-        assertEquals(0, Day202210.part2(exInput.lineSequence()))
+        val exp = """
+            ##..##..##..##..##..##..##..##..##..##..
+            ###...###...###...###...###...###...###.
+            ####....####....####....####....####....
+            #####.....#####.....#####.....#####.....
+            ######......######......######......####
+            #######.......#######.......#######.....""".trimIndent()
+        assertEquals(exp, useLines(2022,10, "ex") { Day202210.part2(it) })
     }
 
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,10) { Day202210.part2(it) })
+        val exp = """
+            ###..####.####.####.#..#.###..####..##..
+            #..#.#.......#.#....#.#..#..#.#....#..#.
+            #..#.###....#..###..##...###..###..#..#.
+            ###..#.....#...#....#.#..#..#.#....####.
+            #.#..#....#....#....#.#..#..#.#....#..#.
+            #..#.#....####.####.#..#.###..#....#..#.
+        """.trimIndent()
+        assertEquals(exp,useLines(2022,10) { Day202210.part2(it).trim() })
     }
 }
