@@ -2,7 +2,7 @@ package aoc2022.day11
 
 class Day202211(lines: List<String>, val trust: Boolean) {
     val monkeys: List<Monkey> = lines.chunked(7).map { parse(it) }
-    val scale = monkeys.map { it.testDiv }.fold(1) { acc, i -> acc * i }.toLong()
+    val scale = monkeys.map { it.testDiv }.fold(1L) { acc, i -> acc * i }
 
 
     private fun parse(lines: List<String>): Monkey {
