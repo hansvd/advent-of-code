@@ -20,18 +20,16 @@ object Day202212 {
         private val width = map[0].size
         private val end = find('E')
         val start = find('S')
-        val possibleStarts = listOf(start)  +
-            (0 until height).map { y -> (0 until width).filter { map[y][it] == 'a' }. map { Point(it,y) } }
-                .flatten()
 
         fun get(p:Point):Char = map[p.y][p.x].let { if (it == 'S') 'a' else if (it == 'E') 'z' else it }
         private fun find(c:Char):Point = (0 until height).map { y ->
             (0 until width).filter { map[y][it] == c }.map { Point(it,y) }
         }.flatten().first()
 
-        fun next(pos:Point):List<Point> = get(pos).let { c -> pos.adjacent(width, height).filter { get(it) <= c + 1 } }
+        private fun next(pos:Point):List<Point> = get(pos).let { c -> pos.adjacent(width, height).filter { get(it) <= c + 1 } }
+        private fun prev(pos:Point):List<Point> = get(pos).let { c -> pos.adjacent(width, height).filter { get(it) >= c - 1 } }
 
-        fun invoke(start:Point):Int? {
+        fun part1():Int? {
            val r = dijkstraSearch(
                 init = Step(start, null),
                 found = { step -> step.pos == end },
@@ -40,16 +38,19 @@ object Day202212 {
             )
             return r.minOfOrNull { it.stepNb }
         }
+        fun part2():Int? {
+            val r = dijkstraSearch(
+                init = Step(end, null),
+                found = { step -> get(step.pos) == 'a' },
+                children = { step -> prev(step.pos).map { neighbor -> Step(neighbor, step) } },
+                cost = { it.stepNb }
+            )
+            return r.minOfOrNull { it.stepNb }
+        }
     }
-    fun part1(lines: Sequence<String>): Int {
-        val area = parseInput(lines)
-        return area.invoke(area.start) ?: 0
-    }
+    fun part1(lines: Sequence<String>): Int = parseInput(lines).part1() ?:0
 
-    fun part2(lines: Sequence<String>): Int {
-        val area = parseInput(lines)
-        return area.possibleStarts.mapNotNull { area.invoke(it)}.minOf { it }
-    }
+    fun part2(lines: Sequence<String>): Int = parseInput(lines).part2() ?:0
 
     fun parseInput(lines:Sequence<String>) : Area {
         return Area(lines.map { it.toList()}.toList())
