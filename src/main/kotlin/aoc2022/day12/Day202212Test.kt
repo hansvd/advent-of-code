@@ -6,26 +6,30 @@ import kotlin.test.assertEquals
 
 class Day202212Test {
 
-    val exInput = """"""
+    val exInput = """Sabqponm
+abcryxxl
+accszExk
+acctuvwj
+abdefghi"""
 
     @Test
     fun part1ExTest() {
-        assertEquals(0, Day202212.part1(exInput.lineSequence()))
+        assertEquals(31, Day202212.part1(exInput.lineSequence()))
     }
 
     @Test
     fun part1Test() {
-        assertEquals(0,useLines(2022,12) { Day202212.part1(it) })
+        assertEquals(437, useLines(2022, 12) { Day202212.part1(it) })
     }
 
 
     @Test
     fun part2ExTest() {
-        assertEquals(0, Day202212.part2(exInput.lineSequence()))
+        assertEquals(29, Day202212.part2(exInput.lineSequence()))
     }
 
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,12) { Day202212.part2(it) })
+        assertEquals(430, useLines(2022, 12) { Day202212.part2(it) })
     }
 }
