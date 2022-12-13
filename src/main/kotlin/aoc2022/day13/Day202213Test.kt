@@ -7,7 +7,6 @@ import kotlin.test.assertEquals
 
 class Day202213Test {
 
-    val exInput = """"""
 
     @Test
     fun part1ExTest() {
@@ -22,11 +21,11 @@ class Day202213Test {
 
     @Test
     fun part2ExTest() {
-        assertEquals(0, Day202213.part2(exInput.lineSequence()))
+        assertEquals(140, useLines(2022,13, "ex") { Day202213.part2(it) })
     }
 
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,13) { Day202213.part2(it) })
+        assertEquals(20592,useLines(2022,13) { Day202213.part2(it) })
     }
 }
