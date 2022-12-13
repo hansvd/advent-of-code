@@ -27,7 +27,7 @@ object Day202213 {
     }
 
 
-    fun parseLine(line: String): Any {
+    private fun parseLine(line: String): Any {
         if (line == "[]") return listOf<Int>()
         if (line[0].isDigit()) return Integer.valueOf(line)
 
