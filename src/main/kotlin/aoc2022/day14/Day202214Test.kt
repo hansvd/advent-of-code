@@ -1,11 +1,10 @@
-package aoc2022.day25
+package aoc2022.day14
 
-import aoc2022.day14.Day202214
 import org.junit.jupiter.api.Test
 import shared.Input.useLines
 import kotlin.test.assertEquals
 
-class Day202225Test {
+class Day202214Test {
 
     val exInput = """"""
 
@@ -16,7 +15,7 @@ class Day202225Test {
 
     @Test
     fun part1Test() {
-        assertEquals(0,useLines(2022,25) { Day202214.part1(it) })
+        assertEquals(0,useLines(2022,14) { Day202214.part1(it) })
     }
 
 
@@ -27,6 +26,6 @@ class Day202225Test {
 
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,25) { Day202214.part2(it) })
+        assertEquals(0,useLines(2022,14) { Day202214.part2(it) })
     }
 }
