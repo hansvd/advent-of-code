@@ -3,7 +3,7 @@ package aoc2022.day13
 object Day202213 {
 
     class PacketPair(private val left: Any, private val right: Any) {
-        fun isRightOrder(): Boolean = compare(left, right) == true
+        fun isRightOrder(): Boolean = compare(left, right) == -1
     }
 
     fun part1(lines: List<String>): Int {
@@ -16,12 +16,7 @@ object Day202213 {
         val sep1 = parseLine("[[2]]")
         val sep2 =  parseLine("[[6]]")
         val l = (listOf(sep1,sep2)
-            + lines.filter { it.isNotBlank() }.map { parseLine(it) }).sortedWith { a, b ->
-            when (compare(a, b)) {
-                true -> -1
-                false -> 1
-                else -> 0
-            }
+            + lines.filter { it.isNotBlank() }.map { parseLine(it) }).sortedWith { a, b -> compare(a, b)
         }
         return (l.indexOfFirst { it == sep1 } + 1) * (l.indexOfFirst { it == sep2 } + 1)
     }
@@ -48,22 +43,22 @@ object Day202213 {
         return sub
     }
 
-    fun compare(left: Any?, right: Any?): Boolean? {
+    fun compare(left: Any?, right: Any?): Int {
         if (left is Int && right is Int) {
-            if (left < right) return true
-            if (right < left) return false
-            return null
+            if (left < right) return -1
+            if (right < left) return 1
+            return 0
         }
         if (left is List<*> && right is List<*>) {
             val nl = left.size
             val nr = right.size
             for (i in 0 until nl.coerceAtMost(nr)) {
                 val c = compare(left[i], right[i])
-                if (c != null) return c
+                if (c != 0) return c
             }
-            if (nl < nr) return true
-            if (nr < nl) return false
-            return null
+            if (nl < nr) return -1
+            if (nr < nl) return 1
+            return 0
         }
         if (left is Int) return compare(listOf(left), right)
         return compare(left, listOf(right))
