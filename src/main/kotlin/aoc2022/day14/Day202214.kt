@@ -21,7 +21,7 @@ object Day202214 {
         fun addSand():Boolean {
             var p = Point(500,0)
             if (get(p) != 0) return false
-            do {
+            while(true) {
                 val n = p.sandAdjacent().firstOrNull { get(it) == 0 }
                 if (n == null) {
                     map[p] = Sand
@@ -29,7 +29,7 @@ object Day202214 {
                 }
                 if (n.y > yMax) return false
                 p = n
-            } while(true)
+            }
         }
     }
     fun part1(lines: Sequence<String>): Int = run(lines)
