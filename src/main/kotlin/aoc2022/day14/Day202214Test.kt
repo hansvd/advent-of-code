@@ -22,11 +22,11 @@ class Day202214Test {
 
     @Test
     fun part2ExTest() {
-        assertEquals(0, Day202214.part2(exInput.lineSequence()))
+        assertEquals(93, Day202214.part2(exInput.lineSequence()))
     }
 
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,14) { Day202214.part2(it) })
+        assertEquals(24813,useLines(2022,14) { Day202214.part2(it) })
     }
 }
