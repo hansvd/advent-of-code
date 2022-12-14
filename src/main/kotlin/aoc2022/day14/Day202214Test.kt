@@ -6,16 +6,17 @@ import kotlin.test.assertEquals
 
 class Day202214Test {
 
-    val exInput = """"""
+    val exInput = """498,4 -> 498,6 -> 496,6
+503,4 -> 502,4 -> 502,9 -> 494,9"""
 
     @Test
     fun part1ExTest() {
-        assertEquals(0, Day202214.part1(exInput.lineSequence()))
+        assertEquals(24, Day202214.part1(exInput.lineSequence()))
     }
 
     @Test
     fun part1Test() {
-        assertEquals(0,useLines(2022,14) { Day202214.part1(it) })
+        assertEquals(873,useLines(2022,14) { Day202214.part1(it) })
     }
 
 
