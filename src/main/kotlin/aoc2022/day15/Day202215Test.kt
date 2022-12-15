@@ -46,11 +46,11 @@ Sensor at x=20, y=1: closest beacon is at x=15, y=3"""
 
     @Test
     fun part2ExTest() {
-        assertEquals(0, Day202215.part2(exInput.lineSequence()))
+        assertEquals(56000011, Day202215.part2(exInput.lineSequence(), 0..20))
     }
 
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,15) { Day202215.part2(it) })
+        assertEquals(10229191267339L,useLines(2022,15) { Day202215.part2(it, 0..4_000_000) })
     }
 }

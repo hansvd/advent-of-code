@@ -2,21 +2,9 @@ package shared
 
 import kotlin.math.abs
 
-data class Line(val p0: Point, val p1: Point) {
-    val left = minOf(p0.x, p1.x)
-    val right = maxOf(p0.x, p1.x)
-}
-
 data class Point(var x: Int, var y: Int) {
-    //    fun topLeft(other: Point): Point = Point(minOf(x, other.x), minOf(y, other.y))
-//    fun bottomRight(other: Point): Point = Point(maxOf(x, other.x), maxOf(y, other.y))
-    fun manhattanDistance(other: Point) = abs(x - other.x) + abs(y - other.y)
 
-//    fun hLineTo(p1: Point): List<Point> = when {
-//        p1.y == y -> (minOf(x, p1.x)..maxOf(x, p1.x)).map { Point(it, y) }
-//        p1.x == x -> (minOf(y, p1.y)..maxOf(y, p1.y)).map { Point(x, it) }
-//        else -> listOf()
-//    }
+    fun manhattanDistance(other: Point) = abs(x - other.x) + abs(y - other.y)
 
     fun adjacentWithManhattanDistance(d: Int): Sequence<Point> {
         return sequence {
@@ -30,22 +18,41 @@ data class Point(var x: Int, var y: Int) {
         }
     }
 
-//    fun adjacentWithManhattanDistanceAsHLines(d: Int): Sequence<Line> {
-//        return sequence {
-//
-//            for (yy in y - d..y + d) {
-//                val dy = abs(y - yy)
-//                val dx = d - dy
-//                yield(Line(Point(x - dx, yy), Point(x + dx, yy)))
-//            }
+//    fun adjacentWithManhattanDistanceForYRange(d: Int, yRange: IntRange): List<HLine> {
+//        val maxRange = y - d..y + d
+//        val range = yRange.intersect(maxRange)
+//        return range.mapNotNull { yy ->
+//            val dy = abs(y - yy)
+//            val dx = d - dy
+//            if (dx < 0) null
+//            HLine(x - dx .. x + dx, y)
 //        }
 //    }
 
-    fun adjacentWithManhattanDistanceForY(d: Int, yy: Int): Line? {
-        val dy = abs( y - yy)
+    fun adjacentWithManhattanDistanceFor(d: Int, area: Area): List<HLine> {
+        val yRange = y - d..y + d
+        val xRange = x - d..x + d
+        val yRangeResult = area.yRange.intersect(yRange)
+        val xRangeResult = area.xRange.intersect(xRange)
+        return yRangeResult.mapNotNull { yy ->
+            val dy = abs(y - yy)
+            val dx = d - dy
+            if (dx < 0) null
+            else {
+                val x1 = maxOf(x - d, xRangeResult.first)
+                val x2 = minOf(x + d, xRangeResult.last)
+                if (x1 <= x2)
+                    HLine(x - dx..x + dx, yy)
+                else null
+            }
+        }
+    }
+
+    fun adjacentWithManhattanDistanceForY(d: Int, yy: Int): HLine? {
+        val dy = abs(y - yy)
         val dx = d - dy
         if (dx < 0) return null
-        return Line(Point(x - dx, y), Point(x + dx, y))
+        return HLine(x - dx..x + dx, yy)
     }
 }
 
