@@ -7,10 +7,10 @@ import shared.width
 
 object Day202215 {
 
-    class Map(val hLines: List<IntRange>) {
+    class Map(val ranges: List<IntRange>) {
         fun noBeaconCount(): Int {
             val result = mutableListOf<IntRange>()
-            for (l in hLines.sortedBy { it.first }) {
+            for (l in ranges.sortedBy { it.first }) {
                 val ll = result.firstOrNull { l.isOverlap(it) }
                 if (ll == null) result.add(l)
                 else {
@@ -19,28 +19,7 @@ object Day202215 {
                 }
             }
             return result.sumOf { it.width }
-
-
         }
-//        fun print() {
-//            val xMin =  map.keys.minOf { it.x }
-//            val xMax = map.keys.maxOf { it.x }
-//            val yMin =  map.keys.minOf { it.y }
-//            val yMax = map.keys.maxOf { it.y }
-//            println("$xMin .. $xMax")
-//            for (y in yMin .. yMax) {
-//                print("$y\t")
-//                for (x in xMin..xMax) {
-//                    print(when(map[Point(x,y)]) {
-//                        Beacon -> 'B'
-//                        Sensor -> 'S'
-//                        NoBeacon -> '#'
-//                        else -> '.'
-//                    })
-//                }
-//                println()
-//            }
-//        }
     }
 
     fun part1(lines: Sequence<String>, testY: Int = 10): Int = parseInput(lines, testY).noBeaconCount()
@@ -67,19 +46,16 @@ object Day202215 {
             val beacon = it.second
 
             val d = it.first.manhattanDistance(it.second)
-            it.first.adjacentWithManhattanDistanceAsHLines(d).filter { l -> l.p0.y == testY }
-                .forEach { l ->
-                    if (beacon.y == testY && (l.left..l.right).contains(beacon.x)) {
-                        if (beacon.x == l.left)
-                            result.add(l.left + 1..l.right)
-                        else
-                            result.add(l.left..l.right - 1)
-                    } else
-                        result.add(l.left..l.right)
-                }
+            val l = it.first.adjacentWithManhattanDistanceForY(d, testY) ?: return@forEach
+            if (beacon.y == testY && (l.left..l.right).contains(beacon.x)) {
+                if (beacon.x == l.left)
+                    result.add(l.left + 1..l.right)
+                else
+                    result.add(l.left until l.right)
+            } else
+                result.add(l.left..l.right)
         }
-        val r = Map(result)
-        //r.print()
-        return r
+
+        return Map(result)
     }
 }
