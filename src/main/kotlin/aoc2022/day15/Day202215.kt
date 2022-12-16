@@ -8,7 +8,7 @@ object Day202215 {
         val d = sensor.manhattanDistance(beacon)
 
         fun noBeaconXRange(testY: Int): IntRange? {
-            val l = sensor.adjacentWithManhattanDistanceForY(d, testY) ?: return null
+            val l = sensor.adjacentWithinManhattanDistanceForY(d, testY) ?: return null
             return if (beacon.y == testY && (l.left..l.right).contains(beacon.x)) {
                 if (beacon.x == l.left)
                     return l.left + 1..l.right
@@ -36,11 +36,13 @@ object Day202215 {
         val searchArea = Area(Point(testRange.first, testRange.first), Point(testRange.last, testRange.last))
         val input = parseInput(lines).toList()
 
+        // search in points just outside the distance
+        // should be d + 1 because there should be only 1 result according to text,
+        // (when d+2 there are multiple results)
         val r = input.asSequence().flatMap {
-            it.sensor.adjacentWithManhattanDistanceFor(it.d + 1, searchArea)
+            it.sensor.adjacentWithinManhattanDistanceFor(it.d + 1, searchArea)
         }
             .flatMap { listOf(Point(it.left, it.y), Point(it.right, it.y)) }
-            .filter { testRange.contains(it.x) && testRange.contains(it.y) }
             .first { outerPoint ->
             input.all {
                 it.sensor.manhattanDistance(outerPoint) > it.d

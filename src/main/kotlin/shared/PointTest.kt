@@ -30,7 +30,7 @@ class PointTest {
                 Point(x = 2, y = 1),
                 Point(x = 2, y = 2),
                 Point(x = 3, y = 1)
-            ), Point(1, 1).adjacentWithManhattanDistance(2).toSet()
+            ), Point(1, 1).adjacentWithinManhattanDistance(2).toSet()
         )
 
     }
