@@ -35,6 +35,6 @@ Valve JJ has flow rate=21; tunnel leads to valve II"""
 
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,16) { Day202216.part2(it) })
+        assertEquals(2100,useLines(2022,16) { Day202216.part2(it) })
     }
 }

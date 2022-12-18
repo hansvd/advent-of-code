@@ -45,15 +45,10 @@ object Day202216 {
 
         fun invoke2(): Int {
             val start = valves["AA"]!!
-            val results = findRecur(start, setOf(start),26)
-//                .filter {  it.steps.size == 6 && it.steps[0].name == "JJ" && it.steps[1].name == "BB" &&
-//                        it.steps[2].name == "CC"
-//                        && it.steps[3].name == "DD" && it.steps[4].name == "HH" && it.steps[5].name == "EE" }
 
-
-
-            val max = sequence {
-                results.forEach {
+            // take 100 is just a lucky shot which worked
+            return sequence {
+                findRecur(start, setOf(start),26).sortedByDescending { it.score }.take(100).forEach {
                     var score = 0
                     val openValves = mutableSetOf<Valve>()
                     for (i in 0 until it.steps.size){
@@ -66,11 +61,10 @@ object Day202216 {
             }.flatMap {r1 ->
                 val result2 = findRecur(start, r1.openValves + start, 26)
                 result2.map {Pair(r1,it)}
-            }
-                .maxBy { p ->
+            }.maxOf { p ->
                         p.first.score + p.second.score}
 
-            return max.first.score + max.second.score
+
         }
         private fun findRecur(start:Valve, openValves:Set<Valve>, timeLeft: Int):List<Result> {
             if (timeLeft < 2) return listOf() // no time to open another valve
