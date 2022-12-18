@@ -57,8 +57,8 @@ object Day202215 {
         val match = reg.matchEntire(l)
         if (match != null)
             Input(
-                Point(Integer.valueOf(match.groupValues[1]), Integer.valueOf(match.groupValues[2])),
-                Point(Integer.valueOf(match.groupValues[3]), Integer.valueOf(match.groupValues[4]))
+                Point(match.groupValues[1].toInt(), match.groupValues[2].toInt()),
+                Point(match.groupValues[3].toInt(), match.groupValues[4].toInt())
             )
         else null
     }
