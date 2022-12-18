@@ -4,29 +4,79 @@ import shared.dijkstraSearch
 
 object Day202216 {
 
-    data class Valve(val name: String, val rate: Int, val tunnelsTo: List<String>)
+    data class Valve(val name: String, val rate: Int, val tunnelsTo: List<String>) {
+        override fun equals(other: Any?): Boolean = (other as? Step)?.name == name
+        override fun hashCode(): Int = name.hashCode()
+    }
 
-    data class Step(val valve: Valve, val score: Int, val timeLeft: Int, val previous: Step?) {
+    data class Step(val valve: Valve, val timeLeft: Int, val previous: Step?) {
         val name = valve.name
         override fun equals(other: Any?): Boolean = (other as? Step)?.name == name
         override fun hashCode(): Int = name.hashCode()
 
         val stepNb: Int = (previous?.stepNb ?: -1) + 1
+
+        fun openValves():Set<Valve> = setOf(valve) + (previous?.openValves()?: setOf())
+
+        val score:Int get() = (timeLeft - 1) * valve.rate
+
+        override fun toString():String {
+            return "$name:$score ($timeLeft)"
+        }
     }
-    class Result(val v:Valve, val steps:List<Step>, val score:Int, val timeLeft: Int)
-    class Cave(val valves: Map<String, Valve>) {
+    class Result(val v:Valve, val steps:List<Step>, val openValves: Set<Valve>, val score:Int, val timeLeft: Int) {
+
+        override fun toString():String {
+            val sb = StringBuilder()
+            for (i in steps) {
+                sb.append(i.name + ":" +"$score (${i.timeLeft}) - ")
+            }
+            return sb.toString()
+        }
+    }
+    class Cave(private val valves: Map<String, Valve>) {
 
         fun invoke(): Int {
             val start = valves["AA"]!!
-            val results = findRecur(start, listOf(start),30)
+            val results = findRecur(start, setOf(start),30)
             val r = results.maxBy { it.score }
             return r.score
         }
-        fun findRecur(start:Valve, openValves:List<Valve>, timeLeft: Int):List<Result> {
+
+        fun invoke2(): Int {
+            val start = valves["AA"]!!
+            val results = findRecur(start, setOf(start),26)
+//                .filter {  it.steps.size == 6 && it.steps[0].name == "JJ" && it.steps[1].name == "BB" &&
+//                        it.steps[2].name == "CC"
+//                        && it.steps[3].name == "DD" && it.steps[4].name == "HH" && it.steps[5].name == "EE" }
+
+
+
+            val max = sequence {
+                results.forEach {
+                    var score = 0
+                    val openValves = mutableSetOf<Valve>()
+                    for (i in 0 until it.steps.size){
+                        val s = it.steps[i]
+                        score += s.score
+                        openValves += s.openValves()
+                        yield(Result(s.valve, it.steps.take(i+1), openValves, score, s.timeLeft  ))
+                    }
+                }
+            }.flatMap {r1 ->
+                val result2 = findRecur(start, r1.openValves + start, 26)
+                result2.map {Pair(r1,it)}
+            }
+                .maxBy { p ->
+                        p.first.score + p.second.score}
+
+            return max.first.score + max.second.score
+        }
+        private fun findRecur(start:Valve, openValves:Set<Valve>, timeLeft: Int):List<Result> {
             if (timeLeft < 2) return listOf() // no time to open another valve
             val ends = valves.values.filter{it.rate > 0 && !openValves.contains(it)}.sortedByDescending { it.rate }
 
-            val results = ends.mapNotNull { findFromTo(start,it,timeLeft) }.sortedByDescending { it.score }
+            val results = ends.mapNotNull { findFromTo(start,it,openValves, timeLeft) }.sortedByDescending { it.score }
             val endResults = mutableListOf<Result>()
             for (r in results) {
                 val result2 = findRecur(r.v, openValves + r.v, r.timeLeft)
@@ -34,21 +84,22 @@ object Day202216 {
                     endResults.add(r)
                 else
                     result2.forEach {
-                        endResults.add(Result(it.v, r.steps + it.steps, it.score + r.score, it.timeLeft)) }
+                        endResults.add(Result(it.v, r.steps + it.steps, it.openValves + r.openValves, it.score + r.score, it.timeLeft)) }
             }
             return endResults
         }
 
-        fun findFromTo(start:Valve, end:Valve, timeLeft:Int):Result? {
+
+           private fun findFromTo(start:Valve, end:Valve, openValves: Set<Valve>, timeLeft:Int):Result? {
             val r = dijkstraSearch(
-                init = Step(start, 0,timeLeft, null),
+                init = Step(start,timeLeft, null),
                 found = { step -> step.timeLeft <= 1 || step.valve.name == end.name },
-                children = { step -> step.valve.tunnelsTo.map { Step(valves[it]!!,step.score,step.timeLeft-1, step) } },
+                children = { step -> step.valve.tunnelsTo.map { Step(valves[it]!!,step.timeLeft-1, step) } },
                 cost = { it.stepNb }
             ).firstOrNull() ?: return null
 
             if (r.name != end.name) return null
-            return Result( end,listOf(r),(r.timeLeft-1) * r.valve.rate, r.timeLeft -1 )
+            return Result( end,listOf(r), openValves + end,r.score, r.timeLeft - 1 )
         }
     }
 
@@ -58,7 +109,7 @@ object Day202216 {
     }
 
     fun part2(lines: Sequence<String>): Int {
-        return 0
+        return parseInput(lines).invoke2()
     }
 
     private val reg = """Valve (..) has flow rate=(-?\d+); tunnel(s)? lead(s)? to valve(s)? (.+)""".toRegex()
