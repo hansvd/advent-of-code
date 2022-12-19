@@ -13,7 +13,7 @@ object Day202216 {
         val stepNb: Int = (previous?.stepNb ?: -1) + 1
     }
 
-    data class Node(val v: Valve, val stepNb: Int, val openValves: Set<Valve>, val score: Int, val timeLeft: Int, val previous:Node?) {
+    data class Node(val v: Valve, val openValves: Set<Valve>, val score: Int, val timeLeft: Int, val previous:Node?) {
         override fun toString(): String = v.name + " - " + previous?.toString()
     }
 
@@ -23,14 +23,14 @@ object Day202216 {
         private val searchMap = initSearch()
         fun invoke(): Int {
             val start = valves["AA"]!!
-            val results = findRecur(Node(start,0, setOf(start),0,30,null))
+            val results = findRecur(Node(start, setOf(start),0,30,null))
             val r = results.maxBy { it.score }
             return r.score
         }
 
         fun invoke2(): Int {
             val start = valves["AA"]!!
-            val startNode = Node(start,0, setOf(start),0,26,null)
+            val startNode = Node(start, setOf(start),0,26,null)
 //            // take 20: the right one is in one of the firsts
             return sequence {
                 findRecur(startNode).sortedByDescending { it.score }.take(20).forEach {
@@ -41,7 +41,7 @@ object Day202216 {
                     }
                 }
             }.map { r1 ->
-                val result2 = findRecur(Node(start,0, r1.openValves,0,26,null))
+                val result2 = findRecur(Node(start, r1.openValves,0,26,null))
                 result2.map { Pair(r1, it) }
             }.maxOfOrNull { q ->
                 q.maxOfOrNull { p ->
@@ -62,7 +62,7 @@ object Day202216 {
                     else {
                         val tl = node.timeLeft - steps - 1
                         if (tl < 0) null
-                        else Node(end, node.stepNb + steps, node.openValves + end, node.score + end.rate * tl, tl, node)
+                        else Node(end, node.openValves + end, node.score + end.rate * tl, tl, node)
                     }
                 }.sortedByDescending { it.score }
             val endResults = mutableListOf<Node>()
