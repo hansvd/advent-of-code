@@ -2,6 +2,8 @@ package aoc2022.day16
 
 import org.junit.jupiter.api.Test
 import shared.Input.useLines
+
+
 import kotlin.test.assertEquals
 
 class Day202216Test {
