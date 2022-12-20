@@ -34,14 +34,29 @@ class Day202218Test {
         assertEquals(3522,useLines(2022,18) { Day202218.part1(it) })
     }
 
+    @Test
+    fun part2Ex1Test() {
+        assertEquals(6, Day202218.part2("1,1,1".lineSequence()))
+        assertEquals(12, Day202218.part2("1,1,1\n3,1,1".lineSequence()))
+        assertEquals(12, Day202218.part2("1,1,1\n4,1,1".lineSequence()))
+
+        assertEquals(12, Day202218.part2("1,1,1\n1,3,1".lineSequence()))
+        assertEquals(12, Day202218.part2("1,1,1\n1,4,1".lineSequence()))
+
+        assertEquals(12, Day202218.part2("1,1,1\n1,1,3".lineSequence()))
+        assertEquals(12, Day202218.part2("1,1,1\n1,1,4".lineSequence()))
+
+        assertEquals(30, Day202218.part2("1,1,1\n2,2,1\n3,1,1\n2,0,1\n2,1,0\n2,1,2".lineSequence()))
+        assertEquals(24, Day202218.part2("1,1,1\n2,2,1\n3,1,1\n2,0,1".lineSequence()))
+    }
 
     @Test
     fun part2ExTest() {
-        assertEquals(0, Day202218.part2(exInput.lineSequence()))
+        assertEquals(58, Day202218.part2(exInput.lineSequence()))
     }
 
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,18) { Day202218.part2(it) })
+        assertEquals(2074,useLines(2022,18) { Day202218.part2(it) })
     }
 }
