@@ -6,26 +6,34 @@ import kotlin.test.assertEquals
 
 class Day202219Test {
 
-    val exInput = """"""
+
+    @Test
+    fun part1Ex2Test() {
+        assertEquals(9, useLines(2022, 19, "ex2") { Day202219.part1(it) })
+    }
 
     @Test
     fun part1ExTest() {
-        assertEquals(0, Day202219.part1(exInput.lineSequence()))
+        assertEquals(33, useLines(2022, 19, "ex") { Day202219.part1(it) })
     }
 
     @Test
     fun part1Test() {
-        assertEquals(0,useLines(2022,19) { Day202219.part1(it) })
+        assertEquals(1404, useLines(2022, 19) { Day202219.part1(it) })
     }
 
+    @Test
+    fun part2Ex2Test() {
+        assertEquals(9, useLines(2022, 19, "ex2") { Day202219.part2(it) })
+    }
 
     @Test
     fun part2ExTest() {
-        assertEquals(0, Day202219.part2(exInput.lineSequence()))
+        assertEquals(0, useLines(2022, 19, "ex") { Day202219.part2(it) })
     }
 
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,19) { Day202219.part2(it) })
+        assertEquals(0, useLines(2022, 19) { Day202219.part2(it) })
     }
 }
