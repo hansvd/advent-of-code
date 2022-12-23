@@ -24,16 +24,17 @@ class Day202219Test {
 
     @Test
     fun part2Ex2Test() {
-        assertEquals(9, useLines(2022, 19, "ex2") { Day202219.part2(it) })
+        assertEquals(56, useLines(2022, 19, "ex2") { Day202219.part2(it) })
     }
 
     @Test
     fun part2ExTest() {
-        assertEquals(0, useLines(2022, 19, "ex") { Day202219.part2(it) })
+        assertEquals(62*56, useLines(2022, 19, "ex") { Day202219.part2(it) })
     }
+
 
     @Test
     fun part2Test() {
-        assertEquals(0, useLines(2022, 19) { Day202219.part2(it) })
+        assertEquals(21*7*40, useLines(2022, 19) { Day202219.part2(it) })
     }
 }

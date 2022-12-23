@@ -24,11 +24,10 @@ object Day202219 {
     }
 
 
-    fun part1(lines: Sequence<String>): Int = parseInput(lines).sumOf { it.find() * it.id }
+    fun part1(lines: Sequence<String>): Int = parseInput(lines).sumOf { it.find(24) * it.id }
 
-    fun part2(lines: Sequence<String>): Int {
-        return 0
-    }
+    fun part2(lines: Sequence<String>): Int = parseInput(lines).take(3).fold(1) { a,b -> a * b.find(32) }
+
 
     data class Blueprint(val id: Int, val robotPrices: List<RobotPrices>) {
         val maxCosts = (0 until RobotNb).map { c ->
@@ -41,40 +40,40 @@ object Day202219 {
 
         private val seenBefore = mutableMapOf<Int, Int>()
 
-        private fun hasSeenBefore(robots: List<Int>, assets: List<Int>, stepsLeft: Int): Boolean {
+        private fun hasSeenBefore(state:State): Boolean {
             var s = 1
-            robots.forEach { s = s * 31 + it }
-            assets.forEach { s = s * 31 + it }
+            state.robots.forEach { s = s * 31 + it }
+            state.assets.forEach { s = s * 31 + it }
             val before = seenBefore[s]
             if (before == null) {
-                seenBefore[s] = stepsLeft
+                seenBefore[s] = state.stepsLeft
                 return false
             } else {
-                if (before >= stepsLeft) return true
+                if (before >= state.stepsLeft) return true
                 return false
             }
         }
 
-        fun find(): Int {
+        fun find(stepNb:Int): Int {
             println("Find $id")
             var max = 0
-            queue += State(this, 24)
+            queue += State(this, stepNb)
             while (queue.isNotEmpty()) {
                 val next = queue.poll()
                 when  {
                     next.stepsLeft == 0 -> {
-                        //next.print()
                         max = maxOf(max, next.assets[Geode])
                     }
-                    next.potential < max -> break
+                    next.potential <= max -> break
                     else -> {
-                        next.nextStates().filter {
+                        queue.addAll(next.nextStates().filter {
                             it.potential > max &&
-                                    !hasSeenBefore(it.robots, it.assets, it.stepsLeft)
-                        }.forEach { queue.add(it) }
+                                    !hasSeenBefore(it)
+                        })
                     }
                 }
             }
+            println("Find $id -> $max")
             return max
         }
 
