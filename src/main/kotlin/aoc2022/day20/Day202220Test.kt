@@ -11,75 +11,75 @@ class Day202220Test {
 
     @Test
     fun part1Test1() {
-        val test = listOf(1, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
+        val test = listOf(1L, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
         Day202220.move(test, 0)
         assertContentEquals(listOf(2, 1, -3, 3, - 2, 0, 4), test.map { it.second })
     }
 
     @Test
     fun part1Test1a() {
-        val test = listOf(1, 6, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
+        val test = listOf(1L, 6, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
         Day202220.move(test, 1)
         assertContentEquals(listOf(1, 6, -3, 3, - 2, 0, 4), test.map { it.second })
     }
 
     @Test
     fun part1Test2() {
-        val test = listOf(6, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
+        val test = listOf(6L, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
         Day202220.move(test, 0)
         assertContentEquals(listOf(6, 2, -3, 3, - 2, 0, 4), test.map { it.second })
     }
 
     @Test
     fun part1Test3() {
-        val test = listOf(12, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
+        val test = listOf(12L, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
         Day202220.move(test, 0)
         assertContentEquals(listOf(12, 2, -3, 3, - 2, 0, 4), test.map { it.second })
     }
 
     @Test
     fun part1Test5() {
-        val test = listOf(2, -1, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
+        val test = listOf(2L, -1, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
         Day202220.move(test, 1)
         assertContentEquals(listOf(-1, 2, -3, 3, - 2, 0, 4), test.map { it.second })
     }
 
     @Test
     fun part1Test6() {
-        val test = listOf(2, -8, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
+        val test = listOf(2L, -8, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
         Day202220.move(test, 1)
         assertContentEquals(listOf(2, -3, 3, - 2, 0, -8, 4), test.map { it.second })
     }
     @Test
     fun part1Test7() {
-        val test = listOf(2, -12, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
+        val test = listOf(2L, -12, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
         Day202220.move(test, 1)
         assertContentEquals(listOf(2, -12,-3, 3, - 2, 0, 4), test.map { it.second })
     }
     @Test
     fun part1Test0() {
-        val test = listOf(0, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
+        val test = listOf(0L, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
         Day202220.move(test, 0)
         assertContentEquals(listOf(0,2, -3, 3, - 2, 0, 4), test.map { it.second })
     }
 
     @Test
     fun part1TestNeg1() {
-        val test = listOf(-1, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
+        val test = listOf(-1L, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
         Day202220.move(test, 0)
         assertContentEquals(listOf(2, -3, 3, - 2, 0, -1, 4), test.map { it.second })
     }
 
     @Test
     fun part1TestNeg2() {
-        val test = listOf(-6, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
+        val test = listOf(-6L, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
         Day202220.move(test, 0)
         assertContentEquals(listOf(-6,2, -3, 3, - 2, 0, 4), test.map { it.second })
     }
 
     @Test
     fun part1TestNeg3() {
-        val test = listOf(-7, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
+        val test = listOf(-7L, 2, -3, 3, -2, 0, 4).mapIndexed { index, i -> Pair(index, i) }.toMutableList()
         Day202220.move(test, 0)
         assertContentEquals(listOf(2, -3, 3, - 2, 0,-7, 4), test.map { it.second })
     }
@@ -98,11 +98,11 @@ class Day202220Test {
 
     @Test
     fun part2ExTest() {
-        assertEquals(0, Day202220.part2(exInput.lineSequence()))
+        assertEquals(1623178306L, Day202220.part2(exInput.lineSequence()))
     }
 
     @Test
     fun part2Test() {
-        assertEquals(0, useLines(2022, 20) { Day202220.part2(it) })
+        assertEquals(11102539613040L, useLines(2022, 20) { Day202220.part2(it) })
     }
 }
