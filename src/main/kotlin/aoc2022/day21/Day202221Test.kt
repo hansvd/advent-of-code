@@ -40,6 +40,6 @@ hmdt: 32"""
 
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(2022,21) { Day202221.part2(it) })
+        assertEquals(3887609741189,useLines(2022,21) { Day202221.part2(it) })
     }
 }
