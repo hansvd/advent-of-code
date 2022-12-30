@@ -43,5 +43,15 @@ data class Point(var x: Int, var y: Int) {
         if (dx < 0) return null
         return HLine(x - dx..x + dx, yy)
     }
+
+    fun left() = Point(this.x - 1, y)
+    fun right() = Point(this.x + 1, y)
+    fun up() = Point(x, this.y - 1)
+    fun down() = Point(x,this.y + 1)
+    fun left(xRange:IntRange):Point = if (x - 1 < xRange.first) Point(xRange.last,y) else left()
+    fun right(xRange:IntRange):Point = if (x + 1 > xRange.last) Point(xRange.first,y) else right()
+
+    fun up(yRange:IntRange):Point = if (y - 1 < yRange.first) Point(x, yRange.last) else up()
+    fun down(yRange:IntRange):Point = if (y + 1 > yRange.last) Point(x, yRange.first) else down()
 }
 
