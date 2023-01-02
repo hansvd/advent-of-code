@@ -1,19 +1,19 @@
 package shared
 
+import shared.Direction.*
 import kotlin.math.abs
+
 
 data class Point(var x: Int, var y: Int) {
 
     fun manhattanDistance(other: Point) = abs(x - other.x) + abs(y - other.y)
 
-    fun adjacentWithinManhattanDistance(d: Int): Sequence<Point> {
-        return sequence {
-            for (yy in y - d..y + d) {
-                val dy = abs(y - yy)
-                val dx = d - dy
-                for (xx in x - dx..x + dx) {
-                    yield(Point(xx, yy))
-                }
+    fun adjacentWithinManhattanDistance(d: Int): Sequence<Point> = sequence {
+        for (yy in y - d..y + d) {
+            val dy = abs(y - yy)
+            val dx = d - dy
+            for (xx in x - dx..x + dx) {
+                yield(Point(xx, yy))
             }
         }
     }
@@ -48,10 +48,23 @@ data class Point(var x: Int, var y: Int) {
     fun right() = Point(this.x + 1, y)
     fun up() = Point(x, this.y - 1)
     fun down() = Point(x,this.y + 1)
-    fun left(xRange:IntRange):Point = if (x - 1 < xRange.first) Point(xRange.last,y) else left()
-    fun right(xRange:IntRange):Point = if (x + 1 > xRange.last) Point(xRange.first,y) else right()
+    fun left(xRange:IntRange) = if (x - 1 < xRange.first) Point(xRange.last,y) else left()
+    fun right(xRange:IntRange) = if (x + 1 > xRange.last) Point(xRange.first,y) else right()
 
-    fun up(yRange:IntRange):Point = if (y - 1 < yRange.first) Point(x, yRange.last) else up()
-    fun down(yRange:IntRange):Point = if (y + 1 > yRange.last) Point(x, yRange.first) else down()
+    fun up(yRange:IntRange) = if (y - 1 < yRange.first) Point(x, yRange.last) else up()
+    fun down(yRange:IntRange) = if (y + 1 > yRange.last) Point(x, yRange.first) else down()
+
+    fun next(direction: Direction) = when(direction) {
+        Right -> right()
+        Left -> left()
+        Down -> down()
+        Up -> up()
+    }
+    fun next(direction: Direction, xRange: IntRange, yRange: IntRange) = when(direction) {
+        Right -> right(xRange)
+        Left -> left(xRange)
+        Down -> down(yRange)
+        Up -> up(yRange)
+    }
 }
 
