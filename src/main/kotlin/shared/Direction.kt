@@ -1,8 +1,8 @@
 package shared
 
-import shared.Turn.Clockwise
+import shared.Rotate.Clockwise
 
-enum class Turn {
+enum class Rotate {
     None,
     Clockwise,
     Counterclockwise
@@ -13,7 +13,7 @@ enum class Direction(val id:Int) {
     Left(2),
     Up(3);
 
-    fun turn(turn: Turn) = if (turn == Turn.None) this else when (this) {
+    fun rotate(turn: Rotate) = if (turn == Rotate.None) this else when (this) {
         Right -> if (turn == Clockwise) Down else Up
         Left -> if (turn == Clockwise) Up else Down
         Down -> if (turn == Clockwise) Left else Right

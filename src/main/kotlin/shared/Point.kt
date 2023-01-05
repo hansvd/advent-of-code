@@ -46,13 +46,13 @@ data class Point(var x: Int, var y: Int) {
 
     fun left() = Point(this.x - 1, y)
     fun right() = Point(this.x + 1, y)
-    fun up() = Point(x, this.y - 1)
-    fun down() = Point(x,this.y + 1)
+    private fun up() = Point(x, this.y - 1)
+    private fun down() = Point(x,this.y + 1)
     fun left(xRange:IntRange) = if (x - 1 < xRange.first) Point(xRange.last,y) else left()
     fun right(xRange:IntRange) = if (x + 1 > xRange.last) Point(xRange.first,y) else right()
 
-    fun up(yRange:IntRange) = if (y - 1 < yRange.first) Point(x, yRange.last) else up()
-    fun down(yRange:IntRange) = if (y + 1 > yRange.last) Point(x, yRange.first) else down()
+    private fun up(yRange:IntRange) = if (y - 1 < yRange.first) Point(x, yRange.last) else up()
+    private fun down(yRange:IntRange) = if (y + 1 > yRange.last) Point(x, yRange.first) else down()
 
     fun next(direction: Direction) = when(direction) {
         Right -> right()
