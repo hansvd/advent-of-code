@@ -16,37 +16,17 @@ object Day202222 {
 
     data class Instruction(val count: Int, val rotate: Rotate)
 
-    data class Rectangle(val start: Point, val angle: Int, val rows: List<List<Char>>) {
-
-        private val width = rows[0].size
-        private val height = rows.size
+    data class Rectangle(val start: Point, val rows: List<List<Char>>) {
 
         fun get(p: Point) = rows[p.y][p.x]
 
-        fun rotate90() = Rectangle(start, angle + 90, (0 until width).map { w ->
-            (height - 1 downTo 0).map { h -> rows[h][w] }
-        })
-
-        fun rotate180() = rotate90().rotate90()
-        fun rotate270() = rotate90().rotate180()
-
-        fun toBoardPoint(pos: Point): Point {
-            println("ToBoardPoint $start, $pos")
-            return when (angle) {
-                0 -> Point(pos.x + start.x, pos.y + start.y)
-                90 -> Point(pos.y + start.x, pos.x + start.y)
-                180 -> Point(start.x + width - 1 - pos.x, start.y + height - 1 - pos.y)
-                270 -> Point(start.x + width - 1 - pos.x, start.y + height - 1 - pos.y)
-
-                else -> throw NotImplementedError()
-            }
-        }
+        fun toBoardPoint(pos: Point): Point = Point(pos.x + start.x, pos.y + start.y)
 
     }
 
 
     class Cube(
-        private val sides: List<Rectangle>, val sideTransistions: Map<Pair<Int, Direction>, Pair<Int, Int>>,
+        private val sides: List<Rectangle>, val sideTransition: Map<Pair<Int, Direction>, Pair<Int, Int>>,
         private val instructions: List<Instruction>
     ) {
         private var state = State(0, Point(sides[0].rows[0].indexOfFirst { it == '.' }, 0), Right)
@@ -62,35 +42,30 @@ object Day202222 {
 
             fun result(): Int {
                 val curPos = sides[side].toBoardPoint(pos)
-                println("Result for side=$side, pos=$pos -> $curPos, dir=${direction.id}")
-
+                //println("Result for side=$side, pos=$pos -> $curPos, dir=${direction.id}")
                 return 1000 * (curPos.y + 1) + 4 * (curPos.x + 1) + direction.id
             }
 
-            fun turn(rotate: Rotate): State {
-                return State(
-                    side, pos,
-                    direction.rotate(rotate)
-                )
-
-            }
+            fun turn(rotate: Rotate): State = State(
+                side, pos,
+                direction.rotate(rotate)
+            )
 
             private val toX = -10
             private val toMaxMinX = -11
             private val toY = -12
             private val toMaxMinY = -13
-            fun mapToReal(vX: Int, curPos: Point): Int {
-                if (vX >= 0) return vX
-                return when (vX) {
+            private fun mapToReal(vX: Int, curPos: Point): Int =
+                if (vX >= 0) vX
+                else when (vX) {
                     toX -> curPos.x
                     toY -> curPos.y
                     toMaxMinX -> sideMax - curPos.x
                     toMaxMinY -> sideMax - curPos.y
                     else -> throw NotImplementedError()
                 }
-            }
 
-            val degreesDirectionToPosDirection = mapOf(
+            private val degreesDirectionToPosDirection = mapOf(
                 Pair(0, Right) to Pair(Point(0, toY), Right),
                 Pair(90, Right) to Pair(Point(toY, sideMax), Up),
                 Pair(180, Right) to Pair(Point(sideMax, toMaxMinY), Left),
@@ -104,7 +79,7 @@ object Day202222 {
                 Pair(0, Up) to Pair(Point(toX, sideMax), Up),
                 Pair(90, Up) to Pair(Point(sideMax, toMaxMinX), Left),
                 Pair(180, Up) to Pair(Point(toMaxMinX, 0), Down),
-                Pair(270, Up) to Pair(Point(toX, 0), Right),
+                Pair(270, Up) to Pair(Point(0, toX), Right),
 
                 Pair(0, Down) to Pair(Point(toX, 0), Down),
                 Pair(90, Down) to Pair(Point(0, toMaxMinX), Right),
@@ -116,28 +91,12 @@ object Day202222 {
                 val newPos = pos.next(direction)
                 return if (newPos.x in 0..sideMax && newPos.y in 0..sideMax) State(side, newPos, direction)
                 else {
-                    val (newSide, degrees) = sideTransistions[Pair(side, direction)]!!
+                    val (newSide, degrees) = sideTransition[Pair(side, direction)]!!
                     val (newPosV, newDirection) = degreesDirectionToPosDirection[Pair(degrees, direction)]!!
                     return State(newSide, Point(mapToReal(newPosV.x, pos), mapToReal(newPosV.y, pos)), newDirection)
                 }
             }
 
-        }
-
-        fun toBoard(): Board {
-            val width = sides.maxOf { it.start.x } + sideWidth + 1
-            val height = sides.maxOf { it.start.y } + sideWidth + 1
-            val b = MutableList(height) { MutableList<Char>(width) { ' ' } }
-            for (s in sides) {
-                for (y in 0..sideMax) for (x in 0..sideMax) {
-                    b[y + s.start.y][x + s.start.x] = s.rows[y][x]
-                }
-            }
-            return Board(b, instructions)
-        }
-
-        fun print() {
-            toBoard().print()
         }
 
         //val nextSides = mapOf(Pair(0, Right) to Pair(0, Right))
@@ -148,15 +107,13 @@ object Day202222 {
                 run repeatBlock@{
                     repeat(instruction.count) {
                         val newState = state.nextState()
-                        if (newState.get() == '.') {
+                        if (newState.get() == '.')
                             state = newState
-                            println(newState)
-                        } else
+                        else
                             return@repeatBlock
                     }
                 }
                 state = state.turn(instruction.rotate)
-                println("Turn $state")
             }
             return state.result()
         }
@@ -176,15 +133,6 @@ object Day202222 {
 
         private fun get(p: Point) = rows[p.y][p.x]
 
-        fun print() {
-            for (y in 0 until rows.size) {
-                for (x in 0 until width)
-                    print(rows[y][x])
-                println()
-            }
-            println()
-        }
-
         fun toCube(isTest: Boolean): Cube {
             if (isTest) {
                 val s = width / 4
@@ -196,61 +144,88 @@ object Day202222 {
                         takeSide(0, 1, s), //.turn180(),
                         takeSide(1, 1, s), //urn90(),
                         takeSide(2, 2, s)
-                    )
-                    , mapOf(
-                        Pair(0,Right) to Pair(1,180),
-                        Pair(0,Left) to Pair(4,90),
-                        Pair(0,Up) to Pair(3,180),
-                        Pair(0,Down) to Pair(2,0),
+                    ), mapOf(
+                        Pair(0, Right) to Pair(1, 180),
+                        Pair(0, Left) to Pair(4, 90),
+                        Pair(0, Up) to Pair(3, 180),
+                        Pair(0, Down) to Pair(2, 0),
 
-                        Pair(1,Right) to Pair(0,180),
-                        Pair(1,Left) to Pair(5,0),
-                        Pair(1,Up) to Pair(2,90),
-                        Pair(1,Down) to Pair(3,90),
+                        Pair(1, Right) to Pair(0, 180),
+                        Pair(1, Left) to Pair(5, 0),
+                        Pair(1, Up) to Pair(2, 90),
+                        Pair(1, Down) to Pair(3, 90),
 
-                        Pair(2,Right) to Pair(1,270),
-                        Pair(2,Left) to Pair(4,0),
-                        Pair(2,Up) to Pair(0,0),
-                        Pair(2,Down) to Pair(5,0),
+                        Pair(2, Right) to Pair(1, 270),
+                        Pair(2, Left) to Pair(4, 0),
+                        Pair(2, Up) to Pair(0, 0),
+                        Pair(2, Down) to Pair(5, 0),
 
-                        Pair(3,Right) to Pair(4,0),
-                        Pair(3,Left) to Pair(1,20),
-                        Pair(3,Up) to Pair(0,180),
-                        Pair(3,Down) to Pair(5,180),
+                        Pair(3, Right) to Pair(4, 0),
+                        Pair(3, Left) to Pair(1, 20),
+                        Pair(3, Up) to Pair(0, 180),
+                        Pair(3, Down) to Pair(5, 180),
 
-                        Pair(4,Right) to Pair(2,0),
-                        Pair(4,Left) to Pair(3,0),
-                        Pair(4,Up) to Pair(0,270),
-                        Pair(4,Down) to Pair(5,90),
+                        Pair(4, Right) to Pair(2, 0),
+                        Pair(4, Left) to Pair(3, 0),
+                        Pair(4, Up) to Pair(0, 270),
+                        Pair(4, Down) to Pair(5, 90),
 
-                        Pair(5,Right) to Pair(1,0),
-                        Pair(5,Left) to Pair(4,270),
-                        Pair(5,Up) to Pair(2,0),
-                        Pair(5,Down) to Pair(3,18),
+                        Pair(5, Right) to Pair(1, 0),
+                        Pair(5, Left) to Pair(4, 270),
+                        Pair(5, Up) to Pair(2, 0),
+                        Pair(5, Down) to Pair(3, 180),
 
 
-                    )
-                    , instructions
+                        ), instructions
                 )
             } else {
                 val s = width / 3
                 return Cube(
                     listOf(
                         takeSide(1, 0, s),
-                        takeSide(2, 0, s),//.rotate180(),
+                        takeSide(2, 0, s),
                         takeSide(1, 1, s),
-                        takeSide(0, 3, s),//.rotate270(),
-                        takeSide(0, 2, s),//.rotate270(),
+                        takeSide(0, 3, s),
+                        takeSide(0, 2, s),
                         takeSide(1, 2, s)
-                    )
-                    , mapOf()
-                    , instructions
+                    ), mapOf(
+                        Pair(0, Right) to Pair(1, 0),
+                        Pair(0, Left) to Pair(4, 180),
+                        Pair(0, Up) to Pair(3, 270),
+                        Pair(0, Down) to Pair(2, 0),
+
+                        Pair(1, Right) to Pair(5, 180),
+                        Pair(1, Left) to Pair(0, 0),
+                        Pair(1, Up) to Pair(3, 0),
+                        Pair(1, Down) to Pair(2, 270),
+
+                        Pair(2, Right) to Pair(1, 90),
+                        Pair(2, Left) to Pair(4, 90),
+                        Pair(2, Up) to Pair(0, 0),
+                        Pair(2, Down) to Pair(5, 0),
+
+                        Pair(3, Right) to Pair(5, 90),
+                        Pair(3, Left) to Pair(0, 90),
+                        Pair(3, Up) to Pair(4, 0),
+                        Pair(3, Down) to Pair(1, 0),
+
+                        Pair(4, Right) to Pair(5, 0),
+                        Pair(4, Left) to Pair(0, 180),
+                        Pair(4, Up) to Pair(2, 270),
+                        Pair(4, Down) to Pair(3, 0),
+
+                        Pair(5, Right) to Pair(1, 180),
+                        Pair(5, Left) to Pair(4, 0),
+                        Pair(5, Up) to Pair(2, 0),
+                        Pair(5, Down) to Pair(3, 270),
+
+                        ), instructions
                 )
             }
         }
 
         private fun takeSide(x: Int, y: Int, size: Int): Rectangle =
-            Rectangle(Point(x * size, y * size), 0, (y * size until y * size + size).map { yy ->
+            Rectangle(Point(x * size, y * size), (y * size until y * size + size).map { yy ->
                 (x * size until x * size + size).map { x ->
                     rows[yy][x]
                 }
