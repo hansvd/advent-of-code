@@ -7,16 +7,16 @@ import shared.width
 
 object Day202223 {
 
-    class ElvesMap(val elves: MutableMap<Point, Int>) {
+    class ElvesMap(val elves: MutableMap<Point, Boolean>) {
         fun getXRange() = IntRange(elves.keys.minOf { it.x }, elves.keys.maxOf { it.x })
         fun getYRange() = IntRange(elves.keys.minOf { it.y }, elves.keys.maxOf { it.y })
         fun get(p: Point) = elves[p]
         fun get(p: Point, direction: CompassDirection) = elves[p.to(direction)]
         fun elvesIn(p: Point, vararg direction: CompassDirection) = direction.any { get(p, it) != null }
 
-        fun round(r:Int) {
+        fun round(r:Int):Boolean {
             val proposals = mutableListOf<Pair<Point, Point>>()
-            for ((p, elf) in elves.entries) {
+            for (p in elves.keys) {
                 if (!elvesIn(p, N, S, E, W, NE, NW, SW, SE))
                     continue
                 val m = listOf(
@@ -33,23 +33,17 @@ object Day202223 {
                     }
                 }
             }
+            var didSomething = false
             for (proposal in proposals) {
                 if (proposals.none { it !== proposal && proposal.second == it.second }) {
-                    elves[proposal.second] = elves[proposal.first]!! + 1
+                    elves[proposal.second] = true
                     elves.remove(proposal.first)
+                    didSomething = true
                 }
             }
+            return didSomething
         }
-
-        fun print() {
-            for (y in getYRange()) {
-                for (x in getXRange()) {
-                    print(get(Point(x, y))?.toString() ?: ".")
-                }
-                println()
-            }
-            println("\n----\n")
-        }
+        
         fun countEmptyTiles():Int = getYRange().width * getXRange().width - elves.count()
     }
 
@@ -64,10 +58,15 @@ object Day202223 {
 
 
     fun part2(lines: Sequence<String>): Int {
+        val map = parseInput(lines)
+        for (i in 0 .. Int.MAX_VALUE) {
+            if (!map.round(i))
+                return i + 1
+        }
         return 0
     }
 
     fun parseInput(lines: Sequence<String>) = ElvesMap(lines.flatMapIndexed { y, row ->
-        row.mapIndexedNotNull { x, c -> if (c == '#') Point(x, y) to 0 else null }
+        row.mapIndexedNotNull { x, c -> if (c == '#') Point(x, y) to true else null }
     }.toMap().toMutableMap())
 }
