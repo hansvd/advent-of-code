@@ -6,6 +6,18 @@ import kotlin.math.abs
 
 data class Point(var x: Int, var y: Int) {
 
+    fun to(direction: CompassDirection):Point {
+        return when(direction) {
+            CompassDirection.N -> Point(x,y-1)
+            CompassDirection.E -> Point(x+1,y)
+            CompassDirection.W -> Point(x-1,y)
+            CompassDirection.S -> Point(x,y+1)
+            CompassDirection.NE -> Point(x+1,y-1)
+            CompassDirection.NW -> Point(x-1,y-1)
+            CompassDirection.SE -> Point(x+1,y+1)
+            CompassDirection.SW -> Point(x-1,y+1)
+        }
+    }
     fun manhattanDistance(other: Point) = abs(x - other.x) + abs(y - other.y)
 
     fun adjacentWithinManhattanDistance(d: Int): Sequence<Point> = sequence {
