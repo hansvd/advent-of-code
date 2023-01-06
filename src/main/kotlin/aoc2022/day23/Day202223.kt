@@ -8,31 +8,29 @@ import shared.width
 object Day202223 {
 
     class ElvesMap(val elves: MutableMap<Point, Boolean>) {
-        fun getXRange() = IntRange(elves.keys.minOf { it.x }, elves.keys.maxOf { it.x })
-        fun getYRange() = IntRange(elves.keys.minOf { it.y }, elves.keys.maxOf { it.y })
+        private fun getXRange() = IntRange(elves.keys.minOf { it.x }, elves.keys.maxOf { it.x })
+        private fun getYRange() = IntRange(elves.keys.minOf { it.y }, elves.keys.maxOf { it.y })
         fun get(p: Point) = elves[p]
         fun get(p: Point, direction: CompassDirection) = elves[p.to(direction)]
-        fun elvesIn(p: Point, vararg direction: CompassDirection) = direction.any { get(p, it) != null }
+        private fun elvesIn(p: Point, vararg direction: CompassDirection) = direction.any { get(p, it) != null }
 
-        fun round(r:Int):Boolean {
-            val proposals = mutableListOf<Pair<Point, Point>>()
-            for (p in elves.keys) {
-                if (!elvesIn(p, N, S, E, W, NE, NW, SW, SE))
-                    continue
-                val m = listOf(
-                    arrayOf(N, NE, NW) to N,
-                    arrayOf(S, SE, SW) to S,
-                    arrayOf(W,NW,SW) to W,
-                    arrayOf(E,NE,SE) to E
-                )
-                for (i in 0..3) {
-                    val index = (i + r) % 4
-                    if (!elvesIn(p,*m[index].first)) {
-                        proposals.add(p to p.to(m[index].second))
-                        break
+        private val moveMap = listOf(
+            arrayOf(N, NE, NW) to N,
+            arrayOf(S, SE, SW) to S,
+            arrayOf(W, NW, SW) to W,
+            arrayOf(E, NE, SE) to E
+        )
+
+        fun round(r: Int): Boolean {
+            val proposals =
+                elves.keys.mapNotNull { p ->
+                    if (!elvesIn(p, N, S, E, W, NE, NW, SW, SE))
+                        null
+                    else (0..3).map { i -> (i + r) % 4 }.firstOrNull { i -> !elvesIn(p, *moveMap[i].first) }?.let { i ->
+                        (p to p.to(moveMap[i].second))
                     }
                 }
-            }
+
             var didSomething = false
             for (proposal in proposals) {
                 if (proposals.none { it !== proposal && proposal.second == it.second }) {
@@ -43,15 +41,14 @@ object Day202223 {
             }
             return didSomething
         }
-        
-        fun countEmptyTiles():Int = getYRange().width * getXRange().width - elves.count()
+
+        fun countEmptyTiles(): Int = getYRange().width * getXRange().width - elves.count()
     }
 
     fun part1(lines: Sequence<String>): Int {
         val map = parseInput(lines)
         repeat(10) {
             map.round(it)
-            //map.print()
         }
         return map.countEmptyTiles()
     }
@@ -59,7 +56,7 @@ object Day202223 {
 
     fun part2(lines: Sequence<String>): Int {
         val map = parseInput(lines)
-        for (i in 0 .. Int.MAX_VALUE) {
+        for (i in 0..Int.MAX_VALUE) {
             if (!map.round(i))
                 return i + 1
         }
