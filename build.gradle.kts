@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.21"
+    kotlin("jvm") version "1.9.21"
     application
 }
 
@@ -14,8 +14,8 @@ repositories {
 
 dependencies {
     implementation(kotlin("test"))
-    implementation("org.junit.jupiter", "junit-jupiter-api", "5.9.1")
-    implementation("org.junit.jupiter", "junit-jupiter-engine", "5.9.1")
+    implementation("org.junit.jupiter", "junit-jupiter-api", "5.10.1")
+    implementation("org.junit.jupiter", "junit-jupiter-engine", "5.10.1")
 }
 
 tasks.test {
@@ -23,7 +23,7 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "18"
+    kotlinOptions.jvmTarget = "17"
 }
 
 application {
