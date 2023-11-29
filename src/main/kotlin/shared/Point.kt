@@ -40,10 +40,11 @@ data class Point(var x: Int, var y: Int) {
             val dx = d - dy
             if (dx < 0) null
             else {
-                val x1 = maxOf(x - d, xRangeLimit.first)
-                val x2 = minOf(x + d, xRangeLimit.last)
+                val x1 = maxOf(x - dx, xRangeLimit.first)
+                val x2 = minOf(x + dx, xRangeLimit.last)
                 if (x1 <= x2)
                     HLine(x1..x2, yy)
+                //HLine(x - dx..x + dx, yy)
                 else null
             }
         }
