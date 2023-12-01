@@ -6,25 +6,36 @@ import kotlin.test.assertEquals
 
 class DayTest {
 
-    val year = 2023
-    val day = 1
+    private val year = 2023
+    private val day = 1
 
-    val input = ""
+    private val input = """1abc2
+pqr3stu8vwx
+a1b2c3d4e5f
+treb7uchet"""
+    private val input2 = """two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen"""
+
     @Test
     fun exampleTest() {
-        assertEquals(0,Day.part1(input.lines()))
+        assertEquals(142,Day.part1(input.lines()))
     }
     @Test
     fun part1Test() {
-        assertEquals(0,useLines(year,day) { Day.part1(it.toList()) })
+        assertEquals(54388,useLines(year,day) { Day.part1(it.toList()) })
     }
 
     @Test
     fun exampleTest2() {
-        assertEquals(0,Day.part2(input.lines()))
+        assertEquals(281,Day.part2(input2.lines()))
     }
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(year,day) { Day.part2(it.toList()) })
+        assertEquals(53515,useLines(year,day) { Day.part2(it.toList()) })
     }
 }
