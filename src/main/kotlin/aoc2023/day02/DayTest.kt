@@ -26,10 +26,10 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green"""
 
     @Test
     fun exampleTest2() {
-        assertEquals(0,Day.part2(input.lines()))
+        assertEquals(2286,Day.part2(input.lines()))
     }
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(year,day) { Day.part2(it.toList()) })
+        assertEquals(56322,useLines(year,day) { Day.part2(it.toList()) })
     }
 }
