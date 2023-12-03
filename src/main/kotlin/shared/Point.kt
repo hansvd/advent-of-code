@@ -85,7 +85,7 @@ data class Point(var x: Int, var y: Int) {
             yield(Point(x - d, yy))
             yield(Point(x+d,yy))
         }
-        for (xx in x - d..x + d) {
+        for (xx in x - d + 1..x + d - 1) {
             yield(Point(xx, y - d))
             yield(Point(xx, y +d))
         }
