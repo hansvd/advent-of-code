@@ -79,5 +79,16 @@ data class Point(var x: Int, var y: Int) {
         Down -> down(yRange)
         Up -> up(yRange)
     }
+
+    fun borderWithDistance(d: Int): Sequence<Point> = sequence {
+        for (yy in y - d..y + d) {
+            yield(Point(x - d, yy))
+            yield(Point(x+d,yy))
+        }
+        for (xx in x - d..x + d) {
+            yield(Point(xx, y - d))
+            yield(Point(xx, y +d))
+        }
+    }
 }
 

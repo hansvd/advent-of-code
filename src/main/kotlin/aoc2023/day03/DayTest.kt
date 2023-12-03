@@ -33,10 +33,10 @@ class DayTest {
 
     @Test
     fun exampleTest2() {
-        assertEquals(0,Day.part2(input.lines()))
+        assertEquals(467835,Day.part2(input.lines()))
     }
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(year,day) { Day.part2(it.toList()) })
+        assertEquals(80179647,useLines(year,day) { Day.part2(it.toList()) })
     }
 }
