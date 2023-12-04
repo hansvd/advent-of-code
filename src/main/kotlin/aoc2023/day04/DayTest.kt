@@ -26,10 +26,10 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11"""
 
     @Test
     fun exampleTest2() {
-        assertEquals(25004,Day.part2(input.lines()))
+        assertEquals(30,Day.part2(input.lines()))
     }
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(year,day) { Day.part2(it.toList()) })
+        assertEquals(14427616,useLines(year,day) { Day.part2(it.toList()) })
     }
 }
