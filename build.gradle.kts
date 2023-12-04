@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("test"))
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6")
     implementation("org.junit.jupiter", "junit-jupiter-api", "5.10.1")
     implementation("org.junit.jupiter", "junit-jupiter-engine", "5.10.1")
 }

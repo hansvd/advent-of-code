@@ -1,4 +1,4 @@
-package aoc2023.day00
+package aoc2023.day05
 
 import org.junit.jupiter.api.Test
 import shared.Input.useLines
@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 class DayTest {
 
     private val year = 2023
-    private val day = 0
+    private val day = 5
 
     private val input = """"""
     @Test

@@ -1,6 +1,5 @@
 package aoc2023.day04
 
-import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 
@@ -15,19 +14,14 @@ object Day {
 
     fun part2(lines: List<String>):Int {
         val cards = parseInput(lines)
-        val list = cards.indices.map { it }.toMutableList()
-
-        var result = list.size
-        while (list.size > 0) {
-            val card = cards[list.last()]
+        val list = MutableList(cards.size) { 1}
+        cards.forEachIndexed { index, card ->
             val s = card.our.filter { card.winning.contains(it) }.size
-            result += s
-            list.removeLast()
-            list.addAll(card.index + 1..min(card.index + s, cards.size - 1))
-
-
+            (card.index + 1..min(card.index + s, cards.size - 1)).forEach {
+                list[it] += list[index]
+            }
         }
-        return result
+        return list.sum()
     }
 
     fun parseInput(lines: List<String>):List<Card> = lines.mapIndexed{ index, line ->
