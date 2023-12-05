@@ -14,14 +14,14 @@ object Day {
 
     fun part2(lines: List<String>):Int {
         val cards = parseInput(lines)
-        val list = MutableList(cards.size) { 1}
+        val cardNumber = Array(cards.size) { 1}
         cards.forEachIndexed { index, card ->
             val s = card.our.filter { card.winning.contains(it) }.size
             (card.index + 1..min(card.index + s, cards.size - 1)).forEach {
-                list[it] += list[index]
+                cardNumber[it] += cardNumber[index]
             }
         }
-        return list.sum()
+        return cardNumber.sum()
     }
 
     fun parseInput(lines: List<String>):List<Card> = lines.mapIndexed{ index, line ->
