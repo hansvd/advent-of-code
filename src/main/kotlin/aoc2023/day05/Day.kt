@@ -4,14 +4,8 @@ import shared.intersect
 
 object Day {
 
-    /*
-    seed-to-soil map:
-50 98 2
-52 50 48
-     */
     data class Range(val desStart:Long, val srcStart: Long, val length:Long) {
         val src = srcStart..(srcStart+length)
-        //val dst = desStart.. (desStart+length)
 
         data class MapResult(val todo:List<LongRange>, val done:List<LongRange>)
 
@@ -19,7 +13,7 @@ object Day {
             val i = src.intersect(r)
             if (i.isEmpty()) return MapResult(listOf(r), listOf())
 
-            val done = listOf<LongRange>(
+            val done = listOf(
                 desStart + (i.first - srcStart) ..desStart + (i.last - srcStart)
             )
             val todo = mutableListOf<LongRange>()
@@ -34,16 +28,14 @@ object Day {
                 it.desStart + (from - it.srcStart )
             } ?: from
 
-        fun mapRanges(r:List<LongRange>):List<LongRange> {
-            return r.flatMap { mapRanges(it) }
-        }
-        fun mapRanges(r:LongRange):List<LongRange> {
+        fun mapRanges(r:List<LongRange>):List<LongRange> = r.flatMap { mapRanges(it) }
+        private fun mapRanges(r:LongRange):List<LongRange> {
             val done = mutableListOf<LongRange>()
             var todo = listOf(r)
-            ranges.forEach { r ->
+            ranges.forEach { range ->
                 val newTodo = mutableListOf<LongRange>()
                 todo.forEach {
-                    val s = r.map(it)
+                    val s = range.map(it)
                     newTodo.addAll(s.todo)
                     done.addAll(s.done)
                 }
@@ -51,11 +43,6 @@ object Day {
             }
             return todo + done
         }
-//        fun mapRanges(r:List<LongRange>):List<LongRange> {
-//            val s = r.flatMap { r2 -> ranges.flatMap { it.map(r2) } }
-//            println("$r -> $s")
-//            return s
-//        }
     }
 
 
@@ -68,11 +55,9 @@ object Day {
         val (seeds, maps) = parseInput(lines)
         val ranges =
             (seeds.indices step 2).map { seeds[it]..(seeds[it] + seeds[it+1]) }
-        return ranges.map {  r ->
-            val r2 =maps.fold(listOf(r)) { acc, m -> m.mapRanges(acc)}
-            r2.map {it.first}.min()
-
-        }.min()
+        return ranges.minOfOrNull { r ->
+            maps.fold(listOf(r)) { acc, m -> m.mapRanges(acc) }.minOfOrNull { it.first } ?: 0
+        } ?: 0
 
     }
 
@@ -95,8 +80,8 @@ object Day {
     private fun parseMap(lines: List<String>): FromToMap {
         val fromTo = lines[0].split(' ')[0].split("-to-")
         return FromToMap(fromTo[0], fromTo[1],
-            lines.drop(1).map {
-                val r = it.split(' ').map { it.toLong() }
+            lines.drop(1).map { l ->
+                val r = l.split(' ').map { it.toLong() }
                 Range(r[0], r[1], r[2])
             })
     }
