@@ -22,7 +22,7 @@ Distance:  9  40  200"""
 
     @Test
     fun exampleTest2() {
-        assertEquals(0,Day.part2(input.lines()))
+        assertEquals(71503,Day.part2(input.lines()))
     }
     @Test
     fun part2Test() {
