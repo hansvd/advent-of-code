@@ -3,15 +3,17 @@ package aoc2023.day06
 object Day {
 
     data class TimeDistance(val time:Long, val distance: Long)
-    fun part1(lines: List<String>):Long {
-        return parseInput(lines,false).map { td ->
-            (0L..td.time).filter { (td.time-it) * it > td.distance }.size.toLong()
-        }.reduce {acc, d -> acc * d}
-    }
+    fun part1(lines: List<String>) =  solve(parseInput(lines, false))
 
-    fun part2(lines: List<String>) = parseInput(lines,true).map { td ->
-        td.distance / d
-    }.reduce {acc, d -> acc * d}
+
+    fun part2(lines: List<String>) = solve(parseInput(lines, true))
+
+    private fun solve(tds: List<TimeDistance>) = tds.map { td ->
+            // find first one
+            val f = (1L until td.time).first { (td.time - it) * it > td.distance }
+            val l = (td.time -1 downTo 0L).first { (td.time - it) * it > td.distance }
+            l - f + 1
+        }.reduce { acc, d -> acc * d }
 
     fun parseInput(lines:List<String>, part2:Boolean):List<TimeDistance> {
         val l0 = if (part2) lines[0].replace(" ","", ) else lines[0]

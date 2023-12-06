@@ -26,6 +26,6 @@ Distance:  9  40  200"""
     }
     @Test
     fun part2Test() {
-        assertEquals(0,useLines(year,day) { Day.part2(it.toList()) })
+        assertEquals(41382569,useLines(year,day) { Day.part2(it.toList()) })
     }
 }
