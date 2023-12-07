@@ -26,7 +26,7 @@ object Day202215 {
             if (ll == null) result.add(l)
             else {
                 result.remove(ll)
-                result.add(l.combine(ll))
+                result.add(l.permutations(ll))
             }
         }
         return result.sumOf { it.width }
